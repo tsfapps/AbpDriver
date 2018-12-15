@@ -1,0 +1,49 @@
+package com.abp.driver.fragment;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.abp.driver.R;
+
+public class DashboardDriver extends Fragment {
+
+    private  Activity mActivity;
+    private  FragmentManager mFragmentManger;
+
+    public static DashboardDriver newInstance(Activity activity, FragmentManager fragmentManager) {
+        Log.d("danny","newInstance called");
+        DashboardDriver fragment = new DashboardDriver();
+        fragment.mActivity = activity;
+        fragment.mFragmentManger = fragmentManager;
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("danny","onCreate called");
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.dashboard_driver,container,false);
+        Log.d("danny","onCreateView called");
+        init();
+        return view;
+    }
+
+    private void init() {
+        mActivity.setTitle("Driver");
+    }
+
+
+}
