@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.abp.driver.R;
 
@@ -17,6 +18,8 @@ public class DashboardDriver extends Fragment {
 
     private  Activity mActivity;
     private  FragmentManager mFragmentManger;
+    private  TextView textView;
+    private View view;
 
     public static DashboardDriver newInstance(Activity activity, FragmentManager fragmentManager) {
         Log.d("danny","newInstance called");
@@ -29,19 +32,26 @@ public class DashboardDriver extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Log.d("danny","onCreate called");
     }
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dashboard_driver,container,false);
-        Log.d("danny","onCreateView called");
+        View view = inflater.inflate(R.layout.dashboard_driver_fragment,container,false);
+
+        textView = view.findViewById(R.id.tv_id_drv_frg);
+        String user = getActivity().getIntent().getExtras().getString("EMAIL");
+        textView.setText("Welcome\n"+user);
         init();
         return view;
     }
 
     private void init() {
+
         mActivity.setTitle("Driver");
     }
 
