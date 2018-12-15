@@ -15,7 +15,7 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity {
 
     private static String EMAIL = "EMAIL";
-    private static String PASS = "PASS";
+   // private static String PASS = "PASS";
 
     @BindView(R.id.et_email_login)
     EditText et_email;
@@ -31,21 +31,23 @@ public class LoginActivity extends AppCompatActivity {
     }
     @OnClick(R.id.btn_login)
     public void submitBtn(View view){
-        Intent intent = new Intent(this, DashboardActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(EMAIL, et_email.getText().toString().trim());
-        bundle.putString(PASS, et_password.getText().toString().trim());
-        intent.putExtras(bundle);
-        if (et_email.getText().toString() == null){
+        String email = et_email.getText().toString().trim();
+        String pass = et_password.getText().toString().trim();
+        if (email.isEmpty()){
             et_email.setError("Enter the user id");
-        }if (et_password.getText().toString() == null){
+        }else if (pass.isEmpty()){
             et_password.setError("Enter the password");
-        }
-         {
+        }else {
+
+            Intent intent = new Intent(this, DashboardActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(EMAIL, email);
+            // bundle.putString(PASS, pass);
+            intent.putExtras(bundle);
             startActivity(intent);
             finish();
-        }
 
+        }
     }
 
 
