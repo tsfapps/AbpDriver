@@ -12,14 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.abp.driver.R;
-import com.abp.driver.fragment.DashboardDriver;
+import com.abp.driver.fragment.DashboardDriverFragment;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public Toolbar toolbar;
+    private TextView tv_header_name;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +46,19 @@ public class DashboardActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        String userName = getIntent().getExtras().getString("EMAIL").toString().trim();
+        navigationView =  findViewById(R.id.nav_view);
+       // tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_id_drv_frg);
+        tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_email);
+        tv_header_name.setText(userName);
         navigationView.setNavigationItemSelectedListener(this);
 
         init();
     }
 
     private void init() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DashboardDriver.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DashboardDriverFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
     }
 
 

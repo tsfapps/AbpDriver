@@ -14,16 +14,16 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 
-public class DashboardDriver extends Fragment {
+public class DashboardDriverFragment extends Fragment {
 
     private  Activity mActivity;
     private  FragmentManager mFragmentManger;
     private  TextView textView;
     private View view;
 
-    public static DashboardDriver newInstance(Activity activity, FragmentManager fragmentManager) {
+    public static DashboardDriverFragment newInstance(Activity activity, FragmentManager fragmentManager) {
         Log.d("danny","newInstance called");
-        DashboardDriver fragment = new DashboardDriver();
+        DashboardDriverFragment fragment = new DashboardDriverFragment();
         fragment.mActivity = activity;
         fragment.mFragmentManger = fragmentManager;
         return fragment;
