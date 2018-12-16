@@ -9,7 +9,7 @@
     <string name="driver_dashboard">driver dashboard</string>
     <string name="password_hint">Password</string>
     <string name="email_id_hint">Email Id</string>
-    <string name="submit">Submit</string>
+    <string name="submit">LogIn</string>
     <string name="user_name">User Name</string>
     <string-array name="spinner_login">
         <item>Driver</item>
