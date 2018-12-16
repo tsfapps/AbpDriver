@@ -12,7 +12,7 @@
     <string name="submit">Submit</string>
     <string name="user_name">User Name</string>
     <string-array name="spinner_login">
-        <item>--login as--</item>
+
         <item>Driver</item>
         <item>District Manager</item>
         <item>State Manager</item>
