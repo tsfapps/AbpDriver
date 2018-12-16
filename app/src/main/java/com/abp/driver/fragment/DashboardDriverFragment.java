@@ -19,7 +19,6 @@ public class DashboardDriverFragment extends Fragment {
     private  Activity mActivity;
     private  FragmentManager mFragmentManger;
     private  TextView textView;
-    private View view;
 
     public static DashboardDriverFragment newInstance(Activity activity, FragmentManager fragmentManager) {
         Log.d("danny","newInstance called");

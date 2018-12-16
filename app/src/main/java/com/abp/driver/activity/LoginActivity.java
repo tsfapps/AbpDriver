@@ -40,10 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         }else {
 
             Intent intent = new Intent(this, DashboardActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(EMAIL, email);
-            // bundle.putString(PASS, pass);
-            intent.putExtras(bundle);
+            intent.putExtra(EMAIL, email);
+            intent.putExtra("type",1);
             startActivity(intent);
             finish();
 

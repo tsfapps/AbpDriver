@@ -11,6 +11,7 @@
     <string name="email_id_hint">Email Id</string>
     <string name="submit">LogIn</string>
     <string name="user_name">User Name</string>
+    <string name="state_manager">State Manager</string>
     <string-array name="spinner_login">
         <item>Driver</item>
         <item>District Manager</item>

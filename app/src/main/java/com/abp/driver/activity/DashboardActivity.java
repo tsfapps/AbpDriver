@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.DashboardDriverFragment;
+import com.abp.driver.fragment.DistrictManagerFragment;
+import com.abp.driver.fragment.StateManagerFragment;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -23,6 +25,8 @@ public class DashboardActivity extends AppCompatActivity
     public Toolbar toolbar;
     private TextView tv_header_name;
     private NavigationView navigationView;
+    private String userEmail;
+    private int userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +50,39 @@ public class DashboardActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        String userName = getIntent().getExtras().getString("EMAIL").toString().trim();
-        navigationView =  findViewById(R.id.nav_view);
-       // tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_id_drv_frg);
-        tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_email);
-        tv_header_name.setText(userName);
-        navigationView.setNavigationItemSelectedListener(this);
-
         init();
     }
 
     private void init() {
+        userEmail = getIntent().getExtras().getString("EMAIL");
+        userType = getIntent().getExtras().getInt("type");
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DashboardDriverFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
+        navigationView =  findViewById(R.id.nav_view);
+        tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_email);
+        tv_header_name.setText(userEmail);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        startDashboardFragment(userType);
+
+    }
+
+    private void startDashboardFragment(int userType) {
+
+        switch (userType){
+            case 0:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DashboardDriverFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
+                break;
+            case 1:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DistrictManagerFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
+
+                break;
+                case 2:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_main, StateManagerFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
+
+                    break;
+        }
+
     }
 
 
