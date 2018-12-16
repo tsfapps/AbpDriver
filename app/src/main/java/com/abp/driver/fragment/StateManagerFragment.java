@@ -11,27 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abp.driver.R;
+import com.abp.driver.activity.DashboardActivity;
 
 public class StateManagerFragment extends Fragment {
 
-    private Activity mActivity;
+    private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
-
-    public static StateManagerFragment newInstance(Activity activity, FragmentManager fragmentManager) {
-
-
-
-        StateManagerFragment fragment = new StateManagerFragment();
-        fragment.mActivity = activity;
-        fragment.mFragmentManager = fragmentManager;
-        return fragment;
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.state_fragment, container, false);
+        init();
         return view;
+    }
+
+    private void init() {
+        mActivity = (DashboardActivity) getActivity();
+        mActivity.setToolbarTitle("State Manager");
+        mFragmentManager = mActivity.getSupportFragmentManager();
     }
 }

@@ -1,15 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:gravity="center"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv_id_drv_frg"
-        style="@style/style_tv"
-        android:text="@string/driver_dashboard"
-        />
+        android:id="@+id/tv_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/welcome_msg"
+        android:textSize="24dp"
+        android:textColor="#000"
+        android:textStyle="bold" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_welcome"
+        android:text="Mr. XYZ"
+        android:textSize="18dp"
+        android:textColor="#000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_user_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_user_name"
+        android:text="Check in to start."
+        android:textSize="18dp"
+        android:textColor="#000"
+        android:textStyle="bold" />
+
+
+    <RelativeLayout
+        android:id="@+id/rlLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_user_msg"
+        android:background="@drawable/circle_red"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:elevation="5dp">
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Check In"
+            android:textSize="25dp"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</RelativeLayout>

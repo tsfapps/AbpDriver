@@ -27,12 +27,14 @@ public class DashboardActivity extends AppCompatActivity
     private NavigationView navigationView;
     private String userEmail;
     private int userType;
+    private TextView mToolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -61,38 +63,41 @@ public class DashboardActivity extends AppCompatActivity
         tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_email);
         tv_header_name.setText(userEmail);
         navigationView.setNavigationItemSelectedListener(this);
-
-
         startDashboardFragment(userType);
-
     }
 
     private void startDashboardFragment(int userType) {
-
         switch (userType){
-            case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DashboardDriverFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
-                break;
             case 1:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DistrictManagerFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DashboardDriverFragment()).addToBackStack(null).commit();
+                break;
+            case 2:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).addToBackStack(null).commit();
 
                 break;
-                case 2:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container_main, StateManagerFragment.newInstance(this,getSupportFragmentManager())).addToBackStack(null).commit();
-
-                    break;
+            case 3:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StateManagerFragment()).addToBackStack(null).commit();
+                break;
         }
 
+    }
+
+    public void setToolbarTitle(String title){
+        mToolbarTitle.setText(title);
     }
 
 
     @Override
     public void onBackPressed() {
+       onBackPressedCalled();
+    }
+
+    public void onBackPressedCalled(){
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+           finish();
         }
     }
 
