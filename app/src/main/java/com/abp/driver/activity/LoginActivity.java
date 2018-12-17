@@ -56,15 +56,6 @@ public class LoginActivity extends AppCompatActivity{
         collapsingToolbar.setTitle("Log In");
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
 
-        SM = getSharedPreferences(MyPreference, Context.MODE_PRIVATE);
-
-
-        if (SM.getString(EMAIL, "").toString().equals(EMAIL)) {
-
-            Toast.makeText(this, email, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-            startActivity(intent);
-        }
         //mSpinner.setOnItemClickListener(this);
     }
 
@@ -90,10 +81,6 @@ public class LoginActivity extends AppCompatActivity{
         }else {
             if (type > 0) {
 
-                SharedPreferences.Editor editor = SM.edit();
-                editor.putString(EMAIL, email);
-                editor.putBoolean("logIn", true);
-                editor.apply();
                 Intent intent = new Intent(this, DashboardActivity.class);
                 intent.putExtra(EMAIL, email);
                 intent.putExtra("type",type);
