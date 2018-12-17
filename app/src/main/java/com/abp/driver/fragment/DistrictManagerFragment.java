@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,5 +32,28 @@ public class DistrictManagerFragment extends Fragment {
         mActivity = (DashboardActivity) getActivity();
         mActivity.setToolbarTitle("District Manager");
         mFragmentManager = mActivity.getSupportFragmentManager();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (getView() != null) {
+                getView().setFocusableInTouchMode(true);
+                getView().requestFocus();
+                getView().setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                            mActivity.onBackPressedCalled();
+                        }
+                        return true;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Log.e("error",""+e);
+        }
     }
 }
