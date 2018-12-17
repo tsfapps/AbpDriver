@@ -58,18 +58,14 @@ public class LoginActivity extends AppCompatActivity{
 
         //mSpinner.setOnItemClickListener(this);
     }
-
     @OnClick({R.id.btn_login})
-
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
                 submitBtn();
                 break;
         }
-
     }
-
     private void submitBtn(){
         int type = mSpinner.getSelectedItemPosition();
         email = et_email.getText().toString().trim();
@@ -80,7 +76,6 @@ public class LoginActivity extends AppCompatActivity{
             et_password.setError("Enter the password");
         }else {
             if (type > 0) {
-
                 Intent intent = new Intent(this, DashboardActivity.class);
                 intent.putExtra(EMAIL, email);
                 intent.putExtra("type",type);
