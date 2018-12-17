@@ -13,6 +13,9 @@
     <string name="user_name">User Name</string>
     <string name="state_manager">State Manager</string>
     <string name="welcome_msg">Welcome</string>
+    <string name="attendance">ATTENDANCE</string>
+    <string name="status">STATUS</string>
+    <string name="manager">MANAGER</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>
