@@ -27,8 +27,9 @@
     </style>
     <style name="style_et">
         <item name="android:layout_gravity">center</item>
+        <item name="android:ems">100</item>
         <item name="android:layout_margin">5dp</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:padding">5dp</item>
@@ -55,6 +56,18 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:spinnerMode">dialog</item>
+    </style>
+    <style name="style_cv">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_centerInParent">true</item>
+
+    </style>
+    <style name="style_iv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+
     </style>
 
 

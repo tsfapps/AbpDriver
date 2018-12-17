@@ -1,6 +1,8 @@
 package com.abp.driver.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,10 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity{
 
+
+    public static final String MyPreference = "MyPref";
+    public boolean aBoolean = false;
+    private SharedPreferences SM;
     private static String EMAIL = "EMAIL";
    // private static String PASS = "PASS";
 
@@ -35,22 +41,35 @@ public class LoginActivity extends AppCompatActivity{
     @BindView(R.id.sp_login)
     protected AppCompatSpinner mSpinner;
     private Toolbar toolbar;
+    private String email;
+    private String pass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Log In");
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
 
+        SM = getSharedPreferences(MyPreference, Context.MODE_PRIVATE);
+
+
+        if (SM.getString(EMAIL, "").toString().equals(EMAIL)) {
+
+            Toast.makeText(this, email, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+            startActivity(intent);
+        }
         //mSpinner.setOnItemClickListener(this);
     }
+
     @OnClick({R.id.btn_login})
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
@@ -62,14 +81,19 @@ public class LoginActivity extends AppCompatActivity{
 
     private void submitBtn(){
         int type = mSpinner.getSelectedItemPosition();
-        String email = et_email.getText().toString().trim();
-        String pass = et_password.getText().toString().trim();
+        email = et_email.getText().toString().trim();
+        pass = et_password.getText().toString().trim();
         if (email.isEmpty()){
             et_email.setError("Enter the user id");
         }else if (pass.isEmpty()){
             et_password.setError("Enter the password");
         }else {
             if (type > 0) {
+
+                SharedPreferences.Editor editor = SM.edit();
+                editor.putString(EMAIL, email);
+                editor.putBoolean("logIn", true);
+                editor.apply();
                 Intent intent = new Intent(this, DashboardActivity.class);
                 intent.putExtra(EMAIL, email);
                 intent.putExtra("type",type);
