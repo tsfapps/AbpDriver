@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.abp.driver.R;
-import com.abp.driver.fragment.DashboardDriverFragment;
+import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 
@@ -69,7 +69,7 @@ public class DashboardActivity extends AppCompatActivity
     private void startDashboardFragment(int userType) {
         switch (userType){
             case 1:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DashboardDriverFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).addToBackStack(null).commit();

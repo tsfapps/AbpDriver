@@ -19,7 +19,7 @@ import com.abp.driver.activity.DashboardActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DashboardDriverFragment extends Fragment {
+public class DriverFragment extends Fragment {
 
     private  DashboardActivity mActivity;
     private  FragmentManager mFragmentManger;
