@@ -1,11 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.NestedScrollView
     android:orientation="vertical"
     android:gravity="center"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<TextView
-    style="@style/style_tv"
-    android:text="@string/state_manager"/>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
 
-</LinearLayout>
+    >
+    <LinearLayout
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="State Manager"
+            android:textSize="20dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="3dp"
+            android:textStyle="bold"
+            android:textColor="@color/black_dark"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The state manager can check the attendance of each driver and also can track as per requirement"
+            android:textSize="12dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="10dp"
+            android:textStyle="normal"
+            android:textColor="@color/black_dark"/>
+
+        <android.support.v7.widget.CardView
+            app:cardCornerRadius="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:background="#c70097b9"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!--Upper side Layout-->
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/ivAttendance"
+                        style="@style/style_cv">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                style="@style/style_iv"
+                                android:background="@drawable/ic_attendence" />
+
+                            <TextView
+                                android:textColor="#5dc0d7"
+                                style="@style/style_tv"
+                                android:text="@string/attendance"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/ivStatus"
+                        style="@style/style_cv">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                style="@style/style_iv"
+                                android:background="@drawable/ic_status" />
+
+                            <TextView
+                                android:textColor="#ee4976"
+                                style="@style/style_tv"
+                                android:text="STATUS"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+                <!--Middle side Layout-->
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/ivEvr"
+                        style="@style/style_cv">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                style="@style/style_iv"
+                                android:background="@drawable/ic_evr" />
+
+                            <TextView
+                                android:textColor="#f6b026"
+                                style="@style/style_tv"
+                                android:text="EVR"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/ivManager"
+                        style="@style/style_cv">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                style="@style/style_iv"
+                                android:background="@drawable/ic_manager" />
+
+                            <TextView
+                                android:textColor="#fdae10"
+                                style="@style/style_tv"
+                                android:text="MANAGER"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+
+                <!--Lower side Layout-->
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/ivLogout"
+                        style="@style/style_cv">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                style="@style/style_iv"
+                                android:background="@drawable/ic_logout" />
+
+                            <TextView
+                                android:textColor="#ae1916"
+                                style="@style/style_tv"
+                                android:text="Logout"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/ivProfile"
+                        style="@style/style_cv">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                style="@style/style_iv"
+                                android:background="@drawable/ic_profile" />
+
+                            <TextView
+                                android:textColor="#f14976"
+                                style="@style/style_tv"
+                                android:text="PROFILE"
+                                />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

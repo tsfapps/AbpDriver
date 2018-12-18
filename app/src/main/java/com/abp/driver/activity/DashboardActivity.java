@@ -48,8 +48,7 @@ public class DashboardActivity extends AppCompatActivity
 
     private void init() {
         userEmail = getIntent().getExtras().getString("EMAIL");
-        userType = getIntent().getExtras().getInt("type");
-
+        userType = getIntent().getExtras().getInt("TYPE");
         navigationView =  findViewById(R.id.nav_view);
         tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_email);
         tv_header_name.setText(userEmail);

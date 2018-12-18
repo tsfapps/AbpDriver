@@ -29,15 +29,12 @@ public class LoginActivity extends AppCompatActivity{
     public static final String MyPreference = "MyPref";
     public boolean aBoolean = false;
     private SharedPreferences SM;
-    private static String EMAIL = "EMAIL";
-   // private static String PASS = "PASS";
+    // private static String PASS = "PASS";
 
     @BindView(R.id.et_email_login)
     protected EditText et_email;
-
     @BindView(R.id.et_password_login)
     protected EditText et_password;
-
     @BindView(R.id.sp_login)
     protected AppCompatSpinner mSpinner;
     private Toolbar toolbar;
@@ -56,7 +53,6 @@ public class LoginActivity extends AppCompatActivity{
         collapsingToolbar.setTitle("Log In");
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
 
-        //mSpinner.setOnItemClickListener(this);
     }
     @OnClick({R.id.btn_login})
     public void onClick(View view) {
@@ -77,10 +73,12 @@ public class LoginActivity extends AppCompatActivity{
         }else {
             if (type > 0) {
                 Intent intent = new Intent(this, DashboardActivity.class);
+                String EMAIL = "EMAIL";
+                String TYPE = "TYPE";
                 intent.putExtra(EMAIL, email);
-                intent.putExtra("type",type);
+                intent.putExtra(TYPE,type);
                 startActivity(intent);
-                finish();
+              //  finish();
             } else {
                 Toast.makeText(getApplicationContext(),"Select type !",Toast.LENGTH_SHORT).show();
             }
@@ -88,12 +86,4 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    private void setSpinnerItem() {
-        String[] list = getResources().getStringArray(R.array.spinner_login);
-    }
-
-   /* @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d("danny","spinner pos :"+i+" l: "+l+" view:"+ view.getId());
-    }*/
 }
