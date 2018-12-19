@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity{
     private SharedPreferences SM;
     // private static String PASS = "PASS";
 
-    @BindView(R.id.et_email_login)
+    @BindView(R.id.et_phone_login )
     protected EditText et_email;
     @BindView(R.id.et_password_login)
     protected EditText et_password;

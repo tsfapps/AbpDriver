@@ -16,6 +16,7 @@
     <string name="attendance">ATTENDANCE</string>
     <string name="status">STATUS</string>
     <string name="manager">MANAGER</string>
+    <string name="phone_number">Phone Number</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>
