@@ -12,22 +12,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.StateManagerFragment;
+import com.abp.driver.pojo.ModelProfile;
+import com.bumptech.glide.Glide;
+
+import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public Toolbar toolbar;
-    private TextView tv_header_name;
-    private NavigationView navigationView;
-    private String userEmail;
-    private int userType;
     private TextView mToolbarTitle;
+    private ModelProfile modelProfiles;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +45,27 @@ public class DashboardActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        profileImage();
         init();
+
     }
 
     private void init() {
-        userEmail = getIntent().getExtras().getString("EMAIL");
-        userType = getIntent().getExtras().getInt("TYPE");
-        navigationView =  findViewById(R.id.nav_view);
-        tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_email);
-        tv_header_name.setText(userEmail);
+        int[] pro_img = {R.drawable.pro_img};
+        ModelProfile modelProfile;
+        modelProfile = new ModelProfile();
+        modelProfile.setUser_name("Tousif Akram");
+        modelProfile.setUser_image(pro_img[0]);
+
+
+        String userEmail = getIntent().getExtras().getString("EMAIL");
+        int userType = getIntent().getExtras().getInt("TYPE");
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
+        tv_header_name.setText(modelProfile.getUser_name());
+
+        ImageView header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
+        Glide.with(this).load(modelProfile.getUser_image()).into(header_img);
         navigationView.setNavigationItemSelectedListener(this);
         startDashboardFragment(userType);
     }
@@ -93,19 +107,13 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.dashboard, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             SharedPreferences SM = getSharedPreferences(LoginActivity.MyPreference, Context.MODE_PRIVATE);
             SharedPreferences.Editor edit = SM.edit();
@@ -123,11 +131,11 @@ public class DashboardActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_attendance) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_status) {
 
         } else if (id == R.id.nav_evr) {
@@ -143,5 +151,13 @@ public class DashboardActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void profileImage(){
+
+
+
+
+
     }
 }
