@@ -1,5 +1,6 @@
 package com.abp.driver.activity;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,34 +11,42 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.DistrictManagerFragment;
+import com.abp.driver.fragment.ProfileFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.pojo.ModelProfile;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public Toolbar toolbar;
-    private TextView mToolbarTitle;
-    private ModelProfile modelProfiles;
-
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.toolbar_title)
+    TextView mToolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        toolbar =  findViewById(R.id.toolbar);
-        mToolbarTitle =  findViewById(R.id.toolbar_title);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -47,6 +56,7 @@ public class DashboardActivity extends AppCompatActivity
         toggle.syncState();
         profileImage();
         init();
+
 
     }
 
@@ -64,16 +74,27 @@ public class DashboardActivity extends AppCompatActivity
         TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
         tv_header_name.setText(modelProfile.getUser_name());
 
-        ImageView header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
-        Glide.with(this).load(modelProfile.getUser_image()).into(header_img);
+        ImageView iv_header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
+        Glide.with(this).load(modelProfile.getUser_image()).into(iv_header_img);
+
+        iv_header_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Hello Friend", Toast.LENGTH_LONG).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
+            }
+        });
+
         navigationView.setNavigationItemSelectedListener(this);
         startDashboardFragment(userType);
     }
+
 
     private void startDashboardFragment(int userType) {
         switch (userType){
             case 1:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
+
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).addToBackStack(null).commit();
@@ -94,17 +115,28 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
        onBackPressedCalled();
+
     }
 
     public void onBackPressedCalled(){
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-           finish();
+        }
+
+        else {
+            onBackPressedFragment();
         }
     }
-
+    public void onBackPressedFragment(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        }
+        else {
+           super.onBackPressed();
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dashboard, menu);

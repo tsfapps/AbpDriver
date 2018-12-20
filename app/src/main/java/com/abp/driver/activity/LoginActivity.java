@@ -54,13 +54,10 @@ public class LoginActivity extends AppCompatActivity{
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
 
     }
-    @OnClick({R.id.btn_login})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_login:
+    @OnClick(R.id.btn_login)
+
+    public void onButtonClick(View view) {
                 submitBtn();
-                break;
-        }
     }
     private void submitBtn(){
         int type = mSpinner.getSelectedItemPosition();
