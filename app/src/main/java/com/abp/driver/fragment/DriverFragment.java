@@ -14,12 +14,14 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.utils.CustomLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DriverFragment extends Fragment {
 
+    private static final String TAG = "DriverFragment";
     private  DashboardActivity mActivity;
     private  FragmentManager mFragmentManger;
     private View view;
@@ -41,6 +43,7 @@ public class DriverFragment extends Fragment {
     }
 
     private void init() {
+        CustomLog.d(TAG,"init called");
         mActivity = (DashboardActivity) getActivity();
         mActivity.setToolbarTitle("Driver");
         mFragmentManger = mActivity.getSupportFragmentManager();
@@ -51,6 +54,7 @@ public class DriverFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        CustomLog.d(TAG,"onResume called");
         try {
             if (getView() != null) {
                 getView().setFocusableInTouchMode(true);
@@ -66,7 +70,7 @@ public class DriverFragment extends Fragment {
                 });
             }
         } catch (Exception e) {
-            Log.e("error",""+e);
+            CustomLog.e("error",""+e);
         }
     }
 

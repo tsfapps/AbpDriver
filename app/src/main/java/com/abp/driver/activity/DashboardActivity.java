@@ -11,28 +11,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.abp.driver.R;
-import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.DistrictManagerFragment;
+import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.ProfileFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.pojo.ModelProfile;
 import com.bumptech.glide.Glide;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -122,21 +116,21 @@ public class DashboardActivity extends AppCompatActivity
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-
-        else {
+        } else {
             onBackPressedFragment();
         }
     }
-    public void onBackPressedFragment(){
+
+    private void onBackPressedFragment(){
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
         }
         else {
-           super.onBackPressed();
+           finish();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dashboard, menu);

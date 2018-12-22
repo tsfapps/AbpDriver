@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.utils.CustomLog;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,27 +53,27 @@ public class DistrictManagerFragment extends Fragment {
     }
 
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        try {
-//            if (getView() != null) {
-//                getView().setFocusableInTouchMode(true);
-//                getView().requestFocus();
-//                getView().setOnKeyListener(new View.OnKeyListener() {
-//                    @Override
-//                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-//                            mActivity.onBackPressedCalled();
-//                        }
-//                        return true;
-//                    }
-//                });
-//            }
-//        } catch (Exception e) {
-//            Log.e("error",""+e);
-//        }
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (getView() != null) {
+                getView().setFocusableInTouchMode(true);
+                getView().requestFocus();
+                getView().setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                            mActivity.onBackPressedCalled();
+                        }
+                        return true;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            CustomLog.e("error",""+e);
+        }
+    }
 
     @Override
     public void onDestroy() {
