@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.DriverFragment;
@@ -180,10 +181,6 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     public void profileImage(){
-
-
-
-
 
     }
 }
