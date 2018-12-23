@@ -1,29 +1,28 @@
 package com.abp.driver.fragment;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.service.LocationService;
 import com.abp.driver.utils.CustomLog;
-import com.github.akashandroid90.googlesupport.location.AppLocationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DriverFragment extends AppLocationFragment {
+public class DriverFragment extends Fragment {
 
     private static final String TAG = "DriverFragment";
     private  DashboardActivity mActivity;
@@ -32,6 +31,8 @@ public class DriverFragment extends AppLocationFragment {
     @BindView(R.id.tv_user_name)
     TextView mUserName;
     private int REQUEST_LOCATION = 1;
+    private double mLatitude;
+    private double mLongitude;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +50,9 @@ public class DriverFragment extends AppLocationFragment {
 
     private void init() {
         CustomLog.d(TAG,"init called");
+        Intent intent=new Intent(getContext(), LocationService.class);
+        getActivity().startService(intent);
+
         mActivity = (DashboardActivity) getActivity();
         mActivity.setToolbarTitle("Driver");
         mFragmentManger = mActivity.getSupportFragmentManager();
@@ -56,10 +60,22 @@ public class DriverFragment extends AppLocationFragment {
         mUserName.setText("Mr. "+user);
     }
 
+    private void getLocation() {
+        CustomLog.d(TAG,"getLocation called");
+        if (null != LocationService.getCurrentLocation()) {
+            Location location = LocationService.getCurrentLocation();
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+            CustomLog.d(TAG,"new Location lat :"+mLatitude+ " long:"+mLongitude);
+            Toast.makeText(getContext(),"new lat: "+mLatitude+" long: "+mLongitude,Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         CustomLog.d(TAG,"onResume called");
+        getLocation();
         try {
             if (getView() != null) {
                 getView().setFocusableInTouchMode(true);
@@ -79,18 +95,10 @@ public class DriverFragment extends AppLocationFragment {
         }
     }
 
-
     @Override
-    public void newLocation(Location location) {
-        if (location != null) {
-            CustomLog.d(TAG,"new Location lat :"+location.getLatitude()+ " long:"+location.getLongitude());
-        }
-    }
-
-    @Override
-    public void myCurrentLocation(Location currentLocation) {
-        if (currentLocation != null) {
-            CustomLog.d(TAG,"myCurrentLocation lat :"+currentLocation.getLatitude()+ " long:"+currentLocation.getLongitude());
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        Intent intent=new Intent(getContext(), LocationService.class);
+        getActivity().stopService(intent);
     }
 }
