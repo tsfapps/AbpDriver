@@ -2,13 +2,18 @@ package com.abp.driver.activity;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -24,6 +29,8 @@ import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.ProfileFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.pojo.ModelProfile;
+import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
@@ -32,6 +39,7 @@ import butterknife.ButterKnife;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final String TAG = "DashboardActivity";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.toolbar_title)
@@ -182,5 +190,29 @@ public class DashboardActivity extends AppCompatActivity
 
     public void profileImage(){
 
+    }
+
+    public boolean isGpsEnable(){
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return statusOfGPS;
+    }
+
+    public void showDialogueGps(boolean cancelableValue) {
+        try {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(Constant.GPS_DIALOGUE_MESSAGE)
+                    .setCancelable(cancelableValue)
+                    .setPositiveButton(Constant.ENABLE, new DialogInterface.OnClickListener() {
+                        public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(intent,10);
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
+        } catch (Exception e) {
+            CustomLog.e(TAG, e.toString());
+        }
     }
 }

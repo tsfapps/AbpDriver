@@ -68,7 +68,7 @@ public class LocationService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         CustomLog.e(TAG, "onStartCommand  " + " interval time " + updateInterval);
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
 

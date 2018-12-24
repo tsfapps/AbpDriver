@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.abp.driver.R;
+import com.abp.driver.service.LocationService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +53,6 @@ public class LoginActivity extends AppCompatActivity{
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Log In");
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
-
     }
     @OnClick(R.id.btn_login)
 

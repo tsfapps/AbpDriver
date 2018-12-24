@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.abp.driver.utils.CustomLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DriverFragment extends Fragment {
 
@@ -50,6 +52,7 @@ public class DriverFragment extends Fragment {
 
     private void init() {
         CustomLog.d(TAG,"init called");
+
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().startService(intent);
 
@@ -71,11 +74,26 @@ public class DriverFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.btn_check_in_out)
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.btn_check_in_out:
+                if (mActivity.isGpsEnable()) {
+                    getLocation();
+                } else {
+                   mActivity.showDialogueGps(false);
+                }
+                break;
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         CustomLog.d(TAG,"onResume called");
-        getLocation();
+        if (!mActivity.isGpsEnable()) {
+            mActivity.showDialogueGps(false);
+        }
         try {
             if (getView() != null) {
                 getView().setFocusableInTouchMode(true);
