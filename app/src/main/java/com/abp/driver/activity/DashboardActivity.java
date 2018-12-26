@@ -26,7 +26,8 @@ import android.widget.Toast;
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.DriverFragment;
-import com.abp.driver.fragment.ProfileFragment;
+
+import com.abp.driver.fragment.ProfileFragmentDriver;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.pojo.ModelProfile;
 import com.abp.driver.utils.Constant;
@@ -80,13 +81,13 @@ public class DashboardActivity extends AppCompatActivity
         ImageView iv_header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
         Glide.with(this).load(modelProfile.getUser_image()).into(iv_header_img);
 
-        iv_header_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Hello Friend", Toast.LENGTH_LONG).show();
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
-            }
-        });
+//        iv_header_img.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getApplicationContext(), "Hello Friend", Toast.LENGTH_LONG).show();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDriver()).addToBackStack(null).commit();
+//            }
+//        });
 
         navigationView.setNavigationItemSelectedListener(this);
         startDashboardFragment(userType);

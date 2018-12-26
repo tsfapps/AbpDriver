@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +38,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_profile_dm)
     public void llProfileClk(View view){
-        Fragment tFragment = new ProfileFragment();
+        Fragment tFragment = new ProfileFragmentDistrict();
         FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction tFragmentTransaction = tFragmentManager.beginTransaction();
         tFragmentTransaction.replace(R.id.container_main, tFragment);
@@ -48,7 +47,9 @@ public class DistrictManagerFragment extends Fragment {
     }
     private void init() {
         mActivity = (DashboardActivity) getActivity();
-        mActivity.setToolbarTitle("District Manager");
+        if (mActivity != null) {
+            mActivity.setToolbarTitle("District Manager");
+        }
         mFragmentManager = mActivity.getSupportFragmentManager();
     }
 

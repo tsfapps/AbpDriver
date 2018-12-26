@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.pojo.ModelDriver;
 import com.abp.driver.service.LocationService;
 import com.abp.driver.utils.CustomLog;
 
@@ -35,6 +36,7 @@ public class DriverFragment extends Fragment {
     private int REQUEST_LOCATION = 1;
     private double mLatitude;
     private double mLongitude;
+    private ModelDriver modelDriver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

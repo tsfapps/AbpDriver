@@ -1,6 +1,5 @@
 package com.abp.driver.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +14,7 @@ import android.view.ViewGroup;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragmentDistrict extends Fragment {
 
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
@@ -23,7 +22,7 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_district, container, false);
 
         init();
         return view;
@@ -31,8 +30,11 @@ public class ProfileFragment extends Fragment {
 
     private void init() {
         mActivity = (DashboardActivity) getActivity();
-        mActivity.setToolbarTitle("My Profile");
-        mFragmentManager = mActivity.getSupportFragmentManager();
+        if (mActivity != null) {
+            mActivity.setToolbarTitle("District Manager Profile");
+            mFragmentManager = mActivity.getSupportFragmentManager();
+        }
+
     }
     @Override
     public void onResume() {
@@ -45,7 +47,7 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                           mFragmentManager.popBackStack();
+                            mActivity.onBackPressedCalled();
                         }
                         return true;
                     }
