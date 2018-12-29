@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +14,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abp.driver.ApiClient.ApiClients;
-import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.pojo.ModelDriver;
+import com.abp.driver.model.driver.ModelDriverList;
 import com.abp.driver.service.LocationService;
 import com.abp.driver.utils.CustomLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
 
 public class DriverFragment extends Fragment {
 
@@ -39,7 +35,7 @@ public class DriverFragment extends Fragment {
     private int REQUEST_LOCATION = 1;
     private double mLatitude;
     private double mLongitude;
-  //  private ModelDriver modelDriver;
+  //  private ModelDriverList modelDriver;
 
 
     @Override
@@ -59,7 +55,7 @@ public class DriverFragment extends Fragment {
 
     private void init() {
         CustomLog.d(TAG,"init called");
-       ModelDriver modelDriver = new ModelDriver();
+       ModelDriverList modelDriverList = new ModelDriverList();
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().startService(intent);
 

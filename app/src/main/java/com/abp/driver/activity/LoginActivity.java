@@ -1,6 +1,5 @@
 package com.abp.driver.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -8,20 +7,18 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
-import com.abp.driver.pojo.ModelDriver;
-import com.abp.driver.service.LocationService;
+import com.abp.driver.model.driver.ModelDriver;
+import com.abp.driver.model.driver.ModelDriverList;
+import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
 
 import java.util.Objects;
 
@@ -51,7 +48,7 @@ public class LoginActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private String email;
     private String pass;
-    private ModelDriver modelDrivers;
+    private ModelDriverList modelDriversList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +78,14 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onResponse(Call<ModelDriver> call, Response<ModelDriver> response) {
               ModelDriver modelDrivers = response.body();
-               String name = modelDrivers.name;
-
-                Toast.makeText(getApplicationContext(),name +" is Responding ", Toast.LENGTH_LONG).show();
+                if (modelDrivers.getStatus().equals(Constant.SUCCESS_CODE)){
+                    CustomLog.d("danny","onResponse...response: "+modelDrivers.getData().get(0).getName());
+                }
             }
 
             @Override
             public void onFailure(Call<ModelDriver> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Not Responding", Toast.LENGTH_LONG).show();
+                CustomLog.d("danny","flied..."+ call.toString());
 
             }
         });

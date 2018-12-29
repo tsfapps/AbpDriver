@@ -36,4 +36,5 @@ dependencies {
     implementation ('com.github.akashandroid90.googlesupport:google-support-location:1.7') {
         exclude module: 'support-v4'
     }
+    implementation 'com.github.satyan:sugar:1.3'
 }

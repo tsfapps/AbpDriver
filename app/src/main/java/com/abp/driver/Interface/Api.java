@@ -1,6 +1,7 @@
 package com.abp.driver.Interface;
 
-import com.abp.driver.pojo.ModelDriver;
+import com.abp.driver.model.driver.ModelDriver;
+import com.abp.driver.model.driver.ModelDriverList;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -19,6 +20,6 @@ public interface Api {
     );
 
 //    @POST("api/logindetails.php")
-//    Call<ModelDriver> loginUser(@Body ModelDriver modelDriver);
+//    Call<ModelDriverList> loginUser(@Body ModelDriverList modelDriver);
 
 }

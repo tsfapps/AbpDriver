@@ -1,4 +1,4 @@
-package com.abp.driver.pojo;
+package com.abp.driver.model;
 
 public class ModelProfile {
 
