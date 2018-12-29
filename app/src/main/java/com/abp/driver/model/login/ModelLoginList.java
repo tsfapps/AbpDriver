@@ -2,8 +2,9 @@ package com.abp.driver.model.login;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
-public class ModelLoginList {
+public class ModelLoginList extends SugarRecord {
 
     @SerializedName("logintype")
     @Expose

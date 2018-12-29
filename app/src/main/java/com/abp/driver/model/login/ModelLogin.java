@@ -9,7 +9,7 @@ public class ModelLogin {
     @SerializedName("data")
     @Expose
     private List<ModelLoginList> data = null;
-    @SerializedName("status")
+    @SerializedName("STATUS")
     @Expose
     private String status;
 

@@ -20,6 +20,7 @@ import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
+import com.google.gson.Gson;
 
 import java.util.Objects;
 
@@ -41,11 +42,11 @@ public class LoginActivity extends AppCompatActivity{
     // private static String PASS = "PASS";
 
     @BindView(R.id.et_phone_login )
-    private EditText et_email;
+    protected EditText et_email;
     @BindView(R.id.et_password_login)
-    private EditText et_password;
+    protected EditText et_password;
     @BindView(R.id.sp_login)
-    private AppCompatSpinner mSpinner;
+    protected AppCompatSpinner mSpinner;
     private Toolbar toolbar;
     private String email;
     private String pass;
@@ -78,11 +79,14 @@ public class LoginActivity extends AppCompatActivity{
         call.enqueue(new Callback<ModelLogin>() {
             @Override
             public void onResponse(Call<ModelLogin> call, Response<ModelLogin> response) {
-              ModelLogin modelDrivers = response.body();
-                CustomLog.d("danny","onResponse...response: "+modelDrivers.getData().get(0).getName());
-               /* if (modelDrivers.getStatus().equals(Constant.SUCCESS_CODE)){
-                    CustomLog.d("danny","onResponse...response: "+modelDrivers.getData().get(0).getName());
-                }*/
+              ModelLogin modelLogin = response.body();
+                if (modelLogin.getStatus().equals(Constant.SUCCESS_CODE)){
+                    ModelLoginList.deleteAll(ModelLoginList.class);
+                    for (ModelLoginList modelLoginList : modelLogin.getData()){
+                        modelLoginList.save();
+                    }
+
+                }
             }
 
             @Override
