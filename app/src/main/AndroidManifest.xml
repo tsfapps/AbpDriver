@@ -14,7 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:icon">
+        tools:replace="android:icon"
+        android:name=".main.AbpApplication">
+
+        <meta-data android:name="DATABASE"
+            android:value="abp_database.db" />
+        <meta-data android:name="VERSION"
+            android:value="2" />
+        <meta-data android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.abp.driver" />
+
         <activity
             android:screenOrientation="portrait"
             android:name=".activity.DashboardActivity"
