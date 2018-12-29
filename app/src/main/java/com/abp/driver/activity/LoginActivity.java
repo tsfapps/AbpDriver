@@ -15,8 +15,9 @@ import android.widget.Toast;
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
-import com.abp.driver.model.driver.ModelDriver;
-import com.abp.driver.model.driver.ModelDriverList;
+import com.abp.driver.model.driver.DriverAttendance;
+import com.abp.driver.model.login.ModelLogin;
+import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 
@@ -40,21 +41,21 @@ public class LoginActivity extends AppCompatActivity{
     // private static String PASS = "PASS";
 
     @BindView(R.id.et_phone_login )
-    protected EditText et_email;
+    private EditText et_email;
     @BindView(R.id.et_password_login)
-    protected EditText et_password;
+    private EditText et_password;
     @BindView(R.id.sp_login)
-    protected AppCompatSpinner mSpinner;
+    private AppCompatSpinner mSpinner;
     private Toolbar toolbar;
     private String email;
     private String pass;
-    private ModelDriverList modelDriversList;
+    private ModelLoginList modelDriversList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+        ButterKnife.bind(this);//butter knife binding
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -73,18 +74,19 @@ public class LoginActivity extends AppCompatActivity{
         String password = "MKS12322";
 
 
-        Call<ModelDriver> call = api.loginUser(API_KEY, type, username, password);
-        call.enqueue(new Callback<ModelDriver>() {
+        Call<ModelLogin> call = api.loginUser(API_KEY, type, username, password);
+        call.enqueue(new Callback<ModelLogin>() {
             @Override
-            public void onResponse(Call<ModelDriver> call, Response<ModelDriver> response) {
-              ModelDriver modelDrivers = response.body();
-                if (modelDrivers.getStatus().equals(Constant.SUCCESS_CODE)){
+            public void onResponse(Call<ModelLogin> call, Response<ModelLogin> response) {
+              ModelLogin modelDrivers = response.body();
+                CustomLog.d("danny","onResponse...response: "+modelDrivers.getData().get(0).getName());
+               /* if (modelDrivers.getStatus().equals(Constant.SUCCESS_CODE)){
                     CustomLog.d("danny","onResponse...response: "+modelDrivers.getData().get(0).getName());
-                }
+                }*/
             }
 
             @Override
-            public void onFailure(Call<ModelDriver> call, Throwable t) {
+            public void onFailure(Call<ModelLogin> call, Throwable t) {
                 CustomLog.d("danny","flied..."+ call.toString());
 
             }
@@ -107,18 +109,43 @@ public class LoginActivity extends AppCompatActivity{
             et_password.setError("Enter the password");
         }else {
             if (type > 0) {
-                Intent intent = new Intent(this, DashboardActivity.class);
-                String EMAIL = "EMAIL";
-                String TYPE = "TYPE";
-                intent.putExtra(EMAIL, email);
-                intent.putExtra(TYPE,type);
-                startActivity(intent);
+                String API_KEY = "abpn";
+                String phone = "9728265402";
+                Api api = ApiClients.getApiClients().create(Api.class);
+                Call<DriverAttendance> call = api.driverAttendance(API_KEY, phone);
+                call.enqueue(new Callback<DriverAttendance>() {
+                    @Override
+                    public void onResponse(Call<DriverAttendance> call, Response<DriverAttendance> response) {
+                        DriverAttendance driverAttendance = response.body();
+                        String name = driverAttendance.getData().get(0).getPhoneNo();
+
+                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                        String EMAIL = "EMAIL";
+                       // String TYPE = "TYPE";
+                        intent.putExtra(EMAIL, name);
+                       // intent.putExtra(TYPE,type);
+                        startActivity(intent);
+
+
+                        CustomLog.d("akram", "phone : "+name);
+                    }
+
+                    @Override
+                    public void onFailure(Call<DriverAttendance> call, Throwable t) {
+
+                    }
+                });
+
               //  finish();
             } else {
                 Toast.makeText(getApplicationContext(),"Select type !",Toast.LENGTH_SHORT).show();
             }
 
         }
+    }
+
+    public void driverAtt(){
+
     }
 
 }

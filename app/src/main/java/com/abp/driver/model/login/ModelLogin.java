@@ -1,23 +1,23 @@
-package com.abp.driver.model.driver;
+package com.abp.driver.model.login;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ModelDriver {
+public class ModelLogin {
 
     @SerializedName("data")
     @Expose
-    private List<ModelDriverList> data = null;
+    private List<ModelLoginList> data = null;
     @SerializedName("status")
     @Expose
     private String status;
 
-    public List<ModelDriverList> getData() {
+    public List<ModelLoginList> getData() {
         return data;
     }
 
-    public void setData(List<ModelDriverList> data) {
+    public void setData(List<ModelLoginList> data) {
         this.data = data;
     }
 

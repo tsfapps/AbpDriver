@@ -1,9 +1,9 @@
-package com.abp.driver.model.driver;
+package com.abp.driver.model.login;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ModelDriverList {
+public class ModelLoginList {
 
     @SerializedName("logintype")
     @Expose

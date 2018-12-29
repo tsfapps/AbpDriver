@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.model.driver.ModelDriverList;
+import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.service.LocationService;
 import com.abp.driver.utils.CustomLog;
 
@@ -35,7 +35,7 @@ public class DriverFragment extends Fragment {
     private int REQUEST_LOCATION = 1;
     private double mLatitude;
     private double mLongitude;
-  //  private ModelDriverList modelDriver;
+  //  private ModelLoginList modelDriver;
 
 
     @Override
@@ -55,7 +55,7 @@ public class DriverFragment extends Fragment {
 
     private void init() {
         CustomLog.d(TAG,"init called");
-       ModelDriverList modelDriverList = new ModelDriverList();
+       ModelLoginList modelLoginList = new ModelLoginList();
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().startService(intent);
 
