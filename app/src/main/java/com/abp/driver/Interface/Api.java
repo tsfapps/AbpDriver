@@ -1,7 +1,10 @@
 package com.abp.driver.Interface;
 
 import com.abp.driver.model.driver.DriverAttendance;
+import com.abp.driver.model.driver.DriverAttendanceList;
 import com.abp.driver.model.login.ModelLogin;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -22,6 +25,13 @@ public interface Api {
     @FormUrlEncoded
     @POST("api/get-attendance.php")
     Call<DriverAttendance> driverAttendance(
+            @Field("API_KEY") String API_KEY,
+            @Field("phone_no") String phone_no
+
+    );
+    @FormUrlEncoded
+    @POST("api/get-attendance.php")
+    Call<List<DriverAttendance>> driverAttendanceList(
             @Field("API_KEY") String API_KEY,
             @Field("phone_no") String phone_no
 

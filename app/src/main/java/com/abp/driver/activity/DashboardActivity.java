@@ -21,10 +21,12 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
+import com.abp.driver.fragment.DriverAttendanceDetailFragment;
 import com.abp.driver.fragment.DriverFragment;
 
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.model.ModelProfile;
+import com.abp.driver.model.driver.DriverAttendance;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.bumptech.glide.Glide;
@@ -62,7 +64,11 @@ public class DashboardActivity extends AppCompatActivity
     private void init() {
         int[] pro_img = {R.drawable.pro_img};
         ModelProfile modelProfile;
+
         modelProfile = new ModelProfile();
+
+      //  DriverAttendance driverAttendance = new DriverAttendance();
+
         modelProfile.setUser_name("Tousif Akram");
         modelProfile.setUser_image(pro_img[0]);
 
@@ -70,8 +76,8 @@ public class DashboardActivity extends AppCompatActivity
         String userEmail = getIntent().getExtras().getString("EMAIL");
         int userType = getIntent().getExtras().getInt("TYPE");
         NavigationView navigationView = findViewById(R.id.nav_view);
-        TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
-        tv_header_name.setText(modelProfile.getUser_name());
+      //  TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
+      //  tv_header_name.setText(driverAttendance.getData().get(1).getPhoneNo());
 
         ImageView iv_header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
         Glide.with(this).load(modelProfile.getUser_image()).into(iv_header_img);
@@ -166,7 +172,7 @@ public class DashboardActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_attendance) {
-
+          getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_status) {
 
         } else if (id == R.id.nav_evr) {

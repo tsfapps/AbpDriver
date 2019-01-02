@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity{
                     @Override
                     public void onResponse(Call<DriverAttendance> call, Response<DriverAttendance> response) {
                         DriverAttendance driverAttendance = response.body();
-                        String name = driverAttendance.getData().get(0).getPhoneNo();
+                        String name = "Tousif Akram";
 
                         Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                         String EMAIL = "EMAIL";
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity{
                         startActivity(intent);
 
 
-                        CustomLog.d("akram", "phone : "+name);
+                      //  CustomLog.d("akram", "phone : "+name);
                     }
 
                     @Override
