@@ -2,7 +2,9 @@ package com.abp.driver.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.abp.driver.R;
+import com.abp.driver.receiver.NetworkStateChangeReceiver;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 

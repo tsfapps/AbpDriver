@@ -13,6 +13,28 @@ public class SharedPreference {
         // TODO Auto-generated constructor stub
         this.mContext = ctx;
     }
+    public void setUserData(String userName, String userPhone, String userPic) {
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        edt = sp.edit();
+        edt.putString(Constant.USER_NAME, userName);
+        edt.putString(Constant.USER_PHONE, userPhone);
+        edt.putString(Constant.USER_PIC, userPic);
+        edt.commit();
+    }
+
+    public String getUserName() {
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return sp.getString(Constant.USER_NAME, Constant.EMPTY);
+    }
+    public String getUserPhoneNo() {
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return sp.getString(Constant.USER_PHONE, Constant.EMPTY);
+    }
+
+    public String getUserPic() {
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return sp.getString(Constant.USER_PIC, Constant.EMPTY);
+    }
 
     public void setPermissionSettingPage(boolean value) {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);

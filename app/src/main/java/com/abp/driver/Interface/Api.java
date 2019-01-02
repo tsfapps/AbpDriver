@@ -1,5 +1,6 @@
 package com.abp.driver.Interface;
 
+import com.abp.driver.model.PunchInOut.ModelPunchInOut;
 import com.abp.driver.model.driver.DriverAttendance;
 import com.abp.driver.model.driver.DriverAttendanceList;
 import com.abp.driver.model.login.ModelLogin;
@@ -34,6 +35,24 @@ public interface Api {
     Call<List<DriverAttendance>> driverAttendanceList(
             @Field("API_KEY") String API_KEY,
             @Field("phone_no") String phone_no
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/attendanceapi.php")
+    Call<ModelPunchInOut> driverPunchInOut(
+            @Field("API_KEY") String API_KEY,
+            @Field("type_io") String type_io,
+            @Field("phone_no") String phone_no,
+            @Field("time_in") String time_in,
+            @Field("time_out") String time_out,
+            @Field("total_time") String total_time,
+            @Field("longitude_in") String longitude_in,
+            @Field("longitude_out") String longitude_out,
+            @Field("latitude_in") String latitude_in,
+            @Field("latitude_out") String latitude_out,
+            @Field("check_in_date") String check_in_date,
+            @Field("check_out_date") String check_out_date
 
     );
 

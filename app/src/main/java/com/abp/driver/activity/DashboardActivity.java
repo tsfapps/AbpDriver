@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,9 +29,13 @@ import com.abp.driver.fragment.DriverFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.model.ModelProfile;
 import com.abp.driver.model.driver.DriverAttendance;
+import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
+import com.abp.driver.utils.SharedPreference;
 import com.bumptech.glide.Glide;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +48,8 @@ public class DashboardActivity extends AppCompatActivity
     Toolbar toolbar;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
+    private List<ModelLoginList> mLoginList;
+    private SharedPreference mSharedPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +70,22 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     private void init() {
-        int[] pro_img = {R.drawable.pro_img};
+        mLoginList = ModelLoginList.listAll(ModelLoginList.class);
+      /*  int[] pro_img = {R.drawable.pro_img};
         ModelProfile modelProfile;
-
         modelProfile = new ModelProfile();
-
-      //  DriverAttendance driverAttendance = new DriverAttendance();
-
         modelProfile.setUser_name("Tousif Akram");
-        modelProfile.setUser_image(pro_img[0]);
+        modelProfile.setUser_image(pro_img[0]);*/
 
 
-        String userEmail = getIntent().getExtras().getString("EMAIL");
-        int userType = getIntent().getExtras().getInt("TYPE");
+        //String userEmail = getIntent().getExtras().getString("EMAIL");
         NavigationView navigationView = findViewById(R.id.nav_view);
-      //  TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
-      //  tv_header_name.setText(driverAttendance.getData().get(1).getPhoneNo());
-
+        TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
         ImageView iv_header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
-        Glide.with(this).load(modelProfile.getUser_image()).into(iv_header_img);
+        mSharedPreference = new SharedPreference(this);
+        tv_header_name.setText(mSharedPreference.getUserName());
+        Glide.with(this).load(mSharedPreference.getUserPic()).into(iv_header_img);
+
 
 //        iv_header_img.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -91,21 +96,24 @@ public class DashboardActivity extends AppCompatActivity
 //        });
 
         navigationView.setNavigationItemSelectedListener(this);
-        startDashboardFragment(userType);
+        if (mLoginList.size() > 0) {
+            startDashboardFragment(mLoginList.get(0).getLogintype());
+        } else {
+            String userType = getIntent().getExtras().getString("login_type");
+            startDashboardFragment(userType);
+        }
     }
 
 
-    private void startDashboardFragment(int userType) {
+    private void startDashboardFragment(String userType) {
         switch (userType){
-            case 1:
+            case Constant.LOGIN_TYPE_DRIVER:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
-
                 break;
-            case 2:
+            case Constant.LOGIN_TYPE_DISTRICT_MANAGER:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).addToBackStack(null).commit();
-
                 break;
-            case 3:
+            case Constant.LOGIN_TYPE_STATE_MANAGER:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StateManagerFragment()).addToBackStack(null).commit();
                 break;
         }
@@ -216,5 +224,28 @@ public class DashboardActivity extends AppCompatActivity
         } catch (Exception e) {
             CustomLog.e(TAG, e.toString());
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public boolean isNetworkAvailable() {
+        boolean condition = false;
+        try {
+            final ConnectivityManager connectivity = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivity == null) {
+                condition = false;
+            } else {
+                final NetworkInfo[] info = connectivity.getAllNetworkInfo();
+                if (info != null) {
+                    for (int i = 0; i < info.length; i++) {
+                        if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                            condition = true;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            CustomLog.e(TAG,e.toString());
+        }
+        return condition;
     }
 }
