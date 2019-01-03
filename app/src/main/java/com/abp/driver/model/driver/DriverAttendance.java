@@ -7,6 +7,7 @@ import java.util.List;
 
 public class DriverAttendance {
 
+
     @SerializedName("data")
     @Expose
     private List<DriverAttendanceList> data = null;
@@ -29,4 +30,5 @@ public class DriverAttendance {
     public void setSTATUS(String sTATUS) {
         this.sTATUS = sTATUS;
     }
+
 }

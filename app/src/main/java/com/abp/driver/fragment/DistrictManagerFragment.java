@@ -38,12 +38,14 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_profile_dm)
     public void llProfileClk(View view){
-        Fragment tFragment = new ProfileFragmentDistrict();
-        FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction tFragmentTransaction = tFragmentManager.beginTransaction();
-        tFragmentTransaction.replace(R.id.container_main, tFragment);
-        tFragmentTransaction.addToBackStack(null);
-        tFragmentTransaction.commit();
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDistrict()).addToBackStack(null).commit();
+
+      //  Fragment tFragment = new ProfileFragmentDistrict();
+//        FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
+      //   tFragmentManager.beginTransaction().replace(R.id.container_main, tFragment).addToBackStack(null).commit();
+//        tFragmentTransaction.replace(R.id.container_main, tFragment).addToBackStack(null).commit();
+
     }
     private void init() {
         mActivity = (DashboardActivity) getActivity();

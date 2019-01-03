@@ -1,9 +1,18 @@
 package com.abp.driver.model.driver;
 
+import android.content.Context;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
-public class DriverAttendanceList {
+public class DriverAttendanceList extends SugarRecord{
+    @SerializedName("longitude_in")
+    @Expose
+    private String longitudeIn;
+    @SerializedName("longitude_out")
+    @Expose
+    private String longitudeOut;
     @SerializedName("type_io")
     @Expose
     private String typeIo;
@@ -19,18 +28,54 @@ public class DriverAttendanceList {
     @SerializedName("total_time")
     @Expose
     private String totalTime;
-    @SerializedName("longitude")
+    @SerializedName("latitude_in")
     @Expose
-    private String longitude;
-    @SerializedName("latitude")
+    private String latitudeIn;
+    @SerializedName("latitude_out")
     @Expose
-    private String latitude;
+    private String latitudeOut;
     @SerializedName("check_in_date")
     @Expose
     private String checkInDate;
     @SerializedName("check_out_date")
     @Expose
     private String checkOutDate;
+
+    private Context mContext;
+
+    public DriverAttendanceList(Context mContext, String longitudeIn, String longitudeOut, String typeIo, String phoneNo, String timeIn, String timeOut, String totalTime, String latitudeIn, String latitudeOut, String checkInDate, String checkOutDate) {
+        this.mContext = mContext;
+        this.longitudeIn = longitudeIn;
+        this.longitudeOut = longitudeOut;
+        this.typeIo = typeIo;
+        this.phoneNo = phoneNo;
+        this.timeIn = timeIn;
+        this.timeOut = timeOut;
+        this.totalTime = totalTime;
+        this.latitudeIn = latitudeIn;
+        this.latitudeOut = latitudeOut;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+    }
+
+    public DriverAttendanceList() {
+    }
+
+    public String getLongitudeIn() {
+        return longitudeIn;
+    }
+
+    public void setLongitudeIn(String longitudeIn) {
+        this.longitudeIn = longitudeIn;
+    }
+
+    public String getLongitudeOut() {
+        return longitudeOut;
+    }
+
+    public void setLongitudeOut(String longitudeOut) {
+        this.longitudeOut = longitudeOut;
+    }
 
     public String getTypeIo() {
         return typeIo;
@@ -72,20 +117,20 @@ public class DriverAttendanceList {
         this.totalTime = totalTime;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public String getLatitudeIn() {
+        return latitudeIn;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setLatitudeIn(String latitudeIn) {
+        this.latitudeIn = latitudeIn;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public String getLatitudeOut() {
+        return latitudeOut;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setLatitudeOut(String latitudeOut) {
+        this.latitudeOut = latitudeOut;
     }
 
     public String getCheckInDate() {

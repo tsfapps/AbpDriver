@@ -17,7 +17,7 @@
     <string name="status">STATUS</string>
     <string name="manager">MANAGER</string>
     <string name="phone_number">Phone Number</string>
-    <string name="working_hrs">Total working hours</string>
+    <string name="working_hrs">Total working hrs</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>

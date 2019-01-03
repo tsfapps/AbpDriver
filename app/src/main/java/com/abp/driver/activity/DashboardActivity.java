@@ -116,6 +116,8 @@ public class DashboardActivity extends AppCompatActivity
             case Constant.LOGIN_TYPE_STATE_MANAGER:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StateManagerFragment()).addToBackStack(null).commit();
                 break;
+
+
         }
 
     }

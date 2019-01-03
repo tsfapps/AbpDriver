@@ -21,6 +21,12 @@ import butterknife.ButterKnife;
 public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapter.DriverViewHolder>{
 
     private Context context;
+    private DriverAttendance driverAttendance;
+
+    public DriverAttDetAdapter(Context context, DriverAttendance driverAttendance) {
+        this.context = context;
+        this.driverAttendance = driverAttendance;
+    }
 
 //    public DriverAttDetAdapter(Context context, DriverAttendance driverAttendances) {
 //        this.context = context;
@@ -44,38 +50,44 @@ public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder driverViewHolder, int i) {
-//        DriverAttendance driverAttendance;
-//        String chkIn = driverAttendance.getData().get(i).getTimeIn();
-//        String chkOut = driverAttendance.getData().get(i).getTimeOut();
-//        driverViewHolder.tv_dri_att_det_chk_in.setText(chkIn);
-//        driverViewHolder.tv_dri_att_det_chk_out.setText(chkOut);
-//        CustomLog.d("driverChkIn", chkIn+" : "+chkOut);
 
+        List<DriverAttendanceList> driverAttendanceLists = DriverAttendanceList.listAll(DriverAttendanceList.class);
+        if (driverAttendanceLists.size()>0) {
+            String chkIn = driverAttendanceLists.get(i).getTimeIn();
+            String chkOut = driverAttendanceLists.get(i).getTimeOut();
+            String date = driverAttendanceLists.get(i).getCheckInDate();
+            String totalTime = driverAttendanceLists.get(i).getTotalTime();
+            driverViewHolder.tv_dri_att_det_chk_in.setText(chkIn);
+            driverViewHolder.tv_dri_att_det_chk_out.setText(chkOut);
+            driverViewHolder.tv_dri_att_det_working_hrs.setText(totalTime);
+            driverViewHolder.tv_dri_att_det_date.setText(date);
+            CustomLog.d("driverChkIn", chkIn + " : " + chkOut);
+        }
     }
 
     @Override
     public int getItemCount() {
-       // return driverAttendances.size();
-        return 10;
+        return driverAttendance.getData().size();
+       // return 10;
     }
 
    public class DriverViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.tv_chk_in_dri_att_det)
         TextView tv_dri_att_det_chk_in;
+
         @BindView(R.id.tv_chk_out_dri_att_det)
         TextView tv_dri_att_det_chk_out;
+
         @BindView(R.id.tv_working_hrs_dri_att_det)
         TextView tv_dri_att_det_working_hrs;
+
         @BindView(R.id.tv_date_dri_att_det)
         TextView tv_dri_att_det_date;
 
-
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
-
         }
     }
 }
