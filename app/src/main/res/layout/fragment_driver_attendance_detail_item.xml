@@ -60,7 +60,8 @@
                 android:textSize="12sp"
                 android:id="@+id/tv_chkIn_lbl"
                 android:text="Check in"
-                style="@style/style_tv_dri_att" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <TextView
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
@@ -68,7 +69,8 @@
                 android:layout_below="@+id/tv_chkIn_lbl"
                 android:id="@+id/tv_chk_in_dri_att_det"
                 android:text="9:25 AM"
-                style="@style/style_tv_dri_att" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
         <android.support.v7.widget.CardView
             android:id="@+id/cv_container_dri_att_det"
@@ -146,24 +148,28 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <LinearLayout
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <TextView
+                android:layout_gravity="end"
                 android:textSize="12sp"
                 android:textColor="@color/black"
             android:id="@+id/tv_chkOut_lbl"
             android:text="Check out"
-            style="@style/style_tv_dri_att" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <TextView
+                android:layout_gravity="end"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:id="@+id/tv_chk_out_dri_att_det"
                 android:text="6:45 PM"
-                style="@style/style_tv_dri_att" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>

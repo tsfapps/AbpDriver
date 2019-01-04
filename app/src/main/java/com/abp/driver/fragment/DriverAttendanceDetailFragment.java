@@ -34,7 +34,6 @@ public class DriverAttendanceDetailFragment extends Fragment {
     Unbinder ub_dri_att_det;
 
     private List<DriverAttendance> driverAttendances;
-    private DriverAttDetAdapter driverAttDetAdapter;
     private RecyclerView.LayoutManager layoutManager;
     @BindView(R.id.rv_dri_att_det)
     RecyclerView mRecyclerView;
@@ -54,6 +53,8 @@ public class DriverAttendanceDetailFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
 
+        DriverAttDetAdapter driverAttDetAdapter = new DriverAttDetAdapter();
+        mRecyclerView.setAdapter(driverAttDetAdapter);
 
         callAttendanceApi();
 
@@ -72,31 +73,12 @@ public class DriverAttendanceDetailFragment extends Fragment {
             @Override
             public void onResponse(Call<DriverAttendance> call, Response<DriverAttendance> response) {
 
-               DriverAttendance driverAttendance = response.body();
-//               for (int i = 0; i< driverAttendance.getData().size(); i++) {
-//                   String longitude_in = driverAttendance.getData().get(i).getLongitudeIn();
-//                   String longitude_out = driverAttendance.getData().get(i).getLongitudeOut();
-//                   String type_io = driverAttendance.getData().get(i).getTypeIo();
-//                   String phone_no = driverAttendance.getData().get(i).getPhoneNo();
-//                   String time_in = driverAttendance.getData().get(i).getTimeIn();
-//                   String time_out = driverAttendance.getData().get(i).getTimeOut();
-//                   String total_time = driverAttendance.getData().get(i).getTotalTime();
-//                   String latitude_in = driverAttendance.getData().get(i).getLatitudeIn();
-//                   String latitude_out = driverAttendance.getData().get(i).getLatitudeOut();
-//                   String check_in_date = driverAttendance.getData().get(i).getCheckInDate();
-//                   String check_out_date = driverAttendance.getData().get(i).getCheckOutDate();
-//                   DriverAttendanceList driverAttendanceLists = new DriverAttendanceList(getActivity(), longitude_in, longitude_out, type_io, phone_no, time_in, time_out, total_time, latitude_in, latitude_out, check_in_date, check_out_date);
-//                   driverAttendanceLists.save();
-//                   CustomLog.d("sugarSave", "Data saved in Sqlite database");
-//               }
-
+                DriverAttendance driverAttendance = response.body();
                 DriverAttendanceList.deleteAll(DriverAttendanceList.class);
                 for (DriverAttendanceList driverAttendanceList : driverAttendance.getData()){
                     driverAttendanceList.save();
                 }
-                driverAttDetAdapter = new DriverAttDetAdapter(getContext(), driverAttendance);
-                mRecyclerView.setAdapter(driverAttDetAdapter);
-                  CustomLog.d("recyclerList", driverAttendance.getData().get(1).getPhoneNo()+" is Responding");
+
 
             }
 
