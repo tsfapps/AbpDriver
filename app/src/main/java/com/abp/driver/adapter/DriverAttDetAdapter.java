@@ -32,7 +32,6 @@ public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapte
             driverViewHolder.tv_dri_att_det_chk_out.setText(chkOut);
             driverViewHolder.tv_dri_att_det_working_hrs.setText(totalTime);
             driverViewHolder.tv_dri_att_det_date.setText(date);
-            CustomLog.d("driverChkIn", chkIn + " : " + chkOut);
         }
     }
     @Override
