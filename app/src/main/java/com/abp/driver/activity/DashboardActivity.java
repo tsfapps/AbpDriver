@@ -26,6 +26,7 @@ import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.DriverAttendanceDetailFragment;
 import com.abp.driver.fragment.DriverFragment;
 
+import com.abp.driver.fragment.EvrFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.fragment.StatusFragment;
 import com.abp.driver.model.ModelProfile;
@@ -72,29 +73,12 @@ public class DashboardActivity extends AppCompatActivity
 
     private void init() {
         mLoginList = ModelLoginList.listAll(ModelLoginList.class);
-      /*  int[] pro_img = {R.drawable.pro_img};
-        ModelProfile modelProfile;
-        modelProfile = new ModelProfile();
-        modelProfile.setUser_name("Tousif Akram");
-        modelProfile.setUser_image(pro_img[0]);*/
-
-
-        //String userEmail = getIntent().getExtras().getString("EMAIL");
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
         ImageView iv_header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
         mSharedPreference = new SharedPreference(this);
         tv_header_name.setText(mSharedPreference.getUserName());
         Glide.with(this).load(mSharedPreference.getUserPic()).into(iv_header_img);
-
-
-//        iv_header_img.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(), "Hello Friend", Toast.LENGTH_LONG).show();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDriver()).addToBackStack(null).commit();
-//            }
-//        });
 
         navigationView.setNavigationItemSelectedListener(this);
         if (mLoginList.size() > 0) {
@@ -187,7 +171,7 @@ public class DashboardActivity extends AppCompatActivity
         } else if (id == R.id.nav_status) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_evr) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -196,7 +180,7 @@ public class DashboardActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
