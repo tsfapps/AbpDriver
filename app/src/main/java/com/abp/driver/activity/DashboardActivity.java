@@ -28,6 +28,7 @@ import com.abp.driver.fragment.DriverFragment;
 
 import com.abp.driver.fragment.EvrFragment;
 import com.abp.driver.fragment.StateManagerFragment;
+import com.abp.driver.fragment.StatusDistrictFragment;
 import com.abp.driver.fragment.StatusFragment;
 import com.abp.driver.model.ModelProfile;
 import com.abp.driver.model.driver.DriverAttendance;
@@ -174,6 +175,7 @@ public class DashboardActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_manage) {
 
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusDistrictFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
