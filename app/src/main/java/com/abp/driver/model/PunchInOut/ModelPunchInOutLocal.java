@@ -17,6 +17,8 @@ public class ModelPunchInOutLocal extends SugarRecord {
     private String checkOutDate;
     private String status;
     private String isSynced;
+    private String isCheckInSynced;
+    private String isCheckOutSynced;
 
     public String getLongitudeOut() {
         return longitudeOut;
@@ -80,6 +82,22 @@ public class ModelPunchInOutLocal extends SugarRecord {
 
     public void setLongitudeIn(String longitude) {
         this.longitudeIn = longitude;
+    }
+
+    public String getIsCheckInSynced() {
+        return isCheckInSynced;
+    }
+
+    public void setIsCheckInSynced(String isCheckInSynced) {
+        this.isCheckInSynced = isCheckInSynced;
+    }
+
+    public String getIsCheckOutSynced() {
+        return isCheckOutSynced;
+    }
+
+    public void setIsCheckOutSynced(String isCheckOutSynced) {
+        this.isCheckOutSynced = isCheckOutSynced;
     }
 
     public String getLatitudeIn() {

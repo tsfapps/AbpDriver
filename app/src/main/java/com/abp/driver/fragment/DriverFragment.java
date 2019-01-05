@@ -56,6 +56,8 @@ public class DriverFragment extends Fragment {
     private SharedPreference mSharedPreference;
     private List<ModelPunchInOutLocal> punchInOutLocalDetails;
     private String punchType = null;
+    private boolean isCheckIn = false;
+    private boolean isCheckOut = false;
 
 
     @Override
@@ -116,10 +118,10 @@ public class DriverFragment extends Fragment {
         }
     }
 
-    private void callPunchInOutApi(String type) {
+    private void callPunchInOutApi(final String type) {
         ModelPunchInOutLocal mModelValue = null;
-        String mTypeIO = type;
-        String mPhoneNo = mSharedPreference.getUserPhoneNo();
+        String mTypeIo = type;
+        final String mPhoneNo = mSharedPreference.getUserPhoneNo();
         String mInTime = "";
         String mOutTime = "";
         String mTotalTime = "";
@@ -135,11 +137,16 @@ public class DriverFragment extends Fragment {
             mLatitudeIn = String.valueOf(mLatitude);
             mLongitudeIn = String.valueOf(mLongitude);
             mCheckInDate = DateUtil.getCurrentDateTime();
-            mModelValue = saveAttendanceDetailsLocal(type,mPhoneNo,mInTime,mOutTime,mTotalTime,mLongitudeIn,mLongitudeOut,mLatitudeIn,mLatitudeOut,mCheckInDate,mCheckOutDate);
+            isCheckIn = true;
+            isCheckOut =false;
+            //mModelValue = saveAttendanceDetailsLocal(type,mPhoneNo,mInTime,mOutTime,mTotalTime,mLongitudeIn,mLongitudeOut,mLatitudeIn,mLatitudeOut,mCheckInDate,mCheckOutDate);
         } else {
             List<ModelPunchInOutLocal> localDetails = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
                     "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND time_out = '" + Constant.EMPTY + "' AND status = 'check_in' ORDER BY id DESC");
             if (localDetails.size() > 0) {
+                if (localDetails.get(0).getIsCheckInSynced().equals("N")) {
+                    mTypeIo = "check_in";
+                }
                 mInTime = localDetails.get(0).getTimeIn();
                 mLatitudeIn = localDetails.get(0).getLatitudeIn();
                 mLongitudeIn = localDetails.get(0).getLongitudeIn();
@@ -149,41 +156,51 @@ public class DriverFragment extends Fragment {
                 mOutTime = DateUtil.getCurrentTime();
                 mCheckOutDate = DateUtil.getCurrentDateTime();
                 mTotalTime = DateUtil.timeDiff(mInTime, mOutTime, Constant.HOUR_SUFFIX);
+                isCheckIn =true;
+                isCheckOut = true;
                 Log.d("dannyali","time diff : mCheckInDate :"+mCheckInDate+" mCheckOutDate:"+mCheckOutDate+ " total time :"+ mTotalTime);
-                mModelValue = saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate);
+                //mModelValue = saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate);
             }
         }
 
         if (mActivity.isNetworkAvailable()) {
             Api api = ApiClients.getApiClients().create(Api.class);
-            Call<ModelPunchInOut> call = api.driverPunchInOut(Constant.API_KEY, mTypeIO, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
+            Call<ModelPunchInOut> call = api.driverPunchInOut(Constant.API_KEY, mTypeIo, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
                     mLatitudeOut, mCheckInDate, mCheckOutDate);
             final ModelPunchInOutLocal finalMModelValue = mModelValue;
+            final String finalMInTime = mInTime;
+            final String finalMOutTime = mOutTime;
+            final String finalMTotalTime = mTotalTime;
+            final String finalMLongitudeIn = mLongitudeIn;
+            final String finalMLongitudeOut = mLongitudeOut;
+            final String finalMLatitudeIn = mLatitudeIn;
+            final String finalMLatitudeOut = mLatitudeOut;
+            final String finalMCheckInDate = mCheckInDate;
+            final String finalMCheckOutDate = mCheckOutDate;
             call.enqueue(new Callback<ModelPunchInOut>() {
                 @Override
                 public void onResponse(Call<ModelPunchInOut> call, Response<ModelPunchInOut> response) {
                     ModelPunchInOut modelPunchInOut = response.body();
                     if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                         CustomLog.d("danny", "response success.");
-                        finalMModelValue.setIsSynced("Y");
-                        finalMModelValue.save();
+                        saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ModelPunchInOut> call, Throwable t) {
                     CustomLog.d("danny", "error..." + call.toString());
-                    finalMModelValue.setIsSynced("N");
-                    finalMModelValue.save();
+                    saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,false,isCheckIn, isCheckOut);
                 }
             });
         } else {
             Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate,false, isCheckIn, isCheckOut);
         }
     }
 
-    private ModelPunchInOutLocal saveAttendanceDetailsLocal(String type, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut,
-                                            String mCheckInDate, String mCheckOutDate) {
+    private void saveAttendanceDetailsLocal(String type, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut,
+                                            String mCheckInDate, String mCheckOutDate, boolean isSynced, boolean isCheckIn, boolean isCheckOut) {
         ModelPunchInOutLocal model = null;
         if (type.equals("check_in")) {
             model = new ModelPunchInOutLocal();
@@ -198,7 +215,13 @@ public class DriverFragment extends Fragment {
             model.setCheckInDate(mCheckInDate);
             model.setCheckOutDate(mCheckOutDate);
             model.setStatus(type);
-            model.setIsSynced("N");
+            if (isSynced && isCheckIn && !isCheckOut) {
+                model.setIsCheckInSynced("Y");
+                model.setIsSynced("Y");
+            } else {
+                model.setIsCheckInSynced("N");
+                model.setIsSynced("N");
+            }
             model.save();
         } else {
             Long id;
@@ -218,13 +241,21 @@ public class DriverFragment extends Fragment {
                 model.setCheckInDate(mCheckInDate);
                 model.setCheckOutDate(mCheckOutDate);
                 model.setStatus(type);
-                model.setIsSynced("N");
+                if (isSynced && isCheckIn && isCheckOut) {
+                    model.setIsSynced("Y");
+                } else {
+                    model.setIsSynced("N");
+                }
+                if (isSynced) {
+                    model.setIsCheckOutSynced("Y");
+                } else {
+                    model.setIsCheckOutSynced("N");
+                }
                 model.save();
             }
             Gson gson = new Gson();
             Log.d("dannyali","attendance local list :: "+ gson.toJson(ModelPunchInOutLocal.listAll(ModelPunchInOutLocal.class)));
         }
-        return model;
     }
 
     @OnClick(R.id.btn_check_in_out)
