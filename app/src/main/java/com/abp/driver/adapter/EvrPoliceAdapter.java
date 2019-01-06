@@ -42,10 +42,10 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
     @Override
     public void onBindViewHolder(@NonNull final EvrPoliceHolder evrPoliceHolder, int i) {
 
-        String policeStationName = modelPoliceLists.get(i).getPolicestationname();
+        String policeStationName = modelPoliceLists.get(0).getPolicestationname();
         evrPoliceHolder.tv_policeList.setText(policeStationName);
 
-        CustomLog.d("PoliceList", modelPoliceLists.get(i).getPolicestationname());
+        CustomLog.d("PoliceList", policeStationName);
         evrPoliceHolder.ll_policeList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

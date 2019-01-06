@@ -73,7 +73,7 @@ public class EvrPoliceListFragment extends Fragment {
                     modelPoliceList.save();
                 }
                 CustomLog.d("PoliceList", "Responding");
-              //  CustomLog.d("PoliceList","fragment"+ modelPolice.getData().get(0).getPolicestationname());
+//                 CustomLog.d("PoliceList","fragment"+ modelPolice.getData().get(0).getPolicestationname());
 
             }
 
