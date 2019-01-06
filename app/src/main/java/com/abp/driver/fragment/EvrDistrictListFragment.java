@@ -19,8 +19,8 @@ import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.EvrDistrictAdapter;
-import com.abp.driver.model.status.District;
-import com.abp.driver.model.status.DistrictList;
+import com.abp.driver.model.district.ModelDistrict;
+import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
 
@@ -59,19 +59,19 @@ public class EvrDistrictListFragment extends Fragment {
         String strApiKey = Constant.API_KEY;
         String strStateId = mSharedPreference.getUserStateId();
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<District> call = api.districtList(strApiKey, strStateId);
-        call.enqueue(new Callback<District>() {
+        Call<ModelDistrict> call = api.districtList(strApiKey, strStateId);
+        call.enqueue(new Callback<ModelDistrict>() {
             @Override
-            public void onResponse(Call<District> call, Response<District> response) {
-                District district = response.body();
-                DistrictList.deleteAll(DistrictList.class);
-                for (DistrictList districtList : district.getData()){
-                    districtList.save();
+            public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
+                ModelDistrict modelDistrict = response.body();
+                ModelDistrictList.deleteAll(ModelDistrictList.class);
+                for (ModelDistrictList modelDistrictList : modelDistrict.getData()){
+                    modelDistrictList.save();
                 }
             }
 
             @Override
-            public void onFailure(Call<District> call, Throwable t) {
+            public void onFailure(Call<ModelDistrict> call, Throwable t) {
 
             }
         });
@@ -80,7 +80,7 @@ public class EvrDistrictListFragment extends Fragment {
     private void init() {
         DashboardActivity mActivity = (DashboardActivity) getActivity();
         if (mActivity !=null){
-            mActivity.setToolbarTitle("Evr District List");
+            mActivity.setToolbarTitle("Evr ModelDistrict List");
         }
     }
 

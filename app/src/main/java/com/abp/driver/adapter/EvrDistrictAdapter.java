@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.EvrPoliceListFragment;
-import com.abp.driver.model.status.DistrictList;
+import com.abp.driver.model.district.ModelDistrictList;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 
 public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.EvrDistrictHolder> {
 
-    private List<DistrictList> districtLists = DistrictList.listAll(DistrictList.class);
+    private List<ModelDistrictList> modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
 
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -42,7 +42,7 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull EvrDistrictHolder evrDistrictHolder, int i) {
-        String strDistrictName = districtLists.get(i).getDistrictName();
+        String strDistrictName = modelDistrictLists.get(i).getDistrictName();
         evrDistrictHolder.tv_evrDistrictList.setText(strDistrictName);
 
         evrDistrictHolder.ll_EvrDistrictList.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +56,7 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
 
     @Override
     public int getItemCount() {
-        return districtLists.size();
+        return modelDistrictLists.size();
     }
 
     public class EvrDistrictHolder extends RecyclerView.ViewHolder{

@@ -1,23 +1,23 @@
-package com.abp.driver.model.status;
+package com.abp.driver.model.police;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DistrictDetail {
+public class ModelPolice {
     @SerializedName("data")
     @Expose
-    private List<DistrictDetailList> data = null;
+    private List<ModelPoliceList> data = null;
     @SerializedName("STATUS")
     @Expose
     private String sTATUS;
 
-    public List<DistrictDetailList> getData() {
+    public List<ModelPoliceList> getData() {
         return data;
     }
 
-    public void setData(List<DistrictDetailList> data) {
+    public void setData(List<ModelPoliceList> data) {
         this.data = data;
     }
 

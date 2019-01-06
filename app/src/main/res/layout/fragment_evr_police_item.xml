@@ -15,7 +15,7 @@
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/tv_evr_police_list"
-        android:text="@string/police_list"
+        android:text="@string/police_station_name"
         android:drawableStart="@drawable/ic_arrow"
         android:textSize="14sp"
         android:layout_marginStart="8dp"

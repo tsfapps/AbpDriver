@@ -30,7 +30,7 @@ public class ProfileFragmentDistrict extends Fragment {
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
-            mActivity.setToolbarTitle("District Manager Profile");
+            mActivity.setToolbarTitle("ModelDistrict Manager Profile");
         }
 
     }

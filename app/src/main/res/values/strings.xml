@@ -20,6 +20,7 @@
     <string name="working_hrs">Total working hrs</string>
     <string name="district_list">District List</string>
     <string name="police_list">Police List</string>
+    <string name="police_station_name">Police Station Name</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>

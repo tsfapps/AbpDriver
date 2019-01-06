@@ -33,7 +33,7 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:id="@+id/tv_date_lbl"
-                    android:text="Number of police station : "
+                    android:text="Number of modelPolice station : "
                     style="@style/style_tv_dri_att" />
                 <TextView
                     android:textStyle="bold"

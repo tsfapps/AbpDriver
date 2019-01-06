@@ -3,8 +3,8 @@ package com.abp.driver.Interface;
 import com.abp.driver.model.PunchInOut.ModelPunchInOut;
 import com.abp.driver.model.driver.DriverAttendance;
 import com.abp.driver.model.login.ModelLogin;
-import com.abp.driver.model.status.DistrictDetail;
-import com.abp.driver.model.status.District;
+import com.abp.driver.model.police.ModelPolice;
+import com.abp.driver.model.district.ModelDistrict;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -31,13 +31,13 @@ public interface Api {
     );
     @FormUrlEncoded
     @POST("api/view-statewise-districtapi.php")
-    Call<District> districtList(
+    Call<ModelDistrict> districtList(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid
     );
     @FormUrlEncoded
     @POST("api/view-state-districtwise-policestaionapi.php")
-    Call<DistrictDetail> districtDetail(
+    Call<ModelPolice> districtDetail(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
             @Field("districtid") String districtid

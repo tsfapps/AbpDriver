@@ -26,7 +26,7 @@
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="The district manager can check the attendence of each driver and also can track as per requirement"
+    android:text="The modelDistrict manager can check the attendence of each driver and also can track as per requirement"
     android:textSize="12dp"
     android:layout_gravity="start"
     android:layout_marginBottom="10dp"

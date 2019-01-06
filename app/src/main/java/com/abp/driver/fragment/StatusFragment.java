@@ -17,9 +17,9 @@ import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.StatusAdapter;
-import com.abp.driver.model.status.DistrictDetail;
-import com.abp.driver.model.status.DistrictDetailList;
-import com.abp.driver.model.status.DistrictList;
+import com.abp.driver.model.police.ModelPolice;
+import com.abp.driver.model.police.ModelPoliceList;
+import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
@@ -66,22 +66,22 @@ public class StatusFragment extends Fragment {
         String strStateId = mSharedPreference.getUserStateId();
         String strDistrictId = mSharedPreference.getUserDistrictId();
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<DistrictDetail> call = api.districtDetail(strApi, strStateId, strDistrictId);
-        call.enqueue(new Callback<DistrictDetail>() {
+        Call<ModelPolice> call = api.districtDetail(strApi, strStateId, strDistrictId);
+        call.enqueue(new Callback<ModelPolice>() {
             @Override
-            public void onResponse(Call<DistrictDetail> call, Response<DistrictDetail> response) {
+            public void onResponse(Call<ModelPolice> call, Response<ModelPolice> response) {
 
-                DistrictDetail districtDetail = response.body();
-                DistrictList.deleteAll(DistrictList.class);
-                for (DistrictDetailList districtDetailList : districtDetail.getData()){
-                    districtDetailList.save();
-                    CustomLog.d("StatusState", districtDetailList.getStateName());
+                ModelPolice modelPolice = response.body();
+                ModelDistrictList.deleteAll(ModelDistrictList.class);
+                for (ModelPoliceList modelPoliceList : modelPolice.getData()){
+                    modelPoliceList.save();
+                    CustomLog.d("StatusState", modelPoliceList.getStateName());
                     CustomLog.d("StatusState", "Responding");
                 }
             }
 
             @Override
-            public void onFailure(Call<DistrictDetail> call, Throwable t) {
+            public void onFailure(Call<ModelPolice> call, Throwable t) {
                 CustomLog.d("StatusState", "NotResponding");
 
             }

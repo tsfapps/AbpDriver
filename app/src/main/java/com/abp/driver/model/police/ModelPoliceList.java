@@ -1,10 +1,10 @@
-package com.abp.driver.model.status;
+package com.abp.driver.model.police;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-public class DistrictDetailList extends SugarRecord {
+public class ModelPoliceList extends SugarRecord {
     @SerializedName("police_id")
     @Expose
     private String policeId;

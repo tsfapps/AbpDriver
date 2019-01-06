@@ -1,4 +1,4 @@
-package com.abp.driver.model;
+package com.abp.driver.model.main;
 
 public class ModelProfile {
 

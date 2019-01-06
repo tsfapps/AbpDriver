@@ -56,7 +56,7 @@ public class DistrictManagerFragment extends Fragment {
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
-            mActivity.setToolbarTitle("District Manager");
+            mActivity.setToolbarTitle("ModelDistrict Manager");
         }
     }
 

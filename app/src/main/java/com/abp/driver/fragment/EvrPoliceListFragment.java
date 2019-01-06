@@ -14,12 +14,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.abp.driver.ApiClient.ApiClients;
+import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.EvrPoliceAdapter;
+import com.abp.driver.model.police.ModelPolice;
+import com.abp.driver.model.police.ModelPoliceList;
+import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
+import com.abp.driver.utils.SharedPreference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EvrPoliceListFragment extends Fragment {
 
@@ -27,6 +37,8 @@ public class EvrPoliceListFragment extends Fragment {
     private FragmentManager mFragmentManager;
     @BindView(R.id.rv_evr_police)
     RecyclerView rv_police;
+
+    private SharedPreference mSharedPreference;
 
     @Nullable
     @Override
@@ -46,6 +58,30 @@ public class EvrPoliceListFragment extends Fragment {
     }
 
     private void apiCall() {
+        mSharedPreference = new SharedPreference(mContext);
+        String strApiKey = Constant.API_KEY;
+        String strDistrictId = mSharedPreference.getUserDistrictId();
+        String strStateId = mSharedPreference.getUserStateId();
+        Api api = ApiClients.getApiClients().create(Api.class);
+        Call<ModelPolice> call = api.districtDetail(strApiKey, strStateId, strDistrictId);
+        call.enqueue(new Callback<ModelPolice>() {
+            @Override
+            public void onResponse(Call<ModelPolice> call, Response<ModelPolice> response) {
+                ModelPolice modelPolice = response.body();
+                ModelPoliceList.deleteAll(ModelPoliceList.class);
+                for (ModelPoliceList modelPoliceList : modelPolice.getData()){
+                    modelPoliceList.save();
+                }
+                CustomLog.d("PoliceList", "Responding");
+              //  CustomLog.d("PoliceList","fragment"+ modelPolice.getData().get(0).getPolicestationname());
+
+            }
+
+            @Override
+            public void onFailure(Call<ModelPolice> call, Throwable t) {
+
+            }
+        });
 
     }
 

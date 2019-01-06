@@ -12,11 +12,17 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.EvrFragment;
+import com.abp.driver.model.police.ModelPoliceList;
+import com.abp.driver.utils.CustomLog;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrPoliceHolder> {
+
+    private List<ModelPoliceList> modelPoliceLists = ModelPoliceList.listAll(ModelPoliceList.class);
 
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -36,7 +42,10 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
     @Override
     public void onBindViewHolder(@NonNull final EvrPoliceHolder evrPoliceHolder, int i) {
 
+        String policeStationName = modelPoliceLists.get(i).getPolicestationname();
+        evrPoliceHolder.tv_policeList.setText(policeStationName);
 
+        CustomLog.d("PoliceList", modelPoliceLists.get(i).getPolicestationname());
         evrPoliceHolder.ll_policeList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +56,7 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
 
     @Override
     public int getItemCount() {
-        return 10;
+        return modelPoliceLists.size();
     }
 
     public class EvrPoliceHolder extends RecyclerView.ViewHolder{
