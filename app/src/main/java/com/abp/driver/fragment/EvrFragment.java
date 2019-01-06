@@ -45,6 +45,7 @@ public class EvrFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_evr, container, false);
 
        ButterKnife.bind(this, view);
+       callRecyclerView();
         init();
         return view;
     }
