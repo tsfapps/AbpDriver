@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity{
         Intent intent =  new Intent(this,DashboardActivity.class);
         intent.putExtra("login_type",type);
         startActivity(intent);
+        finish();
     }
 
     private void startApiHandler(final String type) {
