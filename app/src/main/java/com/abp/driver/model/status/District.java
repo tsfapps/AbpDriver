@@ -4,20 +4,20 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class StatusDistrict {
+public class District {
 
     @SerializedName("data")
     @Expose
-    private List<StatusDistrictList> data = null;
+    private List<DistrictList> data = null;
     @SerializedName("STATUS")
     @Expose
     private String sTATUS;
 
-    public List<StatusDistrictList> getData() {
+    public List<DistrictList> getData() {
         return data;
     }
 
-    public void setData(List<StatusDistrictList> data) {
+    public void setData(List<DistrictList> data) {
         this.data = data;
     }
 

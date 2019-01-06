@@ -34,5 +34,27 @@ public class ProfileFragmentDistrict extends Fragment {
         }
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (getView() != null) {
+                getView().setFocusableInTouchMode(true);
+                getView().requestFocus();
+                getView().setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                            getFragmentManager().popBackStack();
+                        }
+                        return true;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Log.e("error",""+e);
+        }
+    }
+
 
 }

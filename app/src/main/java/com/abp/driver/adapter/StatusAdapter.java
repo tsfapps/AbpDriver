@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.abp.driver.R;
-import com.abp.driver.model.status.StatusDistrictList;
+import com.abp.driver.model.status.DistrictList;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusViewHolder>{
 
-    private List<StatusDistrictList> statusDistrictLists = StatusDistrictList.listAll(StatusDistrictList.class);
+    private List<DistrictList> districtLists = DistrictList.listAll(DistrictList.class);
     @NonNull
     @Override
     public StatusViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -28,9 +28,9 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
     @Override
     public void onBindViewHolder(@NonNull StatusViewHolder statusViewHolder, int i) {
 
-        String stateName = statusDistrictLists.get(i).getStateName();
-        String districtName = statusDistrictLists.get(i).getDistrictName();
-        String policeNumber = statusDistrictLists.get(i).getNoOfPolicestation().toString();
+        String stateName = districtLists.get(i).getStateName();
+        String districtName = districtLists.get(i).getDistrictName();
+        String policeNumber = districtLists.get(i).getNoOfPolicestation().toString();
 
         statusViewHolder.tv_stateName.setText(stateName);
         statusViewHolder.tv_districtName.setText(districtName);
@@ -40,7 +40,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
 
     @Override
     public int getItemCount() {
-        return statusDistrictLists.size();
+        return districtLists.size();
     }
 
     public class StatusViewHolder extends RecyclerView.ViewHolder{

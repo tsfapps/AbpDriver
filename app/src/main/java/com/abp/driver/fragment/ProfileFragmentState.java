@@ -16,7 +16,6 @@ import com.abp.driver.activity.DashboardActivity;
 
 public class ProfileFragmentState extends Fragment {
 
-    private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
 
     @Nullable
@@ -24,15 +23,15 @@ public class ProfileFragmentState extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_state, container, false);
 
+        mFragmentManager = getFragmentManager();
         init();
         return view;
     }
 
     private void init() {
-        mActivity = (DashboardActivity) getActivity();
+        DashboardActivity mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("State Manager Profile");
-            mFragmentManager = mActivity.getSupportFragmentManager();
         }
 
     }
@@ -47,7 +46,7 @@ public class ProfileFragmentState extends Fragment {
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                            mActivity.onBackPressedCalled();
+                            getFragmentManager().popBackStack();
                         }
                         return true;
                     }

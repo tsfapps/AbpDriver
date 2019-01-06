@@ -37,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
-
                 android:background="#c70097b9"
                 android:gravity="center"
                 android:layout_width="match_parent"
@@ -58,6 +57,7 @@
                         android:id="@+id/ivAttendance"
                         style="@style/style_cv">
                         <LinearLayout
+                            android:id="@+id/ll_sm_attendance"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:orientation="vertical"
@@ -82,6 +82,7 @@
                         android:id="@+id/ivStatus"
                         style="@style/style_cv">
                         <LinearLayout
+                            android:id="@+id/ll_sm_status"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:orientation="vertical"
@@ -104,6 +105,8 @@
                 </LinearLayout>
                 <!--Middle side Layout-->
                 <LinearLayout
+                    android:layout_marginBottom="30dp"
+
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -115,6 +118,7 @@
                         android:id="@+id/ivEvr"
                         style="@style/style_cv">
                         <LinearLayout
+                            android:id="@+id/ll_sm_evr"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:orientation="vertical"
@@ -123,72 +127,11 @@
                             <ImageView
                                 style="@style/style_iv"
                                 android:background="@drawable/ic_evr" />
-
                             <TextView
                                 android:textColor="#f6b026"
                                 style="@style/style_tv"
                                 android:text="EVR"
                                 />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
-                        android:id="@+id/ivManager"
-                        style="@style/style_cv">
-                        <LinearLayout
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <ImageView
-                                style="@style/style_iv"
-                                android:background="@drawable/ic_manager" />
-
-                            <TextView
-                                android:textColor="#fdae10"
-                                style="@style/style_tv"
-                                android:text="MANAGER"
-                                />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-
-                </LinearLayout>
-
-                <!--Lower side Layout-->
-                <LinearLayout
-                    android:layout_marginBottom="30dp"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
-                        android:id="@+id/ivLogout"
-                        style="@style/style_cv">
-                        <LinearLayout
-                            android:id="@+id/ll_sign_out_sm"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <ImageView
-                                style="@style/style_iv"
-                                android:background="@drawable/ic_logout" />
-
-                            <TextView
-                                android:textColor="#ae1916"
-                                style="@style/style_tv"
-                                android:text="Logout"
-                                />
-
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
@@ -198,7 +141,7 @@
                         android:id="@+id/ivProfile"
                         style="@style/style_cv">
                         <LinearLayout
-                            android:id="@+id/ll_profile_sm"
+                            android:id="@+id/ll_sm_profile"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:orientation="vertical"
@@ -219,6 +162,8 @@
 
 
                 </LinearLayout>
+
+                <!--Lower side Layout-->
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>

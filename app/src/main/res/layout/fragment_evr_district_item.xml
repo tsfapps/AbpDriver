@@ -9,12 +9,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <LinearLayout
-    android:id="@+id/ll_status_district_list"
+    android:id="@+id/ll_evr_district_list"
     android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
-        android:id="@+id/tv_status_district_list"
+        android:id="@+id/tv_evr_district_list"
         android:text="@string/district_list"
         android:drawableStart="@drawable/ic_arrow"
         android:textSize="14sp"

@@ -8,19 +8,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
-import com.abp.driver.Interface.RecyclerClickListner;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.StatusDistrictAdapter;
-import com.abp.driver.model.status.StatusDistrict;
-import com.abp.driver.model.status.StatusDistrictList;
+import com.abp.driver.model.status.District;
+import com.abp.driver.model.status.DistrictList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
 
@@ -30,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StatusDistrictFragment extends Fragment{
+public class StatusDistrictListFragment extends Fragment{
 
     @BindView(R.id.rv_status_district)
     RecyclerView mRecyclerView;
@@ -64,23 +64,44 @@ private void init(){
         String strApi = Constant.API_KEY;
         String strId =  mSharedPreference.getUserStateId();
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<StatusDistrict> call = api.districtList(strApi, strId);
-        call.enqueue(new Callback<StatusDistrict>() {
+        Call<District> call = api.districtList(strApi, strId);
+        call.enqueue(new Callback<District>() {
             @Override
-            public void onResponse(Call<StatusDistrict> call, Response<StatusDistrict> response) {
-                StatusDistrict statusDistrict = response.body();
-                StatusDistrictList.deleteAll(StatusDistrictList.class);
-                for (StatusDistrictList statusDistrictList : statusDistrict.getData()){
-                    statusDistrictList.save();
+            public void onResponse(Call<District> call, Response<District> response) {
+                District district = response.body();
+                DistrictList.deleteAll(DistrictList.class);
+                for (DistrictList districtList : district.getData()){
+                    districtList.save();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<StatusDistrict> call, Throwable t) {
+            public void onFailure(Call<District> call, Throwable t) {
 //                CustomLog.d("districtList", "NotResponding");
             }
         });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (getView() != null) {
+                getView().setFocusableInTouchMode(true);
+                getView().requestFocus();
+                getView().setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                            getFragmentManager().popBackStack();
+                        }
+                        return true;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Log.e("error",""+e);
+        }
     }
 
 

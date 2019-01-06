@@ -1,9 +1,11 @@
 package com.abp.driver.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,76 +18,70 @@ import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.adapter.StatusAdapter;
-import com.abp.driver.model.status.DistrictDetail;
-import com.abp.driver.model.status.DistrictDetailList;
+import com.abp.driver.adapter.EvrDistrictAdapter;
+import com.abp.driver.model.status.District;
 import com.abp.driver.model.status.DistrictList;
 import com.abp.driver.utils.Constant;
-import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StatusFragment extends Fragment {
+public class EvrDistrictListFragment extends Fragment {
 
-    private Unbinder unbinder;
-    @BindView(R.id.rv_status)
+    @BindView(R.id.rv_evr_district)
     RecyclerView mRecyclerView;
+    private Context mContext;
+    private FragmentManager mFragmentManager;
     private SharedPreference mSharedPreference;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_status, container, false);
-
-        unbinder = ButterKnife.bind(this, view);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        StatusAdapter statusAdapter = new StatusAdapter();
-        mRecyclerView.setAdapter(statusAdapter);
-
-        callApi();
+        View view = inflater.inflate(R.layout.fragment_evr_district, container, false);
+        ButterKnife.bind(this, view);
+        mContext = getContext();
+        mFragmentManager = getFragmentManager();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(layoutManager);
+        EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager);
+        mRecyclerView.setAdapter(evrDistrictAdapter);
+        apiCall();
         init();
         return view;
     }
-    private void init() {
-        DashboardActivity mActivity = (DashboardActivity) getActivity();
-        if (mActivity != null) {
-            mActivity.setToolbarTitle("Status");
-        }
-    }
 
-    private void callApi(){
-        mSharedPreference = new SharedPreference(getContext());
-        String strApi = Constant.API_KEY;
+    private void apiCall() {
+
+        mSharedPreference = new SharedPreference(mContext);
+        String strApiKey = Constant.API_KEY;
         String strStateId = mSharedPreference.getUserStateId();
-        String strDistrictId = mSharedPreference.getUserDistrictId();
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<DistrictDetail> call = api.districtDetail(strApi, strStateId, strDistrictId);
-        call.enqueue(new Callback<DistrictDetail>() {
+        Call<District> call = api.districtList(strApiKey, strStateId);
+        call.enqueue(new Callback<District>() {
             @Override
-            public void onResponse(Call<DistrictDetail> call, Response<DistrictDetail> response) {
-
-                DistrictDetail districtDetail = response.body();
+            public void onResponse(Call<District> call, Response<District> response) {
+                District district = response.body();
                 DistrictList.deleteAll(DistrictList.class);
-                for (DistrictDetailList districtDetailList : districtDetail.getData()){
-                    districtDetailList.save();
-                    CustomLog.d("StatusState", districtDetailList.getStateName());
-                    CustomLog.d("StatusState", "Responding");
+                for (DistrictList districtList : district.getData()){
+                    districtList.save();
                 }
             }
 
             @Override
-            public void onFailure(Call<DistrictDetail> call, Throwable t) {
-                CustomLog.d("StatusState", "NotResponding");
+            public void onFailure(Call<District> call, Throwable t) {
 
             }
         });
+    }
+
+    private void init() {
+        DashboardActivity mActivity = (DashboardActivity) getActivity();
+        if (mActivity !=null){
+            mActivity.setToolbarTitle("Evr District List");
+        }
     }
 
     @Override
@@ -109,4 +105,5 @@ public class StatusFragment extends Fragment {
             Log.e("error",""+e);
         }
     }
+
 }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-public class StatusDistrictList extends SugarRecord {
+public class DistrictList extends SugarRecord {
     @SerializedName("district_id")
     @Expose
     private String districtId;

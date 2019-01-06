@@ -1,8 +1,5 @@
 package com.abp.driver.fragment;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.activity.LoginActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,22 +41,31 @@ public class StateManagerFragment extends Fragment {
         }
         mFragmentManager = mActivity.getSupportFragmentManager();
     }
-
-
-    @OnClick(R.id.ll_profile_sm)
-    public void onSmProClk(View view){
-        Fragment tFragment = new ProfileFragmentState();
-        FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction tFragmentTransaction = tFragmentManager.beginTransaction();
-        tFragmentTransaction.replace(R.id.container_main, tFragment);
-        tFragmentTransaction.addToBackStack(null);
-        tFragmentTransaction.commit();
+    @OnClick(R.id.ll_sm_attendance)
+    public void llSmAttendanceClk(View view){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
     }
-    @OnClick(R.id.ll_sign_out_sm)
-    public void OnSignOut(View view){
 
+    @OnClick(R.id.ll_sm_status)
+    public void llSmStatusClk(View view){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusDistrictListFragment()).addToBackStack(null).commit();
+    }
 
+    @OnClick(R.id.ll_sm_evr)
+    public void llSmEvrClk(View view){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrDistrictListFragment()).addToBackStack(null).commit();
+    }
 
+    @OnClick(R.id.ll_sm_profile)
+    public void onSmProClk(View view){
+//        Fragment tFragment = new ProfileFragmentState();
+//        FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
+//        FragmentTransaction tFragmentTransaction = tFragmentManager.beginTransaction();
+//        tFragmentTransaction.replace(R.id.container_main, tFragment);
+//        tFragmentTransaction.addToBackStack(null);
+//        tFragmentTransaction.commit();
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentState()).addToBackStack(null).commit();
     }
     @Override
     public void onResume() {

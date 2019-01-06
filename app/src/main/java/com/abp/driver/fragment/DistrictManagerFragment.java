@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,16 +33,25 @@ public class DistrictManagerFragment extends Fragment {
         return view;
     }
 
-    @OnClick(R.id.ll_profile_dm)
-    public void llProfileClk(View view){
 
+    @OnClick(R.id.ll_dm_attendance)
+    public void llDmAttendanceClk(View view){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.ll_dm_status)
+    public void llDmStatusClk(View view){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusFragment()).addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.ll_dm_evr)
+    public void llDmEvrClk(View view){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrPoliceListFragment()).addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.ll_dm_profile)
+    public void llDmProfileClk(View view){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDistrict()).addToBackStack(null).commit();
-
-      //  Fragment tFragment = new ProfileFragmentDistrict();
-//        FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
-      //   tFragmentManager.beginTransaction().replace(R.id.container_main, tFragment).addToBackStack(null).commit();
-//        tFragmentTransaction.replace(R.id.container_main, tFragment).addToBackStack(null).commit();
-
     }
     private void init() {
         mActivity = (DashboardActivity) getActivity();

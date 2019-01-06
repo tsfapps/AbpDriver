@@ -13,8 +13,7 @@ import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.StatusFragment;
-import com.abp.driver.model.status.StatusDistrictList;
-import com.abp.driver.utils.CustomLog;
+import com.abp.driver.model.status.DistrictList;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import butterknife.ButterKnife;
 
 public class StatusDistrictAdapter extends RecyclerView.Adapter<StatusDistrictAdapter.DistrictListHolder> {
 
-   private List<StatusDistrictList> statusDistrictLists = StatusDistrictList.listAll(StatusDistrictList.class);
+   private List<DistrictList> districtLists = DistrictList.listAll(DistrictList.class);
 
 
   private Context mContext;
@@ -46,9 +45,9 @@ public class StatusDistrictAdapter extends RecyclerView.Adapter<StatusDistrictAd
     }
     @Override
     public void onBindViewHolder(@NonNull DistrictListHolder districtListHolder, int i) {
-        if (statusDistrictLists.size()>0) {
-            final String disList = statusDistrictLists.get(i).getDistrictName();
-            final String disId = statusDistrictLists.get(i).getDistrictId();
+        if (districtLists.size()>0) {
+            final String disList = districtLists.get(i).getDistrictName();
+            final String disId = districtLists.get(i).getDistrictId();
             districtListHolder.tv_district_list.setText(disList);
 
             districtListHolder.ll_district_list.setOnClickListener(new View.OnClickListener() {
@@ -65,14 +64,14 @@ public class StatusDistrictAdapter extends RecyclerView.Adapter<StatusDistrictAd
     }
     @Override
     public int getItemCount() {
-        return statusDistrictLists.size();
+        return districtLists.size();
     }
     public class DistrictListHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.tv_district_list)
+        @BindView(R.id.tv_status_district_list)
         TextView tv_district_list;
 
-        @BindView(R.id.ll_district_list)
+        @BindView(R.id.ll_status_district_list)
         LinearLayout ll_district_list;
 
         public DistrictListHolder(@NonNull View itemView) {
