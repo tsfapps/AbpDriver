@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.utils.CustomLog;
+import com.abp.driver.utils.SharedPreference;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +24,7 @@ public class DistrictManagerFragment extends Fragment {
     private DashboardActivity mActivity;
     private LinearLayout ll_profile_dm;
     private Unbinder unbinder;
+    private SharedPreference mSharePref;
 
     @Nullable
     @Override
@@ -36,7 +38,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_attendance)
     public void llDmAttendanceClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_status)
@@ -46,7 +48,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_evr)
     public void llDmEvrClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrPoliceListFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, EvrPoliceListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_profile)
@@ -58,6 +60,7 @@ public class DistrictManagerFragment extends Fragment {
         if (mActivity != null) {
             mActivity.setToolbarTitle("ModelDistrict Manager");
         }
+        mSharePref = new SharedPreference(getContext());
     }
 
 

@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 public class EvrDistrictListFragment extends Fragment {
 
     @BindView(R.id.rv_evr_district)
-    RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
     private Context mContext;
     private FragmentManager mFragmentManager;
     private SharedPreference mSharedPreference;
@@ -44,37 +45,48 @@ public class EvrDistrictListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(layoutManager);
-        EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager);
-        mRecyclerView.setAdapter(evrDistrictAdapter);
         apiCall();
         init();
         return view;
     }
 
     private void apiCall() {
+        try {
+            mSharedPreference = new SharedPreference(mContext);
+            String strApiKey = Constant.API_KEY;
+            String strStateId = mSharedPreference.getUserStateId();
+            Api api = ApiClients.getApiClients().create(Api.class);
+            Call<ModelDistrict> call = api.districtList(strApiKey, strStateId);
+            call.enqueue(new Callback<ModelDistrict>() {
+                @Override
+                public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
+                    ModelDistrict modelDistrict = response.body();
+                    if (modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                        ModelDistrictList.deleteAll(ModelDistrictList.class);
+                        for (ModelDistrictList modelDistrictList : modelDistrict.getData()) {
+                            modelDistrictList.save();
+                        }
+                        callRecyclerView();
+                    } else {
 
-        mSharedPreference = new SharedPreference(mContext);
-        String strApiKey = Constant.API_KEY;
-        String strStateId = mSharedPreference.getUserStateId();
-        Api api = ApiClients.getApiClients().create(Api.class);
-        Call<ModelDistrict> call = api.districtList(strApiKey, strStateId);
-        call.enqueue(new Callback<ModelDistrict>() {
-            @Override
-            public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
-                ModelDistrict modelDistrict = response.body();
-                ModelDistrictList.deleteAll(ModelDistrictList.class);
-                for (ModelDistrictList modelDistrictList : modelDistrict.getData()){
-                    modelDistrictList.save();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ModelDistrict> call, Throwable t) {
+                @Override
+                public void onFailure(Call<ModelDistrict> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void callRecyclerView() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(layoutManager);
+        EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager);
+        mRecyclerView.setAdapter(evrDistrictAdapter);
     }
 
     private void init() {

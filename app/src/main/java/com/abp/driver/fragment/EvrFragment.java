@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.EvrAapter;
+import com.abp.driver.utils.SharedPreference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,26 +27,41 @@ public class EvrFragment extends Fragment {
     @BindView(R.id.rv_evr)
     RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
+    private String mDistrictId;
+    private String mPoliceId;
+    private DashboardActivity mActivity;
+    private SharedPreference mSharePref;
+
+    public static EvrFragment newInstance(String districtId, String policeId) {
+        EvrFragment fragment = new EvrFragment();
+        fragment.mDistrictId = districtId;
+        fragment.mPoliceId = policeId;
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evr, container, false);
 
        ButterKnife.bind(this, view);
-       mLayoutManager = new LinearLayoutManager(getActivity());
-       mRecyclerView.setLayoutManager(mLayoutManager);
-        EvrAapter evrAapter = new EvrAapter();
-        mRecyclerView.setAdapter(evrAapter);
-
-
         init();
         return view;
     }
     private void init() {
-        DashboardActivity mActivity = (DashboardActivity) getActivity();
+        mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("EVR");
         }
+        mSharePref = new SharedPreference(getContext());
+
+    }
+
+    private void callRecyclerView(){
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        EvrAapter evrAapter = new EvrAapter();
+        mRecyclerView.setAdapter(evrAapter);
     }
 
     @Override

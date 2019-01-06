@@ -1,5 +1,6 @@
 package com.abp.driver.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapter.DriverViewHolder>{
-    private List<DriverAttendanceList> driverAttendanceLists = DriverAttendanceList.listAll(DriverAttendanceList.class);
+    private final Context mContext;
+    private List<DriverAttendanceList> driverAttendanceLists;
+
+    public DriverAttDetAdapter(Context context, List<DriverAttendanceList> mList) {
+        this.mContext = context;
+        this.driverAttendanceLists = mList;
+    }
+
     @NonNull
     @Override
     public DriverViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -23,7 +31,6 @@ public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapte
     }
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder driverViewHolder, int i) {
-        if (driverAttendanceLists.size()>0) {
             String chkIn = driverAttendanceLists.get(i).getTimeIn();
             String chkOut = driverAttendanceLists.get(i).getTimeOut();
             String date = driverAttendanceLists.get(i).getCheckInDate();
@@ -32,7 +39,6 @@ public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapte
             driverViewHolder.tv_dri_att_det_chk_out.setText(chkOut);
             driverViewHolder.tv_dri_att_det_working_hrs.setText(totalTime);
             driverViewHolder.tv_dri_att_det_date.setText(date);
-        }
     }
     @Override
     public int getItemCount() {

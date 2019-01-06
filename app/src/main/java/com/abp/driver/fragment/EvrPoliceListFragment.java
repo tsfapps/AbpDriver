@@ -13,6 +13,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
@@ -25,6 +27,8 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -36,9 +40,20 @@ public class EvrPoliceListFragment extends Fragment {
     private Context mContext;
     private FragmentManager mFragmentManager;
     @BindView(R.id.rv_evr_police)
-    RecyclerView rv_police;
+    protected RecyclerView rv_police;
+    @BindView(R.id.tv_no_data)
+    protected TextView mTvNoData;
 
     private SharedPreference mSharedPreference;
+    private List<ModelPoliceList> mPolicList;
+    private DashboardActivity mActivity;
+    private String mDistrictId = null;
+
+    public static EvrPoliceListFragment newInstance(String districtId) {
+        EvrPoliceListFragment fragment = new EvrPoliceListFragment();
+        fragment.mDistrictId = districtId;
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -48,40 +63,74 @@ public class EvrPoliceListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-        rv_police.setLayoutManager(layoutManager);
-        EvrPoliceAdapter evrPoliceAdapter = new EvrPoliceAdapter(mContext, mFragmentManager);
-        rv_police.setAdapter(evrPoliceAdapter);
-        apiCall();
+        mActivity = (DashboardActivity)getActivity();
+
+        mPolicList = ModelPoliceList.listAll(ModelPoliceList.class);
+        if (mPolicList.size() > 0) {
+            callRecyclerView();
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            }
+        } else {
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            } else {
+                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            }
+        }
         init();
         return view;
     }
 
+    private void callRecyclerView() {
+        List<ModelPoliceList> mList = ModelPoliceList.listAll(ModelPoliceList.class);
+        if (mList.size() > 0) {
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+            rv_police.setLayoutManager(layoutManager);
+            EvrPoliceAdapter evrPoliceAdapter = new EvrPoliceAdapter(mContext, mFragmentManager, mList);
+            rv_police.setAdapter(evrPoliceAdapter);
+            evrPoliceAdapter.notifyDataSetChanged();
+        } else {
+            rv_police.setVisibility(View.GONE);
+            mTvNoData.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void apiCall() {
-        mSharedPreference = new SharedPreference(mContext);
-        String strApiKey = Constant.API_KEY;
-        String strDistrictId = mSharedPreference.getUserDistrictId();
-        String strStateId = mSharedPreference.getUserStateId();
-        Api api = ApiClients.getApiClients().create(Api.class);
-        Call<ModelPolice> call = api.districtDetail(strApiKey, strStateId, strDistrictId);
-        call.enqueue(new Callback<ModelPolice>() {
-            @Override
-            public void onResponse(Call<ModelPolice> call, Response<ModelPolice> response) {
-                ModelPolice modelPolice = response.body();
-                ModelPoliceList.deleteAll(ModelPoliceList.class);
-                for (ModelPoliceList modelPoliceList : modelPolice.getData()){
-                    modelPoliceList.save();
+        try {
+            mSharedPreference = new SharedPreference(mContext);
+            String strApiKey = Constant.API_KEY;
+            String strStateId = mSharedPreference.getUserStateId();
+            Api api = ApiClients.getApiClients().create(Api.class);
+            Log.d("danny","sid:"+strStateId+" dId:"+mDistrictId);
+            Call<ModelPolice> call = api.districtDetail(strApiKey, strStateId, mDistrictId);
+            call.enqueue(new Callback<ModelPolice>() {
+                @Override
+                public void onResponse(Call<ModelPolice> call, Response<ModelPolice> response) {
+                    ModelPolice modelPolice = response.body();
+                    if (modelPolice.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                        mTvNoData.setVisibility(View.GONE);
+                        rv_police.setVisibility(View.VISIBLE);
+                        ModelPoliceList.deleteAll(ModelPoliceList.class);
+                        for (ModelPoliceList modelPoliceList : modelPolice.getData()) {
+                            modelPoliceList.save();
+                        }
+                        callRecyclerView();
+                    } else {
+                        rv_police.setVisibility(View.GONE);
+                        mTvNoData.setVisibility(View.VISIBLE);
+                    }
                 }
-                CustomLog.d("PoliceList", "Responding");
-//                 CustomLog.d("PoliceList","fragment"+ modelPolice.getData().get(0).getPolicestationname());
 
-            }
-
-            @Override
-            public void onFailure(Call<ModelPolice> call, Throwable t) {
-
-            }
-        });
+                @Override
+                public void onFailure(Call<ModelPolice> call, Throwable t) {
+                    rv_police.setVisibility(View.GONE);
+                    mTvNoData.setVisibility(View.VISIBLE);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

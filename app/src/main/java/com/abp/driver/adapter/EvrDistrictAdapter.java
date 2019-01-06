@@ -41,14 +41,14 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EvrDistrictHolder evrDistrictHolder, int i) {
+    public void onBindViewHolder(@NonNull EvrDistrictHolder evrDistrictHolder, final int i) {
         String strDistrictName = modelDistrictLists.get(i).getDistrictName();
         evrDistrictHolder.tv_evrDistrictList.setText(strDistrictName);
 
         evrDistrictHolder.ll_EvrDistrictList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, new EvrPoliceListFragment()).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().replace(R.id.container_main, EvrPoliceListFragment.newInstance(modelDistrictLists.get(i).getDistrictId())).addToBackStack(null).commit();
             }
         });
 

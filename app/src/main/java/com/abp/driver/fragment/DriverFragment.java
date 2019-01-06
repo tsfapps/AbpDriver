@@ -1,8 +1,10 @@
 package com.abp.driver.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,6 +51,12 @@ public class DriverFragment extends Fragment {
     protected TextView mUserName;
     @BindView(R.id.btn_check_in_out)
     protected Button mBtnPunchInOut;
+    @BindView(R.id.tvWorkingHour)
+    protected TextView mTotalHours;
+    @BindView(R.id.tv_checkedInTime)
+    protected TextView mCheckInTime;
+    @BindView(R.id.tv_checkIn_desc)
+    protected TextView mCheckInDesc;
     private int REQUEST_LOCATION = 1;
     private double mLatitude;
     private double mLongitude;
@@ -58,6 +66,7 @@ public class DriverFragment extends Fragment {
     private String punchType = null;
     private boolean isCheckIn = false;
     private boolean isCheckOut = false;
+    private ProgressDialog mDialog;
 
 
     @Override
@@ -77,7 +86,6 @@ public class DriverFragment extends Fragment {
 
     private void init() {
         CustomLog.d(TAG,"init called");
-        //mLoginList = ModelLoginList.listAll(ModelLoginList.class);
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().startService(intent);
 
@@ -85,7 +93,6 @@ public class DriverFragment extends Fragment {
         mActivity.setToolbarTitle("Driver");
         mFragmentManger = mActivity.getSupportFragmentManager();
         mSharedPreference = new SharedPreference(getContext());
-        mUserName.setText("Mr. " +mSharedPreference.getUserName());
         punchInOutLocalDetails = ModelPunchInOutLocal.listAll(ModelPunchInOutLocal.class);
         if (punchInOutLocalDetails.size() > 0) {
             Gson gson = new Gson();
@@ -101,7 +108,32 @@ public class DriverFragment extends Fragment {
             punchType = "check_in";
             mBtnPunchInOut.setText("Punch In");
         }
+        setValueOfView();
+    }
 
+    private void setValueOfView() {
+        mUserName.setText("Mr. " +mSharedPreference.getUserName());
+        punchInOutLocalDetails = ModelPunchInOutLocal.listAll(ModelPunchInOutLocal.class);
+        if (punchInOutLocalDetails.size() > 0) {
+            ModelPunchInOutLocal mLastData = punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1);
+            if (!mLastData.getTimeIn().equals("")) {
+                mTotalHours.setText(DateUtil.timeDiff(mLastData.getTimeIn(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX));
+            } else {
+                mTotalHours.setText("00:00");
+            }
+            if (!mLastData.getTimeIn().equals("")) {
+                mCheckInDesc.setText("You clocked in at ");
+                mCheckInTime.setVisibility(View.VISIBLE);
+                mCheckInTime.setText(mLastData.getTimeIn());
+            } else {
+                mCheckInDesc.setText("You not yet clocked ");
+                mCheckInTime.setVisibility(View.GONE);
+            }
+        } else {
+            mTotalHours.setText("00:00");
+            mCheckInDesc.setText("You not yet clocked ");
+            mCheckInTime.setVisibility(View.GONE);
+        }
     }
 
     private void getLocation() {
@@ -119,6 +151,9 @@ public class DriverFragment extends Fragment {
     }
 
     private void callPunchInOutApi(final String type) {
+        mDialog = new ProgressDialog(getContext());
+        mDialog.setMessage("Attendance "+punchType+" in progress....");
+        mDialog.show();
         ModelPunchInOutLocal mModelValue = null;
         String mTypeIo = type;
         final String mPhoneNo = mSharedPreference.getUserPhoneNo();
@@ -184,6 +219,7 @@ public class DriverFragment extends Fragment {
                     if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                         CustomLog.d("danny", "response success.");
                         saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut);
+                        startApiHandler();
                     }
                 }
 
@@ -191,11 +227,13 @@ public class DriverFragment extends Fragment {
                 public void onFailure(Call<ModelPunchInOut> call, Throwable t) {
                     CustomLog.d("danny", "error..." + call.toString());
                     saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,false,isCheckIn, isCheckOut);
+                    startApiHandler();
                 }
             });
         } else {
             Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
             saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate,false, isCheckIn, isCheckOut);
+            startApiHandler();
         }
     }
 
@@ -302,5 +340,25 @@ public class DriverFragment extends Fragment {
         super.onDestroy();
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().stopService(intent);
+    }
+
+    private void startApiHandler() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mDialog.isShowing()) {
+                    mDialog.cancel();
+                }
+                if (mBtnPunchInOut.getText().toString().equalsIgnoreCase("Punch In")) {
+                    mBtnPunchInOut.setText("Punch Out");
+                } else {
+                    mBtnPunchInOut.setText("Punch In");
+                }
+                mCheckInDesc.setText("You clocked in at ");
+                mCheckInTime.setVisibility(View.VISIBLE);
+                mCheckInTime.setText(DateUtil.getCurrentTime());
+            }
+        }, 500);
     }
 }

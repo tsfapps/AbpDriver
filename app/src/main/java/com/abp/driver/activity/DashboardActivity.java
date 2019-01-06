@@ -27,6 +27,7 @@ import com.abp.driver.fragment.DriverAttendanceDetailFragment;
 import com.abp.driver.fragment.DriverFragment;
 
 import com.abp.driver.fragment.EvrFragment;
+import com.abp.driver.fragment.ProfileFragmentDriver;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.fragment.StatusDistrictListFragment;
 import com.abp.driver.fragment.StatusFragment;
@@ -35,6 +36,7 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 import com.bumptech.glide.Glide;
+import com.orm.SugarRecord;
 
 import java.util.List;
 
@@ -166,22 +168,23 @@ public class DashboardActivity extends AppCompatActivity
 
         if (id == R.id.nav_attendance) {
           getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
-        } else if (id == R.id.nav_status) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusFragment()).addToBackStack(null).commit();
-        } else if (id == R.id.nav_evr) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrFragment()).addToBackStack(null).commit();
-        } else if (id == R.id.nav_manage) {
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusDistrictListFragment()).addToBackStack(null).commit();
+        } else if (id == R.id.nav_profile) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDriver()).addToBackStack(null).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_logout) {
+            userLogoutCall();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void userLogoutCall() {
+        SugarRecord.deleteAll(SugarRecord.class);
     }
 
     public void profileImage(){

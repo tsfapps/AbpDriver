@@ -43,7 +43,7 @@ public class StateManagerFragment extends Fragment {
     }
     @OnClick(R.id.ll_sm_attendance)
     public void llSmAttendanceClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_status)

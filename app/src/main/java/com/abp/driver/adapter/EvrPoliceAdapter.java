@@ -22,14 +22,15 @@ import butterknife.ButterKnife;
 
 public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrPoliceHolder> {
 
-    private List<ModelPoliceList> modelPoliceLists = ModelPoliceList.listAll(ModelPoliceList.class);
+    private List<ModelPoliceList> modelPoliceLists;
 
     private Context mContext;
     private FragmentManager mFragmentManager;
 
-    public EvrPoliceAdapter(Context mContext, FragmentManager mFragmentManager) {
+    public EvrPoliceAdapter(Context mContext, FragmentManager mFragmentManager, List<ModelPoliceList> mList) {
         this.mContext = mContext;
         this.mFragmentManager = mFragmentManager;
+        this.modelPoliceLists = mList;
     }
 
     @NonNull
@@ -42,7 +43,7 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
     @Override
     public void onBindViewHolder(@NonNull final EvrPoliceHolder evrPoliceHolder, int i) {
 
-        String policeStationName = modelPoliceLists.get(0).getPolicestationname();
+        String policeStationName = modelPoliceLists.get(i).getPolicestationname();
         evrPoliceHolder.tv_policeList.setText(policeStationName);
 
         CustomLog.d("PoliceList", policeStationName);
