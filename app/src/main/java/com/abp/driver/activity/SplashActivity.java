@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import com.abp.driver.R;
 import com.abp.driver.receiver.NetworkStateChangeReceiver;
+import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
@@ -48,11 +49,22 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
+                if (sharePref.getUserPhoneNo().equalsIgnoreCase("") && sharePref.getUserLoginType().equalsIgnoreCase("")) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    callDashboardClass();
+                }
             }
-        }, 2000);
+        }, 1500);
+    }
+
+    private void callDashboardClass() {
+        Intent intent = new Intent(this,DashboardActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
     @Override

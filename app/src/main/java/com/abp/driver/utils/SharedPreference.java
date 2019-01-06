@@ -13,6 +13,20 @@ public class SharedPreference {
         // TODO Auto-generated constructor stub
         this.mContext = ctx;
     }
+
+    public void clearAllData(){
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        edt = sp.edit();
+        edt.remove(Constant.USER_NAME);
+        edt.remove(Constant.USER_PHONE);
+        edt.remove(Constant.USER_PIC);
+        edt.remove(Constant.USER_STATE_ID);
+        edt.remove(Constant.USER_DISTRICT_ID);
+        edt.remove(Constant.USER_LOGIN_TYPE);
+        edt.commit();
+        edt.clear();
+    }
+
     public void setUserData(String userName, String userPhone, String userPic, String stateId, String districtId, String loginType) {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
         edt = sp.edit();

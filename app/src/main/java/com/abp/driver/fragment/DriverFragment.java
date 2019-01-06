@@ -117,6 +117,7 @@ public class DriverFragment extends Fragment {
         if (punchInOutLocalDetails.size() > 0) {
             ModelPunchInOutLocal mLastData = punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1);
             if (!mLastData.getTimeIn().equals("")) {
+                Log.d("danny","setValue called..inTime: "+mLastData.getTimeIn()+" curreenttime :"+ DateUtil.getCurrentTime());
                 mTotalHours.setText(DateUtil.timeDiff(mLastData.getTimeIn(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX));
             } else {
                 mTotalHours.setText("00:00");

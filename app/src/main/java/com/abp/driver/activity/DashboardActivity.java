@@ -185,6 +185,10 @@ public class DashboardActivity extends AppCompatActivity
 
     private void userLogoutCall() {
         SugarRecord.deleteAll(SugarRecord.class);
+        mSharedPreference.clearAllData();
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void profileImage(){
