@@ -33,39 +33,15 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:id="@+id/tv_date_lbl"
-                    android:text="Date : "
+                    android:text="Number of police station : "
                     style="@style/style_tv_dri_att" />
                 <TextView
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="12sp"
-                    android:id="@+id/tv_date_dri_att_det"
-                    android:text="20 - 10 -2019"
+                    android:id="@+id/tv_no_pol_station"
+                    android:text="3"
                     style="@style/style_tv_dri_att" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_marginEnd="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                    <TextView
-                        android:textSize="12sp"
-                        android:textColor="@color/black"
-                        android:id="@+id/tv_chkOut_lbl"
-                        android:text="EVR No. : "
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <TextView
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:id="@+id/tv_chk_out_dri_att_det"
-                        android:text="7857"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -76,28 +52,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+            <LinearLayout
                 android:layout_marginStart="12dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                >
                 <TextView
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:id="@+id/tv_chkIn_lbl"
-                    android:text="Driver Name"
+                    android:text="State Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     android:textSize="16sp"
-                    android:layout_below="@+id/tv_chkIn_lbl"
-                    android:id="@+id/tv_chk_in_dri_att_det"
-                    android:text="Rohit Reddy"
+                    android:id="@+id/tv_status_state_name"
+                    android:text="Uttar Pradesh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                >
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:id="@+id/tv_chkIn_lbl"
+                    android:text="District Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:id="@+id/tv_status_district_name"
+                    android:text="Jaunpur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:gravity="center"

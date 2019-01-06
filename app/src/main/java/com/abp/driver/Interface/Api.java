@@ -40,7 +40,7 @@ public interface Api {
     );
     @FormUrlEncoded
     @POST("api/view-statewise-districtapi.php")
-    Call<DistrictDetail> districtDetail(
+    Call<StatusDistrict> districtDetail(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
             @Field("districtid") String districtid

@@ -18,7 +18,10 @@ import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.StatusAdapter;
 import com.abp.driver.model.status.DistrictDetail;
+import com.abp.driver.model.status.StatusDistrict;
+import com.abp.driver.model.status.StatusDistrictList;
 import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
 import butterknife.BindView;
@@ -46,6 +49,7 @@ public class StatusFragment extends Fragment {
         StatusAdapter statusAdapter = new StatusAdapter();
         mRecyclerView.setAdapter(statusAdapter);
 
+        callApi();
         init();
         return view;
     }
@@ -62,15 +66,23 @@ public class StatusFragment extends Fragment {
         String strStateId = mSharedPreference.getUserStateId();
         String strDistrictId = mSharedPreference.getUserDistrictId();
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<DistrictDetail> call = api.districtDetail(strApi, strStateId, strDistrictId);
-        call.enqueue(new Callback<DistrictDetail>() {
+        Call<StatusDistrict> call = api.districtDetail(strApi, strStateId, strDistrictId);
+        call.enqueue(new Callback<StatusDistrict>() {
             @Override
-            public void onResponse(Call<DistrictDetail> call, Response<DistrictDetail> response) {
+            public void onResponse(Call<StatusDistrict> call, Response<StatusDistrict> response) {
 
+                StatusDistrict statusDistrict = response.body();
+                StatusDistrictList.deleteAll(StatusDistrictList.class);
+                for (StatusDistrictList statusDistrictList : statusDistrict.getData()){
+                    statusDistrictList.save();
+                    CustomLog.d("StatusState", statusDistrictList.getStateName());
+                    CustomLog.d("StatusState", "Responding");
+                }
             }
 
             @Override
-            public void onFailure(Call<DistrictDetail> call, Throwable t) {
+            public void onFailure(Call<StatusDistrict> call, Throwable t) {
+                CustomLog.d("StatusState", "NotResponding");
 
             }
         });

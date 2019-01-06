@@ -50,7 +50,7 @@ public class StatusDistrictAdapter extends RecyclerView.Adapter<StatusDistrictAd
             final String disList = statusDistrictLists.get(i).getDistrictName();
             final String disId = statusDistrictLists.get(i).getDistrictId();
             districtListHolder.tv_district_list.setText(disList);
-            CustomLog.d("districtName", statusDistrictLists.get(0).getDistrictName());
+
             districtListHolder.ll_district_list.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

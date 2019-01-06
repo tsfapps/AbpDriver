@@ -66,7 +66,7 @@ public class DriverAttendanceDetailFragment extends Fragment {
             public void onResponse(Call<DriverAttendance> call, Response<DriverAttendance> response) {
 
                 DriverAttendance driverAttendance = response.body();
-              //  DriverAttendanceList.deleteAll(DriverAttendanceList.class);
+                DriverAttendanceList.deleteAll(DriverAttendanceList.class);
                 for (DriverAttendanceList driverAttendanceList : driverAttendance.getData()){
                     driverAttendanceList.save();
                 }
