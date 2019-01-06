@@ -4,6 +4,8 @@ import com.abp.driver.model.PunchInOut.ModelPunchInOut;
 import com.abp.driver.model.driver.DriverAttendance;
 import com.abp.driver.model.driver.DriverAttendanceList;
 import com.abp.driver.model.login.ModelLogin;
+import com.abp.driver.model.status.DistrictDetail;
+import com.abp.driver.model.status.StatusDistrict;
 
 import java.util.List;
 
@@ -31,11 +33,17 @@ public interface Api {
 
     );
     @FormUrlEncoded
-    @POST("api/get-attendance.php")
-    Call<List<DriverAttendance>> driverAttendanceList(
+    @POST("api/view-statewise-districtapi.php")
+    Call<StatusDistrict> districtList(
             @Field("API_KEY") String API_KEY,
-            @Field("phone_no") String phone_no
-
+            @Field("stateid") String stateid
+    );
+    @FormUrlEncoded
+    @POST("api/view-statewise-districtapi.php")
+    Call<DistrictDetail> districtDetail(
+            @Field("API_KEY") String API_KEY,
+            @Field("stateid") String stateid,
+            @Field("districtid") String districtid
     );
 
     @FormUrlEncoded

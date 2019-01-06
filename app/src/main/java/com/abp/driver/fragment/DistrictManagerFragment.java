@@ -23,7 +23,6 @@ import butterknife.Unbinder;
 public class DistrictManagerFragment extends Fragment {
 
     private DashboardActivity mActivity;
-    private FragmentManager mFragmentManager;
     private LinearLayout ll_profile_dm;
     private Unbinder unbinder;
 
@@ -52,7 +51,6 @@ public class DistrictManagerFragment extends Fragment {
         if (mActivity != null) {
             mActivity.setToolbarTitle("District Manager");
         }
-        mFragmentManager = mActivity.getSupportFragmentManager();
     }
 
 

@@ -9,14 +9,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <LinearLayout
+    android:id="@+id/ll_district_list"
     android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/tv_district_list"
-        android:text="     District List"
-        android:drawableStart="@drawable/dot"
+        android:text="@string/district_list"
+        android:drawableStart="@drawable/ic_arrow"
         android:textSize="14sp"
+        android:layout_marginStart="8dp"
         android:textColor="@color/colorPrimaryDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
