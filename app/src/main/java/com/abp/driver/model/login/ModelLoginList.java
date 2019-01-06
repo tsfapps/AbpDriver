@@ -36,6 +36,12 @@ public class ModelLoginList extends SugarRecord {
     @SerializedName("profile_pic")
     @Expose
     private String profilePic;
+    @SerializedName("state_id")
+    @Expose
+    private String stateId;
+    @SerializedName("district_id")
+    @Expose
+    private String districtId;
 
     public String getLogintype() {
         return logintype;
@@ -117,4 +123,19 @@ public class ModelLoginList extends SugarRecord {
         this.profilePic = profilePic;
     }
 
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
 }

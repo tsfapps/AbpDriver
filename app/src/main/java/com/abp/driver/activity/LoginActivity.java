@@ -1,16 +1,17 @@
 package com.abp.driver.activity;
 
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +20,12 @@ import android.widget.Toast;
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
-import com.abp.driver.model.driver.DriverAttendance;
 import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.service.NetworkStateService;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
-import com.abp.driver.utils.DateUtil;
 import com.abp.driver.utils.SharedPreference;
-import com.google.gson.Gson;
 
 import java.util.Objects;
 
@@ -60,6 +58,7 @@ public class LoginActivity extends AppCompatActivity{
     private String pass;
     private ModelLoginList modelDriversList;
     private SharedPreference mSharedPreference;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,39 +96,47 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     public void callLoginApi(final String type){
-        Api api = ApiClients.getApiClients().create(Api.class);
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage("Please wait login in progress....");
+        mDialog.show();
         String API_KEY = Constant.API_KEY;
-        String username = "9005103632";
-        String password = "MKS12322";
+        String username = null;
+        String password = null;
+        String mType = null;
+        if (type.equals(Constant.LOGIN_TYPE_DRIVER)) {
+            username = "9005103636";
+            password = "MKS00120";
+            mType = Constant.LOGIN_TYPE_DRIVER;
+        } else if (type.equals(Constant.LOGIN_SPINNER_TYPE_STATE_MANAGER)) {
+            username = "9005103632";
+            password = "MKS12322";
+            mType = "statemanager";
+        } else if (type.equals(Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER)) {
+            username = "9005103645";
+            password = "MKS123";
+            mType = "districtmanager";
+        }
 
-
-        Call<ModelLogin> call = api.loginUser(API_KEY, type, username, password);
-        call.enqueue(new Callback<ModelLogin>() {
-            @Override
-            public void onResponse(Call<ModelLogin> call, Response<ModelLogin> response) {
-              ModelLogin modelLogin = response.body();
-                if (modelLogin.getStatus().equals(Constant.SUCCESS_CODE)){
-                    ModelLoginList.deleteAll(ModelLoginList.class);
-                    for (ModelLoginList modelLoginList : modelLogin.getData()){
-                        modelLoginList.save();
-                    }
-                    mSharedPreference.setUserData(modelLogin.getData().get(0).getName(),modelLogin.getData().get(0).getPhoneno(),modelLogin.getData().get(0).getProfilePic());
-                    startDashboardAcivity(type);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ModelLogin> call, Throwable t) {
-                CustomLog.d("danny","flied..."+ call.toString());
-
-            }
-        });
+        new CallApiAsyncTask(this,API_KEY, mType, username, password).execute();
     }
 
     private void startDashboardAcivity(String type) {
         Intent intent =  new Intent(this,DashboardActivity.class);
         intent.putExtra("login_type",type);
         startActivity(intent);
+    }
+
+    private void startApiHandler(final String type) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mDialog.isShowing()) {
+                    mDialog.cancel();
+                }
+                startDashboardAcivity(type);
+            }
+        }, 500);
     }
 
     @OnClick(R.id.btn_login)
@@ -147,12 +154,7 @@ public class LoginActivity extends AppCompatActivity{
             et_password.setError("Enter the password");
         }else {
             if (type > 0) {
-                if (type != 1) {
-                    ModelLoginList.deleteAll(ModelLoginList.class);
-                    startDashboardAcivity(mSpinner.getSelectedItem().toString().toLowerCase());
-                } else {
-                    callLoginApi(mSpinner.getSelectedItem().toString().toLowerCase());
-                }
+                callLoginApi(mSpinner.getSelectedItem().toString().toLowerCase());
             } else {
                 Toast.makeText(getApplicationContext(), "Select type !", Toast.LENGTH_SHORT).show();
             }
@@ -160,8 +162,61 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    public void driverAtt(){
+    private class CallApiAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final String mApiKey;
+        private final String mType;
+        private final String mUserName;
+        private final String mPassword;
 
+        public CallApiAsyncTask(LoginActivity loginActivity, String api_key, String type, String username, String password) {
+            this.mApiKey = api_key;
+            this.mType = type;
+            this.mUserName = username;
+            this.mPassword = password;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        protected Void doInBackground(Void... args) {
+            // do background work here
+            Api api = ApiClients.getApiClients().create(Api.class);
+            Call<ModelLogin> call = api.loginUser(mApiKey, mType, mUserName, mPassword);
+            call.enqueue(new Callback<ModelLogin>() {
+                @Override
+                public void onResponse(Call<ModelLogin> call, Response<ModelLogin> response) {
+                    ModelLogin modelLogin = response.body();
+                    CustomLog.d("danny","LoginActivity onResponse..."+ modelLogin.getData());
+                    if (modelLogin.getStatus().equals(Constant.SUCCESS_CODE)){
+                        ModelLoginList.deleteAll(ModelLoginList.class);
+                        for (ModelLoginList modelLoginList : modelLogin.getData()){
+                            modelLoginList.save();
+                        }
+                        mSharedPreference.setUserData(modelLogin.getData().get(0).getName(),modelLogin.getData().get(0).getPhoneno(),modelLogin.getData().get(0).getProfilePic(),
+                                modelLogin.getData().get(0).getStateId(), modelLogin.getData().get(0).getDistrictId(),modelLogin.getData().get(0).getLogintype());
+                        startApiHandler(mType);
+                    } else {
+                        Toast.makeText(LoginActivity.this,"Server Error ! Please try again",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ModelLogin> call, Throwable t) {
+                    CustomLog.d("danny","onFailure..."+ call.toString());
+                    Toast.makeText(LoginActivity.this,"Server Error ! Please try again",Toast.LENGTH_SHORT).show();
+                    if (mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
+
+                }
+            });
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            // do UI work here
+        }
     }
 
 }
