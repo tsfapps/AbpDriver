@@ -1,21 +1,20 @@
 package com.abp.driver.activity;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.abp.driver.R;
-import com.abp.driver.receiver.NetworkStateChangeReceiver;
-import com.abp.driver.utils.Constant;
+import com.abp.driver.service.NetworkStateService;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
@@ -31,6 +30,26 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         sharePref = new SharedPreference(this);
         checkLocationPermissions();
+        if (!isServiceRunning(NetworkStateService.class)) {
+            startNetworkService();
+        }
+    }
+
+    private void startNetworkService() {
+        Intent intent = new Intent(this, NetworkStateService.class);
+        startService(intent);
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                CustomLog.d(TAG,"NetworkService is running");
+                return true;
+            }
+        }
+        CustomLog.d(TAG,"NetworkService is not running");
+        return false;
     }
 
     private void checkLocationPermissions() {

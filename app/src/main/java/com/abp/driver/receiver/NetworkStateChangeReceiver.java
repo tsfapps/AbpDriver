@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
@@ -37,7 +35,6 @@ public class NetworkStateChangeReceiver extends BroadcastReceiver {
             isReceived = true;
             SharedPreference mSharedPreference = new SharedPreference(context);
             boolean mIsConnected = isConnectedToInternet(context);
-            Toast.makeText(context, "network connected : " + mIsConnected, Toast.LENGTH_SHORT).show();
             List<ModelPunchInOutLocal> localDetails = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
                     "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND is_synced = 'N' ORDER BY id ASC");
             if (localDetails.size() > 0 && mIsConnected) {
@@ -71,8 +68,6 @@ public class NetworkStateChangeReceiver extends BroadcastReceiver {
             mLatitudeOut = local.getLatitudeOut();
             mCheckInDate = local.getCheckInDate();
             mCheckOutDate = local.getCheckOutDate();
-         /* new ApiCallAsyncTask(mTypeIO, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
-                  mLatitudeOut, mCheckInDate, mCheckOutDate,local).execute(); */
             callAttendanceApi(mTypeIO, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
                   mLatitudeOut, mCheckInDate, mCheckOutDate,local);
         }
@@ -112,65 +107,6 @@ public class NetworkStateChangeReceiver extends BroadcastReceiver {
                 isReceived = false;
             }
         });
-    }
-
-    private class ApiCallAsyncTask extends AsyncTask<String, Void, String> {
-        String mTypeIO = null, mPhoneNo = null, mInTime = null, mOutTime = null, mTotalTime = null, mLongitudeIn = null, mLongitudeOut = null, mLatitudeIn = null,
-                mLatitudeOut = null, mCheckInDate = null, mCheckOutDate = null;
-        ModelPunchInOutLocal modelLocal = null;
-        public ApiCallAsyncTask(String mTypeIO, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut, String mCheckInDate, String mCheckOutDate, ModelPunchInOutLocal local) {
-        Log.d(TAG,"ApiCallAsyncTask called");
-        this.mTypeIO = mTypeIO;
-        this.mPhoneNo = mPhoneNo;
-        this.mInTime = mInTime;
-        this.mOutTime = mOutTime;
-        this.mTotalTime = mTotalTime;
-        this.mLongitudeIn = mLongitudeIn;
-        this.mLongitudeOut = mLongitudeOut;
-        this.mLatitudeIn = mLatitudeIn;
-        this.mLatitudeOut = mLatitudeOut;
-        this.mCheckInDate = mCheckInDate;
-        this.mCheckOutDate = mCheckOutDate;
-        this.modelLocal = local;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.d(TAG,"ApiCallAsyncTask doInBackground called.");
-            try {
-                Api api = ApiClients.getApiClients().create(Api.class);
-                Call<ModelPunchInOut> call = api.driverPunchInOut(Constant.API_KEY, mTypeIO, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
-                        mLatitudeOut, mCheckInDate, mCheckOutDate);
-                final ModelPunchInOutLocal finalModelValue = modelLocal;
-                call.enqueue(new Callback<ModelPunchInOut>() {
-                    @Override
-                    public void onResponse(Call<ModelPunchInOut> call, Response<ModelPunchInOut> response) {
-                        ModelPunchInOut modelPunchInOut = response.body();
-                        if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                            Log.d(TAG, "response success called.");
-                            finalModelValue.setIsSynced("Y");
-                            finalModelValue.save();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ModelPunchInOut> call, Throwable t) {
-                        CustomLog.d(TAG, "api error..." + call.toString());
-                        finalModelValue.setIsSynced("N");
-                        finalModelValue.save();
-                    }
-                });
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-          return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.d(TAG,"onPostExecute called");
-        }
     }
 
     private boolean isConnectedToInternet(Context context) {

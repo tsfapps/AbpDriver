@@ -116,13 +116,12 @@ public class DriverFragment extends Fragment {
         punchInOutLocalDetails = ModelPunchInOutLocal.listAll(ModelPunchInOutLocal.class);
         if (punchInOutLocalDetails.size() > 0) {
             ModelPunchInOutLocal mLastData = punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1);
-            if (!mLastData.getTimeIn().equals("")) {
-                Log.d("danny","setValue called..inTime: "+mLastData.getTimeIn()+" curreenttime :"+ DateUtil.getCurrentTime());
-                mTotalHours.setText(DateUtil.timeDiff(mLastData.getTimeIn(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX));
+            if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
+                mTotalHours.setText(DateUtil.timeDiff(mLastData.getTimeIn(), DateUtil.getCurrentTime(), Constant.HOUR_SUFFIX, true));
             } else {
                 mTotalHours.setText("00:00");
             }
-            if (!mLastData.getTimeIn().equals("")) {
+            if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(mLastData.getTimeIn());
@@ -144,7 +143,6 @@ public class DriverFragment extends Fragment {
             mLatitude = location.getLatitude();
             mLongitude = location.getLongitude();
             CustomLog.d(TAG,"new Location lat :"+mLatitude+ " long:"+mLongitude);
-            Toast.makeText(getContext(),"new lat: "+mLatitude+" long: "+mLongitude,Toast.LENGTH_SHORT).show();
             if (punchType != null) {
                 callPunchInOutApi(punchType);
             }

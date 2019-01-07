@@ -73,47 +73,27 @@ public class LoginActivity extends AppCompatActivity{
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
 
         mSharedPreference = new SharedPreference(this);
-        if (!isServiceRunning(NetworkStateService.class)) {
-            startNetworkService();
-        }
     }
 
-    private void startNetworkService() {
-        Intent intent = new Intent(this, NetworkStateService.class);
-        startService(intent);
-    }
-
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-               CustomLog.d(TAG,"NetworkService is running");
-                return true;
-            }
-        }
-        CustomLog.d(TAG,"NetworkService is not running");
-        return false;
-    }
-
-    public void callLoginApi(final String type){
+    public void callLoginApi(final String type, String phoneNo,String pass){
         mDialog = new ProgressDialog(this);
         mDialog.setMessage("Please wait login in progress....");
         mDialog.show();
         String API_KEY = Constant.API_KEY;
-        String username = null;
-        String password = null;
+        String username = phoneNo;
+        String password = pass;
         String mType = null;
         if (type.equals(Constant.LOGIN_TYPE_DRIVER)) {
-            username = "9005103636";
-            password = "MKS00120";
+            //username = "1234567890";
+            //password = "test@123";
             mType = Constant.LOGIN_TYPE_DRIVER;
         } else if (type.equals(Constant.LOGIN_SPINNER_TYPE_STATE_MANAGER)) {
-            username = "9005103632";
-            password = "MKS12322";
+            //username = "9005103632";
+            //password = "MKS12322";
             mType = "statemanager";
         } else if (type.equals(Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER)) {
-            username = "9005103645";
-            password = "MKS123";
+           // username = "9005103645";
+            //password = "MKS123";
             mType = "districtmanager";
         }
 
@@ -146,16 +126,16 @@ public class LoginActivity extends AppCompatActivity{
     }
     private void submitBtn(){
         int type = mSpinner.getSelectedItemPosition();
-        String  email_local = et_email.getText().toString().trim();
-        pass = et_password.getText().toString().trim();
+        String mPhoneNo = et_email.getText().toString().trim();
+        String mPass = et_password.getText().toString().trim();
 
-        if (email_local.isEmpty()){
-            et_email.setError("Enter the user id");
-        }else if (pass.isEmpty()){
+        if (mPhoneNo.isEmpty()){
+            et_email.setError("Enter phone no");
+        }else if (mPass.isEmpty()){
             et_password.setError("Enter the password");
         }else {
             if (type > 0) {
-                callLoginApi(mSpinner.getSelectedItem().toString().toLowerCase());
+                callLoginApi(mSpinner.getSelectedItem().toString().toLowerCase(),mPhoneNo,mPass);
             } else {
                 Toast.makeText(getApplicationContext(), "Select type !", Toast.LENGTH_SHORT).show();
             }

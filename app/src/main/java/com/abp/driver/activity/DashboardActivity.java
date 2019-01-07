@@ -1,14 +1,17 @@
 package com.abp.driver.activity;
 
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
@@ -31,7 +35,10 @@ import com.abp.driver.fragment.ProfileFragmentDriver;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.fragment.StatusDistrictListFragment;
 import com.abp.driver.fragment.StatusFragment;
+import com.abp.driver.model.PunchInOut.ModelPunchInOutLocal;
+import com.abp.driver.model.driver.DriverAttendanceList;
 import com.abp.driver.model.login.ModelLoginList;
+import com.abp.driver.receiver.NetworkStateChangeReceiver;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
@@ -53,6 +60,8 @@ public class DashboardActivity extends AppCompatActivity
     TextView mToolbarTitle;
     private List<ModelLoginList> mLoginList;
     private SharedPreference mSharedPreference;
+    private ProgressDialog mDialog;
+    private boolean isDataSyncStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,11 +193,55 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     private void userLogoutCall() {
-        SugarRecord.deleteAll(SugarRecord.class);
-        mSharedPreference.clearAllData();
-        Intent intent = new Intent(this,LoginActivity.class);
-        startActivity(intent);
-        finish();
+        List<ModelPunchInOutLocal> mList = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
+                "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND time_in != '"+Constant.EMPTY+"' AND time_out = '"+Constant.EMPTY+"' ORDER BY id ASC");
+        if (mList.size() > 0) {
+            Toast.makeText(this,"Punch out before logout !",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        List<ModelPunchInOutLocal> localDetails = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
+                "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND is_synced = 'N' ORDER BY id ASC");
+        if (localDetails.size() > 0) {
+            if (isNetworkAvailable()) {
+                mDialog = new ProgressDialog(this);
+                mDialog.setMessage("Please wait data sync in progress....");
+                mDialog.show();
+                startDataSyncHandler();
+                if (!isDataSyncStarted) {
+                    registerNetworkReceiver();
+                }
+            } else {
+                Toast.makeText(this,"Please connect internet to Sync attendance data",Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            isDataSyncStarted = false;
+            ModelLoginList.deleteAll(ModelLoginList.class);
+            ModelPunchInOutLocal.deleteAll(ModelPunchInOutLocal.class);
+            DriverAttendanceList.deleteAll(DriverAttendanceList.class);
+            mSharedPreference.clearAllData();
+            if (mDialog != null && mDialog.isShowing()){
+                mDialog.dismiss();
+            }
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void startDataSyncHandler() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               userLogoutCall();
+            }
+        }, 3000);
+    }
+    private void registerNetworkReceiver() {
+        isDataSyncStarted = true;
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(new NetworkStateChangeReceiver(), intentFilter);
     }
 
     public void profileImage(){

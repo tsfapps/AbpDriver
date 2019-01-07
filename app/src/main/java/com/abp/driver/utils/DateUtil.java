@@ -58,6 +58,40 @@ public class DateUtil {
         return dH;
     }
 
+    public static String timeDiff(String dateStart, String dateStop, String flag, boolean show) {
+        String dH = "";
+        try {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(Constant.TIME_FORMAT_24HR);
+
+            Date d1 = format.parse(dateStart);
+            Date d2 = format.parse(dateStop);
+            long diff = d2.getTime() - d1.getTime();
+
+            switch (flag){
+                case Constant.HOUR_SUFFIX:
+                    long diffMinutes = diff / (60 * 1000) % 60;
+                    long diffHours = diff / (60 * 60 * 1000) % 24;
+                    long diffDays = diff / (24 * 60 * 60 * 1000);
+                    if (diffDays > 0) {
+                        dH = String.valueOf(diffDays + " d, " + (diffHours) + " : " + (diffMinutes));
+                    } else if (diffHours > 0) {
+                        dH = String.valueOf((diffHours) + " : " + (diffMinutes));
+                    } else {
+                        dH = String.valueOf("0 : "+(diffMinutes));
+                    }
+                    break;
+                case Constant.MINUTE_SUFFIX:
+                    dH = String.valueOf(diff / (60 * 1000));
+                    break;
+            }
+
+        } catch (Exception e) {
+            CustomLog.e("DateUtil",e.toString());
+        }
+        return dH;
+    }
+
+
     public static String convertDD_MM_YYYY_Into_ServerFormat(String date) {
 
         String convertedDate = null;
