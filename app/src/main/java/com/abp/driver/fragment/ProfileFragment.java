@@ -39,6 +39,10 @@ public class ProfileFragment extends Fragment {
     protected TextView tv_address;
     @BindView(R.id.tv_profile_adhar_no)
     protected TextView tv_adhar;
+    @BindView(R.id.tv_profile_username)
+    protected TextView tv_username;
+    @BindView(R.id.tv_profile_user_type)
+    protected TextView tv_user_type;
     @BindView(R.id.iv_pro_pic)
     protected ImageView iv_image;
     @Nullable
@@ -62,12 +66,16 @@ public class ProfileFragment extends Fragment {
         String adhar = loginLists.get(0).getAdhaarno();
         String address = loginLists.get(0).getAddress();
         String image = loginLists.get(0).getProfilePic();
+        String userName = loginLists.get(0).getUserName();
+        String userType = loginLists.get(0).getLogintype();
 
         tv_name.setText(name);
         tv_email.setText(email);
         tv_phone.setText(phone);
         tv_adhar.setText(adhar);
         tv_address.setText(address);
+        tv_username.setText(userName);
+        tv_user_type.setText(userType);
         Glide.with(this).load(image).into(iv_image);
 
 
