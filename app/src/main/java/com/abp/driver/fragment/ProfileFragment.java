@@ -10,28 +10,73 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.model.login.ModelLoginList;
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ProfileFragment extends Fragment {
 
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
+    private List<ModelLoginList> loginLists = ModelLoginList.listAll(ModelLoginList.class);
 
+    @BindView(R.id.tv_profile_name)
+   protected TextView tv_name;
+    @BindView(R.id.tv_profile_phone)
+    protected TextView tv_phone;
+    @BindView(R.id.tv_profile_email)
+    protected TextView tv_email;
+    @BindView(R.id.tv_profile_address)
+    protected TextView tv_address;
+    @BindView(R.id.tv_profile_adhar_no)
+    protected TextView tv_adhar;
+    @BindView(R.id.iv_pro_pic)
+    protected ImageView iv_image;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        ButterKnife.bind(this, view);
+
+
+        profileInfo();
+
         init();
         return view;
+    }
+
+    private void profileInfo(){
+        String name = loginLists.get(0).getName();
+        String email = loginLists.get(0).getEmail();
+        String phone = loginLists.get(0).getPhoneno();
+        String adhar = loginLists.get(0).getAdhaarno();
+        String address = loginLists.get(0).getAddress();
+        String image = loginLists.get(0).getProfilePic();
+
+        tv_name.setText(name);
+        tv_email.setText(email);
+        tv_phone.setText(phone);
+        tv_adhar.setText(adhar);
+        tv_address.setText(address);
+        Glide.with(this).load(image).into(iv_image);
+
+
     }
 
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
-            mActivity.setToolbarTitle("Driver Profile");
+            mActivity.setToolbarTitle("Profile");
             mFragmentManager = mActivity.getSupportFragmentManager();
         }
 
