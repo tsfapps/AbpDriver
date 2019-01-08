@@ -137,7 +137,7 @@ public class EvrPoliceListFragment extends Fragment {
     private void init() {
         DashboardActivity mActivity = (DashboardActivity)getActivity();
         if (mActivity !=null){
-            mActivity.setToolbarTitle("Evr Police List");
+            mActivity.setToolbarTitle("Police Station");
         }
     }
 

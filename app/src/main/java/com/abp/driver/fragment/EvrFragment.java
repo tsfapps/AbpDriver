@@ -1,5 +1,6 @@
 package com.abp.driver.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,13 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.abp.driver.ApiClient.ApiClients;
+import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.EvrAapter;
+import com.abp.driver.model.evr.ModelEvr;
+import com.abp.driver.model.evr.ModelEvrList;
+import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class EvrFragment extends Fragment {
@@ -31,11 +42,17 @@ public class EvrFragment extends Fragment {
     private String mPoliceId;
     private DashboardActivity mActivity;
     private SharedPreference mSharePref;
+    private Context mContext;
+    private String mStateId;
+    private List<ModelEvrList> mList;
+    private FragmentManager mFragmentManager;
 
-    public static EvrFragment newInstance(String districtId, String policeId) {
+
+    public static EvrFragment newInstance(String districtId, String policeId, String stateId) {
         EvrFragment fragment = new EvrFragment();
         fragment.mDistrictId = districtId;
         fragment.mPoliceId = policeId;
+        fragment.mStateId = stateId;
         return fragment;
     }
 
@@ -45,14 +62,47 @@ public class EvrFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_evr, container, false);
 
        ButterKnife.bind(this, view);
+       mContext = getContext();
+       mFragmentManager = getFragmentManager();
+
+       mList = ModelEvrList.listAll(ModelEvrList.class);
+
        callRecyclerView();
+       callApi();
         init();
         return view;
     }
+
+    private void callApi() {
+        String strApiKey = Constant.API_KEY;
+        String strStateId = mStateId;
+        String strDistrictId = mDistrictId;
+        String strPoliceId = mPoliceId;
+        Api api = ApiClients.getApiClients().create(Api.class);
+        Call<ModelEvr> call = api.ervDetail(strApiKey, strStateId, strDistrictId, strPoliceId);
+        call.enqueue(new Callback<ModelEvr>() {
+            @Override
+            public void onResponse(Call<ModelEvr> call, Response<ModelEvr> response) {
+                ModelEvr modelEvr = response.body();
+                if (modelEvr.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                    ModelEvrList.deleteAll(ModelEvrList.class);
+                    for (ModelEvrList modelEvrList : modelEvr.getData()) {
+                        modelEvrList.save();
+                    }
+                    callRecyclerView();
+                }
+            }
+            @Override
+            public void onFailure(Call<ModelEvr> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
-            mActivity.setToolbarTitle("EVR");
+            mActivity.setToolbarTitle("ERV");
         }
         mSharePref = new SharedPreference(getContext());
 
@@ -61,7 +111,7 @@ public class EvrFragment extends Fragment {
     private void callRecyclerView(){
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        EvrAapter evrAapter = new EvrAapter();
+        EvrAapter evrAapter = new EvrAapter(mContext, mFragmentManager, mList);
         mRecyclerView.setAdapter(evrAapter);
     }
 

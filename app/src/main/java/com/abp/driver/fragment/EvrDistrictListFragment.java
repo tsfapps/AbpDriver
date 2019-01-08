@@ -92,7 +92,7 @@ public class EvrDistrictListFragment extends Fragment {
     private void init() {
         DashboardActivity mActivity = (DashboardActivity) getActivity();
         if (mActivity !=null){
-            mActivity.setToolbarTitle("Evr ModelDistrict List");
+            mActivity.setToolbarTitle("District List");
         }
     }
 

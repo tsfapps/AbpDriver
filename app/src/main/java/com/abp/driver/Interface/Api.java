@@ -2,6 +2,7 @@ package com.abp.driver.Interface;
 
 import com.abp.driver.model.PunchInOut.ModelPunchInOut;
 import com.abp.driver.model.driver.DriverAttendance;
+import com.abp.driver.model.evr.ModelEvr;
 import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.police.ModelPolice;
 import com.abp.driver.model.district.ModelDistrict;
@@ -41,6 +42,14 @@ public interface Api {
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
             @Field("districtid") String districtid
+    );
+    @FormUrlEncoded
+    @POST("api/view-state-district-policestaionwise-ervapi.php")
+    Call<ModelEvr> ervDetail(
+            @Field("API_KEY") String API_KEY,
+            @Field("stateid") String stateid,
+            @Field("districtid") String districtid,
+            @Field("policesid") String policesid
     );
 
     @FormUrlEncoded

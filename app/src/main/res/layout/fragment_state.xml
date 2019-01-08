@@ -130,7 +130,7 @@
                             <TextView
                                 android:textColor="#f6b026"
                                 style="@style/style_tv"
-                                android:text="EVR"
+                                android:text="ERV"
                                 />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>

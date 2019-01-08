@@ -58,7 +58,7 @@ public class DistrictManagerFragment extends Fragment {
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
-            mActivity.setToolbarTitle("ModelDistrict Manager");
+            mActivity.setToolbarTitle("District Manager");
         }
         mSharePref = new SharedPreference(getContext());
     }

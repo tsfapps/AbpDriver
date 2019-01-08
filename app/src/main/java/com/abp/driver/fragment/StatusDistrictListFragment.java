@@ -56,7 +56,7 @@ public class StatusDistrictListFragment extends Fragment{
 private void init(){
     DashboardActivity mActivity = (DashboardActivity)getActivity();
     if (mActivity!=null){
-        mActivity.setToolbarTitle("ModelDistrict List");
+        mActivity.setToolbarTitle("District List");
     }
 }
         private void callApi(){

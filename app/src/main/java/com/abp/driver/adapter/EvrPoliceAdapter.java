@@ -41,7 +41,7 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final EvrPoliceHolder evrPoliceHolder, int i) {
+    public void onBindViewHolder(@NonNull final EvrPoliceHolder evrPoliceHolder, final int i) {
 
         String policeStationName = modelPoliceLists.get(i).getPolicestationname();
         evrPoliceHolder.tv_policeList.setText(policeStationName);
@@ -50,7 +50,7 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
         evrPoliceHolder.ll_policeList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, new EvrFragment()).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().replace(R.id.container_main, EvrFragment.newInstance(modelPoliceLists.get(i).getDistrictId(),modelPoliceLists.get(i).getPoliceId(),modelPoliceLists.get(i).getStateId())).addToBackStack(null).commit();
             }
         });
     }
