@@ -39,13 +39,8 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity{
 
 
-    private static String NAME = "E_NAME";
-    private static final String TAG = "LoginActivity";
 
     public static final String MyPreference = "MyPref";
-    public boolean aBoolean = false;
-    private SharedPreferences SM;
-    // private static String PASS = "PASS";
 
     @BindView(R.id.et_phone_login )
     protected EditText et_email;
@@ -53,10 +48,6 @@ public class LoginActivity extends AppCompatActivity{
     protected EditText et_password;
     @BindView(R.id.sp_login)
     protected AppCompatSpinner mSpinner;
-    private Toolbar toolbar;
-    private String email;
-    private String pass;
-    private ModelLoginList modelDriversList;
     private SharedPreference mSharedPreference;
     private ProgressDialog mDialog;
 
@@ -65,7 +56,7 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);//butter knife binding
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);

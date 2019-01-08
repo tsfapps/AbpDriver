@@ -58,14 +58,7 @@ public class StateManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_sm_profile)
     public void onSmProClk(View view){
-//        Fragment tFragment = new ProfileFragmentState();
-//        FragmentManager tFragmentManager = getActivity().getSupportFragmentManager();
-//        FragmentTransaction tFragmentTransaction = tFragmentManager.beginTransaction();
-//        tFragmentTransaction.replace(R.id.container_main, tFragment);
-//        tFragmentTransaction.addToBackStack(null);
-//        tFragmentTransaction.commit();
-
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentState()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
     }
     @Override
     public void onResume() {

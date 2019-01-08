@@ -53,7 +53,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_profile)
     public void llDmProfileClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDistrict()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
     }
     private void init() {
         mActivity = (DashboardActivity) getActivity();

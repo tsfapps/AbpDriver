@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 
-public class ProfileFragmentDriver extends Fragment {
+public class ProfileFragment extends Fragment {
 
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
@@ -22,7 +22,7 @@ public class ProfileFragmentDriver extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile_driver, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         init();
         return view;

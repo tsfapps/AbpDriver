@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!---->
+    <!--// "logintype": "driver",-->
+
+    <!--"adhaarno": "7857572752",-->
+    <!--"address": "south city 1 sector 40",-->
+    <!--"user_name": "test",-->
+    <!--"create_date": "2019-01-07",-->
+
+
     <LinearLayout
         android:layout_gravity="center"
         android:gravity="center"
@@ -32,7 +41,7 @@
         app:cardCornerRadius="60dp"
         android:elevation="20dp">
         <ImageView
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             android:src="@drawable/pro_img"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
@@ -145,6 +154,61 @@
                 android:drawableStart="@drawable/ic_pro_email"
                 android:layout_gravity="center_vertical"
                 android:text="test@abp.com"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+        <View
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="12sp"
+                android:layout_marginLeft="25dp"
+                android:id="@+id/tv_profile_adhar_no"
+                android:hint="Adhar Number"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp" />
+            <TextView
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:drawableStart="@drawable/ic_adhar_number"
+                android:layout_gravity="center_vertical"
+                android:text="900987876567"
+                android:maxLength="12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+        <View
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="12sp"
+                android:layout_marginLeft="25dp"
+                android:id="@+id/tv_profile_address"
+                android:hint="Address"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp" />
+            <TextView
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:drawableStart="@drawable/ic_address"
+                android:layout_gravity="center_vertical"
+                android:text="Ranchi, Jharkhand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>

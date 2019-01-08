@@ -30,11 +30,8 @@ import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.DriverAttendanceDetailFragment;
 import com.abp.driver.fragment.DriverFragment;
 
-import com.abp.driver.fragment.EvrFragment;
-import com.abp.driver.fragment.ProfileFragmentDriver;
+import com.abp.driver.fragment.ProfileFragment;
 import com.abp.driver.fragment.StateManagerFragment;
-import com.abp.driver.fragment.StatusDistrictListFragment;
-import com.abp.driver.fragment.StatusFragment;
 import com.abp.driver.model.PunchInOut.ModelPunchInOutLocal;
 import com.abp.driver.model.driver.DriverAttendanceList;
 import com.abp.driver.model.login.ModelLoginList;
@@ -43,7 +40,6 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 import com.bumptech.glide.Glide;
-import com.orm.SugarRecord;
 
 import java.util.List;
 
@@ -178,7 +174,7 @@ public class DashboardActivity extends AppCompatActivity
         if (id == R.id.nav_attendance) {
           getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_profile) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragmentDriver()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
