@@ -2,7 +2,6 @@
 <LinearLayout
     android:orientation="vertical"
     android:gravity="center"
-
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,28 +11,28 @@
     tools:context=".activity.SplashActivity">
 
     <ImageView
-        android:src="@drawable/driver_logo"
+        android:src="@drawable/abpn_logo"
         android:layout_width="120dp"
         android:layout_height="120dp" />
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Welcome to"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="#000"
-                android:text="@string/app_title"
-                android:textStyle="bold"
-                android:textSize="28sp"
-                />
+    <!-- <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:text="Welcome to"
+         android:textStyle="bold"
+         android:textSize="25sp"
+         />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#FFF"
+        android:text="@string/app_title"
+        android:textStyle="bold"
+        android:textSize="28sp"
+        android:layout_marginTop="10dp"/>
 
 
 </LinearLayout>

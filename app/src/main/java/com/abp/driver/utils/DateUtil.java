@@ -11,7 +11,7 @@ public class DateUtil {
 
 
     public static String getCurrentDateTime() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_FORMAT_TO_SERVER);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_FORMAT_MM_dd_yyyy_HH_mm_ss);
         return sdf.format(new Date());
     }
 
@@ -28,7 +28,7 @@ public class DateUtil {
     public static String timeDiff(String dateStart, String dateStop, String flag) {
         String dH = "";
         try {
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(Constant.TIME_FORMAT_24HR);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(Constant.DATE_FORMAT_MM_dd_yyyy_HH_mm_ss);
 
             Date d1 = format.parse(dateStart);
             Date d2 = format.parse(dateStop);
@@ -61,7 +61,7 @@ public class DateUtil {
     public static String timeDiff(String dateStart, String dateStop, String flag, boolean show) {
         String dH = "";
         try {
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(Constant.TIME_FORMAT_24HR);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(Constant.DATE_FORMAT_MM_dd_yyyy_HH_mm_ss);
 
             Date d1 = format.parse(dateStart);
             Date d2 = format.parse(dateStop);
@@ -69,6 +69,7 @@ public class DateUtil {
 
             switch (flag){
                 case Constant.HOUR_SUFFIX:
+                    //long diffSeconds = diff / 1000 % 60;
                     long diffMinutes = diff / (60 * 1000) % 60;
                     long diffHours = diff / (60 * 60 * 1000) % 24;
                     long diffDays = diff / (24 * 60 * 60 * 1000);

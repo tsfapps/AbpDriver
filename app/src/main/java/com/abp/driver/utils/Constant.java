@@ -30,6 +30,7 @@ public class Constant {
     public static final String DATE_FORMAT_DD_MM_YYYY = "dd-MM-yyyy";
     public static final String DATE_FORMAT_TO_SERVER = "yyyy-MM-dd HH:mm:ss";
     public static final String STANDARD_FORMAT = "EEE MMM dd HH:mm:ss z yyyy";
+    public static final String DATE_FORMAT_MM_dd_yyyy_HH_mm_ss = "MM/dd/yyyy HH:mm:ss";
     public static final String HOUR_SUFFIX = " hr ";
     public static final String MINUTE_SUFFIX = " min ";
     public static final String SECOND_SUFFIX = " sec ";

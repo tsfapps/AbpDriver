@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/tv_welcome"
-        android:text="Mr. Tousif Akram"
+        android:text=""
         android:textSize="18dp"
         android:textColor="#000"
         android:textStyle="bold" />
@@ -70,7 +70,7 @@
             android:id="@+id/tvWorkingHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="09:18"
+            android:text="00:00"
             android:textSize="30sp"
             android:textColor="@color/black_dark"
             android:textStyle="bold" />
@@ -102,7 +102,7 @@
             android:textColor="#fd0202"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="09 : 12 "
+            android:text=""
             android:textStyle="bold"
             />
     </LinearLayout>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.model.login.ModelLoginList;
+import com.abp.driver.utils.Constant;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -68,6 +69,11 @@ public class ProfileFragment extends Fragment {
         String image = loginLists.get(0).getProfilePic();
         String userName = loginLists.get(0).getUserName();
         String userType = loginLists.get(0).getLogintype();
+        if (userType.equals(Constant.LOGIN_TYPE_STATE_MANAGER)) {
+            userType = Constant.LOGIN_SPINNER_TYPE_STATE_MANAGER;
+        } else if (userType.equals(Constant.LOGIN_TYPE_DISTRICT_MANAGER)) {
+            userType = Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER;
+        }
 
         tv_name.setText(name);
         tv_email.setText(email);

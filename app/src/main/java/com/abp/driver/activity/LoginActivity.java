@@ -1,20 +1,17 @@
 package com.abp.driver.activity;
 
-import android.app.ActivityManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
@@ -22,7 +19,6 @@ import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.login.ModelLoginList;
-import com.abp.driver.service.NetworkStateService;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
@@ -170,6 +166,9 @@ public class LoginActivity extends AppCompatActivity{
                         startApiHandler(mType);
                     } else {
                         Toast.makeText(LoginActivity.this,"Server Error ! Please try again",Toast.LENGTH_SHORT).show();
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
                     }
                 }
 
