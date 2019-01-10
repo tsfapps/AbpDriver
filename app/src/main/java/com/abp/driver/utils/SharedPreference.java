@@ -8,6 +8,7 @@ public class SharedPreference {
     private Context mContext;
 
     public static Editor edt;
+    private long mTimeLeft = 60000 * 5;
 
     public SharedPreference(Context ctx) {
         // TODO Auto-generated constructor stub
@@ -80,6 +81,18 @@ public class SharedPreference {
     public boolean getPermissionSettingPage() {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
         return sp.getBoolean(Constant.PREF_KEY_PERMISSION_SETTING, false);
+    }
+
+    public void setCountLeftTime(long leftTime) {
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        edt = sp.edit();
+        edt.putLong(Constant.PREF_KEY_COUNT_TIME_LEFT, leftTime);
+        edt.commit();
+    }
+
+    public long getCountLeftTime(){
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return sp.getLong(Constant.PREF_KEY_COUNT_TIME_LEFT, mTimeLeft);
     }
 
 }

@@ -8,6 +8,7 @@ public class Constant {
     public static final String ENABLE = "Enable";
     public static final String SHARED_PREFERENCE_NAME = "pref_abp_driver";
     public static final String PREF_KEY_PERMISSION_SETTING = "pref_key_permission_setting";
+    public static final String PREF_KEY_COUNT_TIME_LEFT = "pref_key_count_time_left";
     public static final String SUCCESS_CODE = "200";
     public static final String ERROR_CODE = "404";
     public static final String API_KEY = "abpn";

@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity{
     private void startDashboardAcivity(String type) {
         Intent intent =  new Intent(this,DashboardActivity.class);
         intent.putExtra("login_type",type);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

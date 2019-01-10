@@ -33,12 +33,16 @@ public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapte
     public void onBindViewHolder(@NonNull DriverViewHolder driverViewHolder, int i) {
             String chkIn = driverAttendanceLists.get(i).getTimeIn();
             String chkOut = driverAttendanceLists.get(i).getTimeOut();
-            String date = driverAttendanceLists.get(i).getCheckInDate();
+            String dateIn = driverAttendanceLists.get(i).getCheckInDate();
+            String dateOut = driverAttendanceLists.get(i).getCheckOutDate();
             String totalTime = driverAttendanceLists.get(i).getTotalTime();
+            String[] mInDate = dateIn.split(" ");
+            String[] mOutDate = dateOut.split(" ");
             driverViewHolder.tv_dri_att_det_chk_in.setText(chkIn);
             driverViewHolder.tv_dri_att_det_chk_out.setText(chkOut);
             driverViewHolder.tv_dri_att_det_working_hrs.setText(totalTime);
-            driverViewHolder.tv_dri_att_det_date.setText(date);
+            driverViewHolder.tv_dri_att_det_date.setText(mInDate[0]);
+            driverViewHolder.tv_date_dri_att_det_out.setText(mOutDate[0]);
     }
     @Override
     public int getItemCount() {
@@ -54,6 +58,8 @@ public class DriverAttDetAdapter extends RecyclerView.Adapter<DriverAttDetAdapte
         TextView tv_dri_att_det_working_hrs;
         @BindView(R.id.tv_date_dri_att_det)
         TextView tv_dri_att_det_date;
+        @BindView(R.id.tv_date_dri_att_det_out)
+        TextView tv_date_dri_att_det_out;
         public DriverViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

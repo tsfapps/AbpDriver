@@ -8,123 +8,153 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
     <LinearLayout
-        android:gravity="end"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:gravity="end"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
-    <TextView
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:id="@+id/tv_date_lbl"
-        android:text="Date : "
-        style="@style/style_tv_dri_att" />
-        <TextView
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="12sp"
-            android:id="@+id/tv_date_dri_att_det"
-            android:text="20 - 10 -2019"
-            style="@style/style_tv_dri_att" />
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/iv_loc_dri_att_det_out"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-           android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_location" />
-    </LinearLayout>
-    <LinearLayout
-         android:padding="10dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <TextView
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:id="@+id/tv_chkIn_lbl"
-                android:text="Check in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_below="@+id/tv_chkIn_lbl"
-                android:id="@+id/tv_chk_in_dri_att_det"
-                android:text="9:25 AM"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-        <android.support.v7.widget.CardView
-            android:id="@+id/cv_container_dri_att_det"
-            android:elevation="20dp"
-            android:layout_width="120dp"
-            android:layout_weight="0"
-            android:layout_height="120dp"
-            app:cardCornerRadius="60dp">
             <LinearLayout
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp">
                 <TextView
-                    android:gravity="center"
-                    android:layout_margin="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:id="@+id/tv_workHrs_lbl"
-                    android:text="@string/working_hrs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:id="@+id/tv_date_lbl"
+                    android:text="In Date: "
+                    />
                 <TextView
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
                     android:textStyle="bold"
-                   android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/tv_working_hrs_dri_att_det"
-                    android:text="9"
-                    android:layout_width="0dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    android:id="@+id/tv_date_dri_att_det"
+                    android:text="20/01/2019 24:54:09"
+                    android:singleLine="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+            <!--<ImageView
+                android:id="@+id/iv_loc_dri_att_det_out"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_location" />-->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right">
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:text="Out Date: "
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    android:id="@+id/tv_date_dri_att_det_out"
+                    android:text="20/01/2019 56:34:09"
+                    android:singleLine="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:id="@+id/tv_chkIn_lbl"
+                    android:text="Check in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_below="@+id/tv_chkIn_lbl"
+                    android:id="@+id/tv_chk_in_dri_att_det"
+                    android:text="9:25 AM"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <!--<TextView-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textColor="@color/white"-->
-                    <!--android:textSize="24sp"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:gravity="center"-->
-                    <!--android:id="@+id/tv_working_min_dri_att_det"-->
-                    <!--android:text="20"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content" />-->
-                </LinearLayout>
-                <!--<LinearLayout-->
+            </LinearLayout>
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv_container_dri_att_det"
+                android:elevation="20dp"
+                android:layout_width="120dp"
+                android:layout_weight="0"
+                android:layout_height="120dp"
+                app:cardCornerRadius="60dp">
+                <LinearLayout
+                    android:background="@color/colorPrimaryDark"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:gravity="center"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:id="@+id/tv_workHrs_lbl"
+                        android:text="@string/working_hrs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="@color/white"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:id="@+id/tv_working_hrs_dri_att_det"
+                            android:text="9"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"/>
+                        <!--<TextView-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:textColor="@color/white"-->
+                        <!--android:textSize="24sp"-->
+                        <!--android:textStyle="bold"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:gravity="center"-->
+                        <!--android:id="@+id/tv_working_min_dri_att_det"-->
+                        <!--android:text="20"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content" />-->
+                    </LinearLayout>
+                    <!--<LinearLayout-->
                     <!--android:orientation="horizontal"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content">-->
-                <!--<TextView-->
+                    <!--<TextView-->
                     <!--android:padding="5dp"-->
                     <!--android:textColor="@color/white"-->
                     <!--android:textSize="14sp"-->
@@ -134,7 +164,7 @@
                     <!--android:text="hrs"-->
                     <!--android:layout_width="0dp"-->
                     <!--android:layout_height="wrap_content" />-->
-                <!--<TextView-->
+                    <!--<TextView-->
                     <!--android:padding="5dp"-->
                     <!--android:textColor="@color/white"-->
                     <!--android:textSize="14sp"-->
@@ -144,34 +174,34 @@
                     <!--android:text="min"-->
                     <!--android:layout_width="0dp"-->
                     <!--android:layout_height="wrap_content"/>-->
-                <!--</LinearLayout>-->
+                    <!--</LinearLayout>-->
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_gravity="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:id="@+id/tv_chkOut_lbl"
+                    android:text="Check out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_gravity="end"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:id="@+id/tv_chk_out_dri_att_det"
+                    android:text="6:45 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
-        <LinearLayout
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <TextView
-                android:layout_gravity="end"
-                android:textSize="12sp"
-                android:textColor="@color/black"
-            android:id="@+id/tv_chkOut_lbl"
-            android:text="Check out"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_gravity="end"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:id="@+id/tv_chk_out_dri_att_det"
-                android:text="6:45 PM"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </android.support.v7.widget.CardView>

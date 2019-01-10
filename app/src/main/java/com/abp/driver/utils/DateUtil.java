@@ -69,16 +69,16 @@ public class DateUtil {
 
             switch (flag){
                 case Constant.HOUR_SUFFIX:
-                    //long diffSeconds = diff / 1000 % 60;
+                    long diffSeconds = diff / 1000 % 60;
                     long diffMinutes = diff / (60 * 1000) % 60;
                     long diffHours = diff / (60 * 60 * 1000) % 24;
                     long diffDays = diff / (24 * 60 * 60 * 1000);
                     if (diffDays > 0) {
-                        dH = String.valueOf(diffDays + " d, " + (diffHours) + " : " + (diffMinutes));
+                        dH = String.valueOf(diffDays + " d, " + (diffHours) + " : " + (diffMinutes)+" : "+(diffSeconds));
                     } else if (diffHours > 0) {
-                        dH = String.valueOf((diffHours) + " : " + (diffMinutes));
+                        dH = String.valueOf((diffHours) + " : " + (diffMinutes)+" : "+(diffSeconds));
                     } else {
-                        dH = String.valueOf("0 : "+(diffMinutes));
+                        dH = String.valueOf("0 : "+(diffMinutes)+" : "+(diffSeconds));
                     }
                     break;
                 case Constant.MINUTE_SUFFIX:

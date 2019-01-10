@@ -32,7 +32,6 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.DateUtil;
 import com.abp.driver.utils.SharedPreference;
-import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Timer;
@@ -75,7 +74,6 @@ public class DriverFragment extends Fragment {
     private Timer timer;
     private TimerTask timerTask;
     private String mTimeIn = null;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -137,6 +135,7 @@ public class DriverFragment extends Fragment {
         if (punchType.equals("check_out")) {
             startTimer();
         }
+
     }
 
     private void setValueOfViewFromLocal() {
@@ -289,11 +288,15 @@ public class DriverFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ModelPunchInOut> call, Response<ModelPunchInOut> response) {
                     ModelPunchInOut modelPunchInOut = response.body();
-                    if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        CustomLog.d(TAG, "callPunchInOutApi response success.");
-                        mTimeIn = finalMInTime;
-                        saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut);
-                        startApiHandler();
+                    try {
+                        if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                            CustomLog.d(TAG, "callPunchInOutApi response success.");
+                            mTimeIn = finalMInTime;
+                            saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut);
+                            startApiHandler();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -377,14 +380,18 @@ public class DriverFragment extends Fragment {
             listCall.enqueue(new Callback<DriverAttendance>() {
                 @Override
                 public void onResponse(Call<DriverAttendance> call, Response<DriverAttendance> response) {
-                    DriverAttendance driverAttendance = response.body();
-                    if (driverAttendance.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        CustomLog.d(TAG, "callAttendanceDetailApi onResponse called success");
-                        DriverAttendanceList.deleteAll(DriverAttendanceList.class);
-                        for (DriverAttendanceList driverAttendanceList : driverAttendance.getData()) {
-                            driverAttendanceList.save();
+                    try {
+                        DriverAttendance driverAttendance = response.body();
+                        if (driverAttendance.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                            CustomLog.d(TAG, "callAttendanceDetailApi onResponse called success");
+                            DriverAttendanceList.deleteAll(DriverAttendanceList.class);
+                            for (DriverAttendanceList driverAttendanceList : driverAttendance.getData()) {
+                                driverAttendanceList.save();
+                            }
+                            init();
                         }
-                        init();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -453,28 +460,34 @@ public class DriverFragment extends Fragment {
                 if (mDialog.isShowing()) {
                     mDialog.cancel();
                 }
+                mTotalHours.setText("00:00");
+                mCheckInDesc.setText("You clocked in at ");
+                mCheckInTime.setVisibility(View.VISIBLE);
+                mCheckInTime.setText(DateUtil.getCurrentTime());
                 if (mBtnPunchInOut.getText().toString().equalsIgnoreCase("Punch In")) {
                     mBtnPunchInOut.setText("Punch Out");
                 } else {
                     mBtnPunchInOut.setText("Punch In");
                     stoptimertask();
                 }
-                mTotalHours.setText("00:00");
-                mCheckInDesc.setText("You clocked in at ");
-                mCheckInTime.setVisibility(View.VISIBLE);
-                mCheckInTime.setText(DateUtil.getCurrentTime());
-                startTimer();
+                if (punchType.equals("check_out")) {
+                    startTimer();
+                }
             }
         }, 500);
     }
 
     public void startTimer() {
         Log.d(TAG,"startTimer called ");
+        if (punchType.equals("check_in")) {
+          return;
+        }
+
         timer = new Timer();
         //initialize the TimerTask's job
         initializeTimerTask();
         //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 0, 60000); //
+        timer.schedule(timerTask, 1000, 1000); //
     }
 
     private void initializeTimerTask() {
@@ -511,4 +524,28 @@ public class DriverFragment extends Fragment {
         super.onDestroyView();
         stoptimertask();
     }
+
+   /* private void startCountDownTimer(){
+       *//* if (mCountDownTimer != null) {
+            CustomLog.d("danny","startCountDownTimer already running,,, return");
+            return;
+        }*//*
+        mTimeLeft = mSharedPreference.getCountLeftTime();
+        mCountDownTimer = new CountDownTimer(mTimeLeft, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                mTimeLeft = millisUntilFinished;
+               mTotalHours.setText(""+millisUntilFinished/1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                mTimeLeft = 0;
+                mSharedPreference.setCountLeftTime(mTimeLeft);
+                mTotalHours.setText("9 hr complete");
+            }
+
+        }.start();
+    }*/
+
 }
