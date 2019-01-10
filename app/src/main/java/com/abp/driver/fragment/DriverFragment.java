@@ -74,6 +74,8 @@ public class DriverFragment extends Fragment {
     private Timer timer;
     private TimerTask timerTask;
     private String mTimeIn = null;
+    private Handler mTimerTaskHandler = null;
+    private Runnable mRunnable = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,12 +96,12 @@ public class DriverFragment extends Fragment {
         mFragmentManger = mActivity.getSupportFragmentManager();
         mSharedPreference = new SharedPreference(getContext());
         attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
-       if (attendanceServerData.size()>0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")){
-           init();
-           callAttendanceDetailApi();
-       } else {
-           callAttendanceDetailApi();
-       }
+        if (attendanceServerData.size()>0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")){
+            init();
+            callAttendanceDetailApi();
+        } else {
+            callAttendanceDetailApi();
+        }
         return view;
     }
 
@@ -147,7 +149,7 @@ public class DriverFragment extends Fragment {
                 mTimeIn = mLastData.getCheckInDate();
                 mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
             } else {
-                mTotalHours.setText("00:00");
+                mTotalHours.setText("00:00:00");
             }
             if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mCheckInDesc.setText("You clocked in at ");
@@ -158,7 +160,7 @@ public class DriverFragment extends Fragment {
                 mCheckInTime.setVisibility(View.GONE);
             }
         } else {
-            mTotalHours.setText("00:00");
+            mTotalHours.setText("00:00:00");
             mCheckInDesc.setText("You not yet clocked ");
             mCheckInTime.setVisibility(View.GONE);
         }
@@ -172,7 +174,7 @@ public class DriverFragment extends Fragment {
                 mTimeIn = mLastData.getCheckInDate();
                 mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
             } else {
-                mTotalHours.setText("00:00");
+                mTotalHours.setText("00:00:00");
             }
             if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mCheckInDesc.setText("You clocked in at ");
@@ -183,7 +185,7 @@ public class DriverFragment extends Fragment {
                 mCheckInTime.setVisibility(View.GONE);
             }
         } else {
-            mTotalHours.setText("00:00");
+            mTotalHours.setText("00:00:00");
             mCheckInDesc.setText("You not yet clocked ");
             mCheckInTime.setVisibility(View.GONE);
         }
@@ -291,7 +293,7 @@ public class DriverFragment extends Fragment {
                     try {
                         if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                             CustomLog.d(TAG, "callPunchInOutApi response success.");
-                            mTimeIn = finalMInTime;
+                            mTimeIn = finalMCheckInDate;
                             saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut);
                             startApiHandler();
                         }
@@ -303,12 +305,14 @@ public class DriverFragment extends Fragment {
                 @Override
                 public void onFailure(Call<ModelPunchInOut> call, Throwable t) {
                     CustomLog.d(TAG, "callPunchInOutApi onFailure called..." + call.toString());
+                    mTimeIn = finalMCheckInDate;
                     saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,false,isCheckIn, isCheckOut);
                     startApiHandler();
                 }
             });
         } else {
             Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            mTimeIn = mCheckInDate;
             saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate,false, isCheckIn, isCheckOut);
             startApiHandler();
         }
@@ -423,6 +427,7 @@ public class DriverFragment extends Fragment {
     public void onResume() {
         super.onResume();
         CustomLog.d(TAG,"onResume called");
+        startTimer();
         if (!mActivity.isGpsEnable()) {
             mActivity.showDialogueGps(false);
         }
@@ -446,8 +451,15 @@ public class DriverFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        stopTimerTask();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        stopTimerTask();
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().stopService(intent);
     }
@@ -460,27 +472,27 @@ public class DriverFragment extends Fragment {
                 if (mDialog.isShowing()) {
                     mDialog.cancel();
                 }
-                mTotalHours.setText("00:00");
-                mCheckInDesc.setText("You clocked in at ");
-                mCheckInTime.setVisibility(View.VISIBLE);
-                mCheckInTime.setText(DateUtil.getCurrentTime());
-                if (mBtnPunchInOut.getText().toString().equalsIgnoreCase("Punch In")) {
+                if (mBtnPunchInOut.getText().toString().equals("Punch In")) {
                     mBtnPunchInOut.setText("Punch Out");
                 } else {
                     mBtnPunchInOut.setText("Punch In");
-                    stoptimertask();
+                    stopTimerTask();
                 }
-                if (punchType.equals("check_out")) {
-                    startTimer();
-                }
+                mTotalHours.setText("00:00:00");
+                mCheckInDesc.setText("You clocked in at ");
+                mCheckInTime.setVisibility(View.VISIBLE);
+                mCheckInTime.setText(DateUtil.getCurrentTime());
+                startTimer();
             }
         }, 500);
     }
 
     public void startTimer() {
-        Log.d(TAG,"startTimer called ");
-        if (punchType.equals("check_in")) {
-          return;
+        CustomLog.d(TAG,"startTimer called..");
+        if (mBtnPunchInOut.getText().toString().equals("Punch In")) {
+            CustomLog.d(TAG,"startTimer : punchType == Punch In ... return");
+            stopTimerTask();
+            return;
         }
 
         timer = new Timer();
@@ -492,16 +504,20 @@ public class DriverFragment extends Fragment {
 
     private void initializeTimerTask() {
         Log.d(TAG,"initializeTimerTask called ");
-        final Handler handler = new Handler();
+        mTimerTaskHandler = new Handler();
         timerTask = new TimerTask() {
             public void run() {
-                handler.post(new Runnable() {
+                if (mTimerTaskHandler == null){
+                    Log.d(TAG,"initializeTimerTask called return timerHandler = null");
+                    return;
+                }
+                mTimerTaskHandler.post(mRunnable = new Runnable() {
                     public void run() {
                         if (mTimeIn != null) {
-                            if (DateUtil.timeDiff(mTimeIn, DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true).equals("0 : 0")) {
-                                mTotalHours.setText("0 : 0");
-                            } else {
+                            if (mBtnPunchInOut.getText().toString().equals("Punch Out")) {
                                 mTotalHours.setText(DateUtil.timeDiff(mTimeIn, DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
+                            } else {
+                                mTotalHours.setText("00:00:00");
                             }
                         }
                     }
@@ -511,22 +527,25 @@ public class DriverFragment extends Fragment {
 
     }
 
-    public void stoptimertask() {
+    public void stopTimerTask() {
+        CustomLog.d(TAG,"stopTimerTask called");
         //stop the timer, if it's not already null
         if (timer != null) {
             timer.cancel();
             timer = null;
         }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (mTimerTaskHandler != null) {
+            mTimerTaskHandler.removeCallbacksAndMessages(mRunnable);
+            mTimerTaskHandler = null;
+        }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        stoptimertask();
-    }
-
-   /* private void startCountDownTimer(){
-       *//* if (mCountDownTimer != null) {
+    /* private void startCountDownTimer(){
+     *//* if (mCountDownTimer != null) {
             CustomLog.d("danny","startCountDownTimer already running,,, return");
             return;
         }*//*
