@@ -23,6 +23,7 @@
     <string name="police_station_name">Police Station Name</string>
     <string name="vehicle_number">Vehicle Number</string>
     <string name="app_title">ABP 112 Police Service</string>
+    <string name="code_disclaimer">** Please enter correct pass code to mark your attendance present !</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>

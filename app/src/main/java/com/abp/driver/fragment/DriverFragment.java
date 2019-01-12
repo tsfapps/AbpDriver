@@ -1,5 +1,6 @@
 package com.abp.driver.fragment;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
@@ -9,12 +10,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ import com.abp.driver.utils.DateUtil;
 import com.abp.driver.utils.SharedPreference;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -60,6 +64,8 @@ public class DriverFragment extends Fragment {
     protected TextView mCheckInTime;
     @BindView(R.id.tv_checkIn_desc)
     protected TextView mCheckInDesc;
+    @BindView(R.id.tv_pass_code)
+    protected TextView mTvPassCode;
     private int REQUEST_LOCATION = 1;
     private double mLatitude;
     private double mLongitude;
@@ -76,6 +82,10 @@ public class DriverFragment extends Fragment {
     private String mTimeIn = null;
     private Handler mTimerTaskHandler = null;
     private Runnable mRunnable = null;
+    private String mCheckInCode = null;
+    private String mCheckOutCode = null;
+    private Dialog mPassCodeDialog = null;
+    private EditText mEtCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +110,11 @@ public class DriverFragment extends Fragment {
             init();
             callAttendanceDetailApi();
         } else {
-            callAttendanceDetailApi();
+            if (mActivity.isNetworkAvailable()) {
+                callAttendanceDetailApi();
+            }else {
+                init();
+            }
         }
         return view;
     }
@@ -148,16 +162,16 @@ public class DriverFragment extends Fragment {
             if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mTimeIn = mLastData.getCheckInDate();
                 mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
-            } else {
-                mTotalHours.setText("00:00:00");
-            }
-            if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(mLastData.getTimeIn());
+                mCheckInCode = mLastData.getCheckInCode();
+                mTvPassCode.setText("Pass code not generated yet !");
             } else {
+                mTotalHours.setText("00:00:00");
                 mCheckInDesc.setText("You not yet clocked ");
                 mCheckInTime.setVisibility(View.GONE);
+                mTvPassCode.setText("Your Pass code : "+mLastData.getCheckOutCode());
             }
         } else {
             mTotalHours.setText("00:00:00");
@@ -173,16 +187,16 @@ public class DriverFragment extends Fragment {
             if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mTimeIn = mLastData.getCheckInDate();
                 mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
-            } else {
-                mTotalHours.setText("00:00:00");
-            }
-            if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(mLastData.getTimeIn());
+                mCheckInCode = mLastData.getCheckInCode();
+                mTvPassCode.setText("Pass code not generated yet !");
             } else {
+                mTotalHours.setText("00:00:00");
                 mCheckInDesc.setText("You not yet clocked ");
                 mCheckInTime.setVisibility(View.GONE);
+                mTvPassCode.setText("Your Pass code : "+mLastData.getCheckOutCode());
             }
         } else {
             mTotalHours.setText("00:00:00");
@@ -199,12 +213,70 @@ public class DriverFragment extends Fragment {
             mLongitude = location.getLongitude();
             CustomLog.d(TAG,"new Location lat :"+mLatitude+ " long:"+mLongitude);
             if (punchType != null) {
-                callPunchInOutApi(punchType);
+                if (mBtnPunchInOut.getText().toString().equals("Punch In")) {
+                    showPassCodeDialog();
+                } else {
+                    mCheckOutCode = getRandomNumberString().toUpperCase();
+                    if (mCheckOutCode != null) {
+                        callPunchInOutApi(punchType,mCheckOutCode);
+                    } else {
+                        Toast.makeText(getContext(),"Error generating pass code, Please retry.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
         }
     }
 
-    private void callPunchInOutApi(final String type) {
+    private void showPassCodeDialog(){
+        if (mPassCodeDialog != null ){
+            mPassCodeDialog = null;
+        }
+         mPassCodeDialog = new Dialog(getContext());
+         mPassCodeDialog.setCancelable(true);
+         mPassCodeDialog.setCanceledOnTouchOutside(false);
+         mPassCodeDialog.setContentView(R.layout.custom_dailog_code);
+         mEtCode = (EditText)mPassCodeDialog.findViewById(R.id.et_pass_code);
+         mEtCode.requestFocusFromTouch();
+         mEtCode.setFilters(new InputFilter[] {new InputFilter.AllCaps(),new InputFilter.LengthFilter(6)});
+         Button mSubmit = (Button) mPassCodeDialog.findViewById(R.id.btn_code_submit);
+         Button mCancel = (Button) mPassCodeDialog.findViewById(R.id.btn_code_cancel);
+
+         mSubmit.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 String mCode = mEtCode.getText().toString().toUpperCase();
+                 if (mCode!= null && !mCode.equals("")) {
+                     if (mBtnPunchInOut.getText().toString().equals("Punch In")){
+                         mCheckInCode = mCode;
+                     }
+                     hidePassCodeDialog();
+                     callPunchInOutApi(punchType,"");
+                 } else {
+                     mEtCode.setError("Please enter pass code");
+                 }
+             }
+         });
+
+         mCancel.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 hidePassCodeDialog();
+             }
+         });
+         mPassCodeDialog.show();
+
+    }
+
+    private void hidePassCodeDialog() {
+        if (mPassCodeDialog != null && mPassCodeDialog.isShowing()) {
+            Log.d(TAG,"code IN :"+mCheckInCode +" out :"+mCheckOutCode);
+            mPassCodeDialog.dismiss();
+        }
+    }
+
+    private void callPunchInOutApi(final String type, final String checkOutCode) {
+        Log.d(TAG,"callPunchInOutApi called,, type :"+type+" checkOutCode :"+checkOutCode);
         mDialog = new ProgressDialog(getContext());
         mDialog.setMessage("Attendance "+punchType+" in progress....");
         mDialog.show();
@@ -228,7 +300,6 @@ public class DriverFragment extends Fragment {
             mCheckInDate = DateUtil.getCurrentDateTime();
             isCheckIn = true;
             isCheckOut =false;
-            //mModelValue = saveAttendanceDetailsLocal(type,mPhoneNo,mInTime,mOutTime,mTotalTime,mLongitudeIn,mLongitudeOut,mLatitudeIn,mLatitudeOut,mCheckInDate,mCheckOutDate);
         } else {
             attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
             if (attendanceServerData.size() > 0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("")
@@ -275,7 +346,7 @@ public class DriverFragment extends Fragment {
         if (mActivity.isNetworkAvailable()) {
             Api api = ApiClients.getApiClients().create(Api.class);
             Call<ModelPunchInOut> call = api.driverPunchInOut(Constant.API_KEY, mTypeIo, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
-                    mLatitudeOut, mCheckInDate, mCheckOutDate);
+                    mLatitudeOut, mCheckInDate, mCheckOutDate,mCheckInCode, checkOutCode);
             final ModelPunchInOutLocal finalMModelValue = mModelValue;
             final String finalMInTime = mInTime;
             final String finalMOutTime = mOutTime;
@@ -294,7 +365,8 @@ public class DriverFragment extends Fragment {
                         if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                             CustomLog.d(TAG, "callPunchInOutApi response success.");
                             mTimeIn = finalMCheckInDate;
-                            saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut);
+                            saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut,
+                                    mCheckInCode, checkOutCode);
                             startApiHandler();
                         }
                     } catch (Exception e) {
@@ -306,20 +378,22 @@ public class DriverFragment extends Fragment {
                 public void onFailure(Call<ModelPunchInOut> call, Throwable t) {
                     CustomLog.d(TAG, "callPunchInOutApi onFailure called..." + call.toString());
                     mTimeIn = finalMCheckInDate;
-                    saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,false,isCheckIn, isCheckOut);
+                    saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,false,isCheckIn, isCheckOut,
+                            mCheckInCode, checkOutCode);
                     startApiHandler();
                 }
             });
         } else {
             Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
             mTimeIn = mCheckInDate;
-            saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate,false, isCheckIn, isCheckOut);
+            saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate,false, isCheckIn, isCheckOut,
+                    mCheckInCode, checkOutCode);
             startApiHandler();
         }
     }
 
     private void saveAttendanceDetailsLocal(String type, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut,
-                                            String mCheckInDate, String mCheckOutDate, boolean isSynced, boolean isCheckIn, boolean isCheckOut) {
+                                            String mCheckInDate, String mCheckOutDate, boolean isSynced, boolean isCheckIn, boolean isCheckOut, String checkInCode,String checkOutCode) {
         ModelPunchInOutLocal model = null;
         if (type.equals("check_in")) {
             model = new ModelPunchInOutLocal();
@@ -334,6 +408,8 @@ public class DriverFragment extends Fragment {
             model.setCheckInDate(mCheckInDate);
             model.setCheckOutDate(mCheckOutDate);
             model.setStatus(type);
+            model.setCheckInCode(checkInCode);
+            model.setCheckOutCode(checkOutCode);
             if (isSynced && isCheckIn && !isCheckOut) {
                 model.setIsCheckInSynced("Y");
                 model.setIsSynced("Y");
@@ -360,6 +436,8 @@ public class DriverFragment extends Fragment {
                 model.setCheckInDate(mCheckInDate);
                 model.setCheckOutDate(mCheckOutDate);
                 model.setStatus(type);
+                model.setCheckInCode(checkInCode);
+                model.setCheckOutCode(checkOutCode);
                 if (isSynced && isCheckIn && isCheckOut) {
                     model.setIsSynced("Y");
                 } else {
@@ -482,6 +560,9 @@ public class DriverFragment extends Fragment {
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(DateUtil.getCurrentTime());
+                if (mCheckOutCode != null) {
+                    mTvPassCode.setText("Your Pass code : " + mCheckOutCode);
+                }
                 startTimer();
             }
         }, 500);
@@ -544,27 +625,13 @@ public class DriverFragment extends Fragment {
         }
     }
 
-    /* private void startCountDownTimer(){
-     *//* if (mCountDownTimer != null) {
-            CustomLog.d("danny","startCountDownTimer already running,,, return");
-            return;
-        }*//*
-        mTimeLeft = mSharedPreference.getCountLeftTime();
-        mCountDownTimer = new CountDownTimer(mTimeLeft, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                mTimeLeft = millisUntilFinished;
-               mTotalHours.setText(""+millisUntilFinished/1000);
-                //here you can have your logic to set text to edittext
-            }
-
-            public void onFinish() {
-                mTimeLeft = 0;
-                mSharedPreference.setCountLeftTime(mTimeLeft);
-                mTotalHours.setText("9 hr complete");
-            }
-
-        }.start();
-    }*/
+    public String getRandomNumberString() {
+        String zeros = "000000";
+        Random rnd = new Random();
+        String s = Integer.toString(rnd.nextInt(0X1000000), 16);
+        s = zeros.substring(s.length()) + s;
+        CustomLog.d(TAG,"random no :"+ s);
+        return s;
+    }
 
 }

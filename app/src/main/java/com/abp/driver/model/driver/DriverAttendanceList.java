@@ -40,6 +40,12 @@ public class DriverAttendanceList extends SugarRecord{
     @SerializedName("check_out_date")
     @Expose
     private String checkOutDate;
+    @SerializedName("check_in_code")
+    @Expose
+    private String checkInCode;
+    @SerializedName("check_out_code")
+    @Expose
+    private String checkOutCode;
 
     private Context mContext;
 
@@ -147,5 +153,21 @@ public class DriverAttendanceList extends SugarRecord{
 
     public void setCheckOutDate(String checkOutDate) {
         this.checkOutDate = checkOutDate;
+    }
+
+    public String getCheckInCode() {
+        return checkInCode;
+    }
+
+    public void setCheckInCode(String checkInCode) {
+        this.checkInCode = checkInCode;
+    }
+
+    public String getCheckOutCode() {
+        return checkOutCode;
+    }
+
+    public void setCheckOutCode(String checkOutCode) {
+        this.checkOutCode = checkOutCode;
     }
 }

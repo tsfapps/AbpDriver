@@ -50,7 +50,7 @@ public class NetworkStateChangeReceiver extends BroadcastReceiver {
     private void syncDataToServer(Context context, List<ModelPunchInOutLocal> localDetails, boolean isConnected) {
         CustomLog.d(TAG,"syncDataToServer called. list size :"+ localDetails.size());
         String mTypeIO = null, mPhoneNo = null, mInTime = null, mOutTime = null, mTotalTime = null, mLongitudeIn = null, mLongitudeOut = null, mLatitudeIn = null,
-                mLatitudeOut = null, mCheckInDate = null, mCheckOutDate = null;
+                mLatitudeOut = null, mCheckInDate = null, mCheckOutDate = null, mCheckInCode = null, mCheckOutCode = null;
         for (int i = 0; i < localDetails.size(); i++) {
             ModelPunchInOutLocal local = localDetails.get(i);
             if (local.getIsCheckInSynced().equals("N")) {
@@ -68,16 +68,19 @@ public class NetworkStateChangeReceiver extends BroadcastReceiver {
             mLatitudeOut = local.getLatitudeOut();
             mCheckInDate = local.getCheckInDate();
             mCheckOutDate = local.getCheckOutDate();
+            mCheckInCode = local.getCheckInCode();
+            mCheckOutCode = local.getCheckOutCode();
             callAttendanceApi(mTypeIO, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
-                  mLatitudeOut, mCheckInDate, mCheckOutDate,local);
+                  mLatitudeOut, mCheckInDate, mCheckOutDate,local,mCheckInCode, mCheckOutCode);
         }
     }
 
-    private synchronized void callAttendanceApi(String mTypeIO, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut, String mCheckInDate, String mCheckOutDate, ModelPunchInOutLocal local) {
+    private synchronized void callAttendanceApi(String mTypeIO, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut, String mCheckInDate, String mCheckOutDate,
+                                                ModelPunchInOutLocal local, String mCheckInCode, String mCheckOutCode) {
         Log.d(TAG,"callAttendanceApi called");
         Api api = ApiClients.getApiClients().create(Api.class);
         Call<ModelPunchInOut> call = api.driverPunchInOut(Constant.API_KEY, mTypeIO, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
-                mLatitudeOut, mCheckInDate, mCheckOutDate);
+                mLatitudeOut, mCheckInDate, mCheckOutDate, mCheckInCode, mCheckOutCode);
         final ModelPunchInOutLocal finalModelValue = local;
         call.enqueue(new Callback<ModelPunchInOut>() {
             @Override
