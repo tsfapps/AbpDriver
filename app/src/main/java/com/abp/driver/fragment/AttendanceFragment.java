@@ -48,9 +48,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DriverFragment extends Fragment {
+public class AttendanceFragment extends Fragment {
 
-    private static final String TAG = "DriverFragment";
+    private static final String TAG = "AttendanceFragment";
     private  DashboardActivity mActivity;
     private  FragmentManager mFragmentManger;
     private View view;
@@ -102,7 +102,7 @@ public class DriverFragment extends Fragment {
         getActivity().startService(intent);
 
         mActivity = (DashboardActivity) getActivity();
-        mActivity.setToolbarTitle("Driver");
+        mActivity.setToolbarTitle("Attendance");
         mFragmentManger = mActivity.getSupportFragmentManager();
         mSharedPreference = new SharedPreference(getContext());
         getDataFromServer();

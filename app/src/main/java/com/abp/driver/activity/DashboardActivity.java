@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.DriverAttendanceDetailFragment;
-import com.abp.driver.fragment.DriverFragment;
+import com.abp.driver.fragment.AttendanceFragment;
 
 import com.abp.driver.fragment.ProfileFragment;
 import com.abp.driver.fragment.StateManagerFragment;
@@ -98,7 +98,7 @@ public class DashboardActivity extends AppCompatActivity
     private void startDashboardFragment(String userType) {
         switch (userType){
             case Constant.LOGIN_TYPE_DRIVER:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
                 break;
             case Constant.LOGIN_TYPE_DISTRICT_MANAGER:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).addToBackStack(null).commit();
