@@ -105,6 +105,11 @@ public class DriverFragment extends Fragment {
         mActivity.setToolbarTitle("Driver");
         mFragmentManger = mActivity.getSupportFragmentManager();
         mSharedPreference = new SharedPreference(getContext());
+        getDataFromServer();
+        return view;
+    }
+
+    private void getDataFromServer() {
         attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
         if (attendanceServerData.size()>0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")){
             init();
@@ -116,7 +121,6 @@ public class DriverFragment extends Fragment {
                 init();
             }
         }
-        return view;
     }
 
     private void init() {
@@ -150,6 +154,8 @@ public class DriverFragment extends Fragment {
         }
         if (punchType.equals("check_out")) {
             startTimer();
+        } else {
+            stopTimerTask();
         }
 
     }
@@ -560,10 +566,11 @@ public class DriverFragment extends Fragment {
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(DateUtil.getCurrentTime());
+                startTimer();
+                getDataFromServer();
                 if (mCheckOutCode != null) {
                     mTvPassCode.setText("Your Pass code : " + mCheckOutCode);
                 }
-                startTimer();
             }
         }, 500);
     }

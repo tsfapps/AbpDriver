@@ -67,7 +67,7 @@ public interface Api {
             @Field("latitude_out") String latitude_out,
             @Field("check_in_date") String check_in_date,
             @Field("check_out_date") String check_out_date,
-            @Field("check_in_code") String check_in_code,
+            @Field("pass_key") String check_in_code,
             @Field("check_out_code") String check_out_code
 
     );
