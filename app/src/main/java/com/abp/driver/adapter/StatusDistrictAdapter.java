@@ -22,19 +22,16 @@ import butterknife.ButterKnife;
 
 public class StatusDistrictAdapter extends RecyclerView.Adapter<StatusDistrictAdapter.DistrictListHolder> {
 
-   private List<ModelDistrictList> modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
+   private List<ModelDistrictList> modelDistrictLists;
 
 
   private Context mContext;
   private FragmentManager mFragmentManager;
 
-    public StatusDistrictAdapter(Context mContext) {
-        this.mContext = mContext;
-    }
-
-    public StatusDistrictAdapter(Context mContext, FragmentManager mFragmentManager) {
+    public StatusDistrictAdapter(Context mContext, FragmentManager mFragmentManager,List<ModelDistrictList> mList) {
         this.mContext = mContext;
         this.mFragmentManager = mFragmentManager;
+        this.modelDistrictLists = mList;
     }
 
     @NonNull
@@ -54,9 +51,6 @@ public class StatusDistrictAdapter extends RecyclerView.Adapter<StatusDistrictAd
                 @Override
                 public void onClick(View view) {
                     mFragmentManager.beginTransaction().replace(R.id.container_main, new StatusFragment()).addToBackStack(null).commit();
-
-
-                    Toast.makeText(mContext, disId, Toast.LENGTH_LONG).show();
                 }
             });
         }

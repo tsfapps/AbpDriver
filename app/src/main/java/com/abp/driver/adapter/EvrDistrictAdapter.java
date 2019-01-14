@@ -21,14 +21,15 @@ import butterknife.ButterKnife;
 
 public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.EvrDistrictHolder> {
 
-    private List<ModelDistrictList> modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
+    private List<ModelDistrictList> modelDistrictLists;
 
     private Context mContext;
     private FragmentManager mFragmentManager;
 
-    public EvrDistrictAdapter(Context mContext, FragmentManager mFragmentManager) {
+    public EvrDistrictAdapter(Context mContext, FragmentManager mFragmentManager, List<ModelDistrictList> list) {
         this.mContext = mContext;
         this.mFragmentManager = mFragmentManager;
+        this.modelDistrictLists = list;
     }
 
     @NonNull

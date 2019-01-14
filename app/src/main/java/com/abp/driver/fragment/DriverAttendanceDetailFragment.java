@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
@@ -38,6 +39,8 @@ public class DriverAttendanceDetailFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     @BindView(R.id.rv_dri_att_det)
     RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_data)
+    protected TextView mNoDataText;
     private SharedPreference mSharePref;
     private List<DriverAttendanceList> mList;
     private DashboardActivity mActivity;
@@ -65,10 +68,12 @@ public class DriverAttendanceDetailFragment extends Fragment {
             if (mActivity.isNetworkAvailable())
             callAttendanceApi();
         } else {
-            if (mActivity.isNetworkAvailable())
+            mNoDataText.setVisibility(View.VISIBLE);
+            if (mActivity.isNetworkAvailable()) {
                 callAttendanceApi();
-            else
-                Toast.makeText(getContext(),"No internet available ",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "No internet available ", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     private void callAttendanceApi() {
@@ -89,13 +94,15 @@ public class DriverAttendanceDetailFragment extends Fragment {
                         callRecyclerView();
                         CustomLog.d("recyclerList", "Responding");
                     } else {
-
+                        callRecyclerView();
                     }
 
                 }
                 @Override
                 public void onFailure(Call<DriverAttendance> call, Throwable t) {
                     CustomLog.d("recyclerList", "Not Responding");
+                    callRecyclerView();
+                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
@@ -106,10 +113,15 @@ public class DriverAttendanceDetailFragment extends Fragment {
     private void callRecyclerView() {
         mList = DriverAttendanceList.listAll(DriverAttendanceList.class);
         if (mList.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoDataText.setVisibility(View.GONE);
             layoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(layoutManager);
             DriverAttDetAdapter driverAttDetAdapter = new DriverAttDetAdapter(getContext(),mList);
             mRecyclerView.setAdapter(driverAttDetAdapter);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoDataText.setVisibility(View.VISIBLE);
         }
     }
 

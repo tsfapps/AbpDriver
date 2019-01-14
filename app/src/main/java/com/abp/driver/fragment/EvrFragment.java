@@ -13,12 +13,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.adapter.EvrAapter;
+import com.abp.driver.adapter.EarAdapter;
 import com.abp.driver.model.evr.ModelEvr;
 import com.abp.driver.model.evr.ModelEvrList;
 import com.abp.driver.utils.Constant;
@@ -36,7 +38,9 @@ import retrofit2.Response;
 public class EvrFragment extends Fragment {
 
     @BindView(R.id.rv_evr)
-    RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_data)
+    protected TextView mNoDataText;
     private RecyclerView.LayoutManager mLayoutManager;
     private String mDistrictId;
     private String mPoliceId;
@@ -64,11 +68,6 @@ public class EvrFragment extends Fragment {
        ButterKnife.bind(this, view);
        mContext = getContext();
        mFragmentManager = getFragmentManager();
-
-       mList = ModelEvrList.listAll(ModelEvrList.class);
-
-       callRecyclerView();
-       callApi();
         init();
         return view;
     }
@@ -90,11 +89,14 @@ public class EvrFragment extends Fragment {
                         modelEvrList.save();
                     }
                     callRecyclerView();
+                } else {
+                    callRecyclerView();
                 }
             }
             @Override
             public void onFailure(Call<ModelEvr> call, Throwable t) {
-
+                callRecyclerView();
+                Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -105,14 +107,34 @@ public class EvrFragment extends Fragment {
             mActivity.setToolbarTitle("ERV");
         }
         mSharePref = new SharedPreference(getContext());
+        mList = ModelEvrList.listAll(ModelEvrList.class);
+        if (mList.size() > 0) {
+            callRecyclerView();
+            callApi();
+        } else {
+            mNoDataText.setVisibility(View.VISIBLE);
+            if (mActivity.isNetworkAvailable()) {
+                callApi();
+            } else {
+                Toast.makeText(getContext(),"No internet available",Toast.LENGTH_SHORT).show();
+            }
+        }
 
     }
 
     private void callRecyclerView(){
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        EvrAapter evrAapter = new EvrAapter(mContext, mFragmentManager, mList);
-        mRecyclerView.setAdapter(evrAapter);
+        mList = ModelEvrList.listAll(ModelEvrList.class);
+        if (mList.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoDataText.setVisibility(View.GONE);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            EarAdapter evrAapter = new EarAdapter(mContext, mFragmentManager, mList);
+            mRecyclerView.setAdapter(evrAapter);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoDataText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

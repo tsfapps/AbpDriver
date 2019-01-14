@@ -21,6 +21,7 @@ public class ModelPunchInOutLocal extends SugarRecord {
     private String isCheckOutSynced;
     private String checkInCode;
     private String checkOutCode;
+    private String evrId;
 
     public String getLongitudeOut() {
         return longitudeOut;
@@ -156,5 +157,13 @@ public class ModelPunchInOutLocal extends SugarRecord {
 
     public void setCheckOutCode(String checkOutCode) {
         this.checkOutCode = checkOutCode;
+    }
+
+    public String getEvrId() {
+        return evrId;
+    }
+
+    public void setEvrId(String evrId) {
+        this.evrId = evrId;
     }
 }
