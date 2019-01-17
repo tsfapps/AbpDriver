@@ -172,12 +172,12 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     private void userLogoutCall() {
-        List<ModelPunchInOutLocal> mList = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
+        /*List<ModelPunchInOutLocal> mList = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
                 "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND time_in != '"+Constant.EMPTY+"' AND time_out = '"+Constant.EMPTY+"' ORDER BY id ASC");
         if (mList.size() > 0) {
             Toast.makeText(this,"Punch out before logout !",Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         List<ModelPunchInOutLocal> localDetails = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
                 "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND is_synced = 'N' ORDER BY id ASC");
         if (localDetails.size() > 0) {
@@ -194,10 +194,11 @@ public class DashboardActivity extends AppCompatActivity
             }
         } else {
             isDataSyncStarted = false;
+            mSharedPreference.clearAllData();
             ModelLoginList.deleteAll(ModelLoginList.class);
             ModelPunchInOutLocal.deleteAll(ModelPunchInOutLocal.class);
             DriverAttendanceList.deleteAll(DriverAttendanceList.class);
-            mSharedPreference.clearAllData();
+
             if (mDialog != null && mDialog.isShowing()){
                 mDialog.dismiss();
             }

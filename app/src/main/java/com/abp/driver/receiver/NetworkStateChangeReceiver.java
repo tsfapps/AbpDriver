@@ -14,6 +14,7 @@ import com.abp.driver.model.PunchInOut.ModelPunchInOutLocal;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class NetworkStateChangeReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "NetworkStateReceiver";
+    public static final String TAG = "danny";
     private boolean isReceived = false;
 
     @Override

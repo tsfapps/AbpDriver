@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import com.abp.driver.receiver.NetworkStateChangeReceiver;
+import com.abp.driver.utils.CustomLog;
 
 public class NetworkStateService extends Service {
 
@@ -30,7 +31,8 @@ public class NetworkStateService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this,"network service destroyed..",Toast.LENGTH_SHORT).show();
+        CustomLog.d("ABPNetworkService","onDestroy called");
+        unregisterReceiver(new NetworkStateChangeReceiver());
     }
 
     private void registerNetworkReceiver() {

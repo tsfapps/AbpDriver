@@ -35,6 +35,7 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.DateUtil;
 import com.abp.driver.utils.SharedPreference;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Random;
@@ -85,7 +86,6 @@ public class AttendanceFragment extends Fragment {
     private String mCheckInCode = null;
     private String mCheckOutCode = null;
     private Dialog mPassCodeDialog = null;
-    private EditText mEtCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,23 +112,24 @@ public class AttendanceFragment extends Fragment {
 
     private void getDataFromServer() {
         CustomLog.d(TAG,"getDataFromServer called");
-        attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
-        if (attendanceServerData.size()>0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")){
-            init();
-            callAttendanceDetailApi();
-        } else {
-            if (mActivity.isNetworkAvailable()) {
+        if (mActivity.isNetworkAvailable()) {
+            attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
+            if (attendanceServerData.size() > 0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")) {
+                init();
                 callAttendanceDetailApi();
-            }else {
+            } else {
+                callAttendanceDetailApi();
                 init();
             }
+        } else {
+            init();
         }
     }
 
     private void init() {
         CustomLog.d(TAG,"init called");
         attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
-        if (attendanceServerData.size() > 0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")) {
+        if (mActivity.isNetworkAvailable() && attendanceServerData.size() > 0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")) {
             punchType = "check_out";
             mBtnPunchInOut.setText("Punch Out");
             setValueOfViewFromServer(attendanceServerData);
@@ -146,15 +147,19 @@ public class AttendanceFragment extends Fragment {
                 } else {
                     punchType = "check_in";
                     mBtnPunchInOut.setText("Punch In");
-                    ModelPunchInOutLocal.deleteAll(ModelPunchInOutLocal.class);
+                    //ModelPunchInOutLocal.deleteAll(ModelPunchInOutLocal.class);
                 }
             } else {
                 punchType = "check_in";
                 mBtnPunchInOut.setText("Punch In");
             }
             setValueOfViewFromLocal();
-            if (attendanceServerData.size() > 0) {
+            if (mActivity.isNetworkAvailable() && attendanceServerData.size() > 0) {
                 mTvPassCode.setText("Your Pass code : " +attendanceServerData.get(attendanceServerData.size() -1).getCheckOutCode());
+            } else {
+                if (punchInOutLocalDetails.size() > 0) {
+                    mTvPassCode.setText("Your Pass code : " + punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1).getCheckOutCode());
+                }
             }
         }
 
@@ -226,17 +231,29 @@ public class AttendanceFragment extends Fragment {
             CustomLog.d(TAG,"new Location lat :"+mLatitude+ " long:"+mLongitude);
             if (punchType != null) {
                 if (mBtnPunchInOut.getText().toString().equals("Punch In")) {
-                    showPassCodeDialog();
-                } else {
-                    mCheckOutCode = getRandomNumberString().toUpperCase();
-                    if (mCheckOutCode != null) {
-                        callPunchInOutApi(punchType,mCheckOutCode);
+                    if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)) {
+                        showPassCodeDialog();
                     } else {
-                        Toast.makeText(getContext(),"Error generating pass code, Please retry.",Toast.LENGTH_SHORT).show();
+                        mCheckInCode = "000000";
+                        callPunchInOutApi(punchType,"");
+                    }
+                } else {
+                    if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)) {
+                        mCheckOutCode = getRandomNumberString().toUpperCase();
+                        if (mCheckOutCode != null) {
+                            callPunchInOutApi(punchType, mCheckOutCode);
+                        } else {
+                            Toast.makeText(getContext(), "Error generating pass code, Please retry.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        mCheckOutCode = "000000";
+                        callPunchInOutApi(punchType, mCheckOutCode);
                     }
                 }
 
             }
+        } else {
+            Toast.makeText(getContext(),"Error fetching GPS location, please try again.",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -248,7 +265,7 @@ public class AttendanceFragment extends Fragment {
          mPassCodeDialog.setCancelable(true);
          mPassCodeDialog.setCanceledOnTouchOutside(false);
          mPassCodeDialog.setContentView(R.layout.custom_dailog_code);
-         mEtCode = (EditText)mPassCodeDialog.findViewById(R.id.et_pass_code);
+        final EditText mEtCode = (EditText) mPassCodeDialog.findViewById(R.id.et_pass_code);
          mEtCode.requestFocusFromTouch();
          mEtCode.setFilters(new InputFilter[] {new InputFilter.AllCaps(),new InputFilter.LengthFilter(6)});
          Button mSubmit = (Button) mPassCodeDialog.findViewById(R.id.btn_code_submit);
@@ -288,14 +305,19 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void callPunchInOutApi(final String type, final String checkOutCode) {
-        Log.d(TAG,"callPunchInOutApi called,, type :"+type+" checkOutCode :"+checkOutCode);
+        Log.d(TAG,"callPunchInOutApi called,, type :"+type+" checkOutCode :"+checkOutCode+" checkIncode :"+mCheckInCode);
         mDialog = new ProgressDialog(getContext());
         mDialog.setMessage("Attendance "+punchType+" in progress....");
         mDialog.show();
         ModelPunchInOutLocal mModelValue = null;
         String mTypeIo = type;
         final String mPhoneNo = mSharedPreference.getUserPhoneNo();
-        final String mEvrId = mSharedPreference.getUserEvrId();
+        final String mEvrId;
+        if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)) {
+            mEvrId = mSharedPreference.getUserEvrId();
+        } else {
+            mEvrId = "";
+        }
         String mInTime = "";
         String mOutTime = "";
         String mTotalTime = "";
@@ -407,9 +429,9 @@ public class AttendanceFragment extends Fragment {
 
     private void saveAttendanceDetailsLocal(String type, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut,
                                             String mCheckInDate, String mCheckOutDate, boolean isSynced, boolean isCheckIn, boolean isCheckOut, String checkInCode,String checkOutCode, String evrId) {
-        ModelPunchInOutLocal model = null;
+        CustomLog.d(TAG,"saveAttendanceDetailsLocal called.. isSynced :"+isSynced+" type :"+type);
         if (type.equals("check_in")) {
-            model = new ModelPunchInOutLocal();
+            ModelPunchInOutLocal model = new ModelPunchInOutLocal();
             model.setPhoneNo(mPhoneNo);
             model.setTimeIn(mInTime);
             model.setTimeOut(mOutTime);
@@ -424,21 +446,23 @@ public class AttendanceFragment extends Fragment {
             model.setCheckInCode(checkInCode);
             model.setCheckOutCode(checkOutCode);
             model.setEvrId(evrId);
-            if (isSynced && isCheckIn && !isCheckOut) {
-                model.setIsCheckInSynced("Y");
-                model.setIsSynced("Y");
-            } else {
-                model.setIsCheckInSynced("N");
-                model.setIsSynced("N");
+            if (isCheckIn && !isCheckOut) {
+                if (isSynced) {
+                    model.setIsCheckInSynced("Y");
+                    model.setIsSynced("Y");
+                } else {
+                    model.setIsCheckInSynced("N");
+                    model.setIsSynced("N");
+                }
             }
             model.save();
         } else {
             Long id;
             List<ModelPunchInOutLocal> localDetails = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
-                    "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND time_out = '" + Constant.EMPTY + "' AND status = 'check_in' ORDER BY id DESC");
+                    "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND time_in != '" + Constant.EMPTY + "'  AND time_out = '" + Constant.EMPTY + "' ORDER BY id DESC");
             if (localDetails.size() > 0) {
                 id = localDetails.get(0).getId();
-                model = ModelPunchInOutLocal.findById(ModelPunchInOutLocal.class, id);
+                ModelPunchInOutLocal model = ModelPunchInOutLocal.findById(ModelPunchInOutLocal.class, id);
                 model.setPhoneNo(mPhoneNo);
                 model.setTimeIn(mInTime);
                 model.setTimeOut(mOutTime);
@@ -453,15 +477,41 @@ public class AttendanceFragment extends Fragment {
                 model.setCheckInCode(checkInCode);
                 model.setCheckOutCode(checkOutCode);
                 model.setEvrId(evrId);
-                if (isSynced && isCheckIn && isCheckOut) {
-                    model.setIsSynced("Y");
-                } else {
-                    model.setIsSynced("N");
+                if (isCheckIn && isCheckOut) {
+                    if (isSynced) {
+                        model.setIsCheckOutSynced("Y");
+                        model.setIsSynced("Y");
+                    } else {
+                        model.setIsCheckOutSynced("N");
+                        model.setIsSynced("N");
+                    }
                 }
-                if (isSynced) {
-                    model.setIsCheckOutSynced("Y");
-                } else {
-                    model.setIsCheckOutSynced("N");
+                model.save();
+            } else {
+                ModelPunchInOutLocal model = new ModelPunchInOutLocal();
+                model.setPhoneNo(mPhoneNo);
+                model.setTimeIn(mInTime);
+                model.setTimeOut(mOutTime);
+                model.setTotalTime(mTotalTime);
+                model.setLongitudeIn(mLongitudeIn);
+                model.setLongitudeOut(mLongitudeOut);
+                model.setLatitudeIn(mLatitudeIn);
+                model.setLatitudeOut(mLatitudeOut);
+                model.setCheckInDate(mCheckInDate);
+                model.setCheckOutDate(mCheckOutDate);
+                model.setStatus(type);
+                model.setCheckInCode(checkInCode);
+                model.setCheckOutCode(checkOutCode);
+                model.setEvrId(evrId);
+                model.setIsCheckInSynced("Y");
+                if (isCheckIn && isCheckOut) {
+                    if (isSynced) {
+                        model.setIsSynced("Y");
+                        model.setIsCheckOutSynced("Y");
+                    } else {
+                        model.setIsSynced("N");
+                        model.setIsCheckOutSynced("N");
+                    }
                 }
                 model.save();
             }
