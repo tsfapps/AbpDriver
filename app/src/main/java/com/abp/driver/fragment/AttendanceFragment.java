@@ -96,6 +96,7 @@ public class AttendanceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        CustomLog.d(TAG,"onCreateView called");
         View view = inflater.inflate(R.layout.fragment_driver,container,false);
         ButterKnife.bind(this, view);
         Intent intent=new Intent(getContext(), LocationService.class);
@@ -110,6 +111,7 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void getDataFromServer() {
+        CustomLog.d(TAG,"getDataFromServer called");
         attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
         if (attendanceServerData.size()>0 && !attendanceServerData.get(attendanceServerData.size() - 1).getTimeIn().equals("") && attendanceServerData.get(attendanceServerData.size() - 1).getTimeOut().equals("")){
             init();
@@ -151,7 +153,11 @@ public class AttendanceFragment extends Fragment {
                 mBtnPunchInOut.setText("Punch In");
             }
             setValueOfViewFromLocal();
+            if (attendanceServerData.size() > 0) {
+                mTvPassCode.setText("Your Pass code : " +attendanceServerData.get(attendanceServerData.size() -1).getCheckOutCode());
+            }
         }
+
         if (punchType.equals("check_out")) {
             startTimer();
         } else {
@@ -289,6 +295,7 @@ public class AttendanceFragment extends Fragment {
         ModelPunchInOutLocal mModelValue = null;
         String mTypeIo = type;
         final String mPhoneNo = mSharedPreference.getUserPhoneNo();
+        final String mEvrId = mSharedPreference.getUserEvrId();
         String mInTime = "";
         String mOutTime = "";
         String mTotalTime = "";
@@ -352,7 +359,7 @@ public class AttendanceFragment extends Fragment {
         if (mActivity.isNetworkAvailable()) {
             Api api = ApiClients.getApiClients().create(Api.class);
             Call<ModelPunchInOut> call = api.driverPunchInOut(Constant.API_KEY, mTypeIo, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn,
-                    mLatitudeOut, mCheckInDate, mCheckOutDate,mCheckInCode, checkOutCode);
+                    mLatitudeOut, mCheckInDate, mCheckOutDate,mCheckInCode, checkOutCode,mEvrId);
             final ModelPunchInOutLocal finalMModelValue = mModelValue;
             final String finalMInTime = mInTime;
             final String finalMOutTime = mOutTime;
@@ -372,7 +379,7 @@ public class AttendanceFragment extends Fragment {
                             CustomLog.d(TAG, "callPunchInOutApi response success.");
                             mTimeIn = finalMCheckInDate;
                             saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,true,isCheckIn,isCheckOut,
-                                    mCheckInCode, checkOutCode);
+                                    mCheckInCode, checkOutCode,mEvrId);
                             startApiHandler();
                         }
                     } catch (Exception e) {
@@ -385,7 +392,7 @@ public class AttendanceFragment extends Fragment {
                     CustomLog.d(TAG, "callPunchInOutApi onFailure called..." + call.toString());
                     mTimeIn = finalMCheckInDate;
                     saveAttendanceDetailsLocal(type, mPhoneNo, finalMInTime, finalMOutTime, finalMTotalTime, finalMLongitudeIn, finalMLongitudeOut, finalMLatitudeIn, finalMLatitudeOut, finalMCheckInDate, finalMCheckOutDate,false,isCheckIn, isCheckOut,
-                            mCheckInCode, checkOutCode);
+                            mCheckInCode, checkOutCode,mEvrId);
                     startApiHandler();
                 }
             });
@@ -393,13 +400,13 @@ public class AttendanceFragment extends Fragment {
             Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
             mTimeIn = mCheckInDate;
             saveAttendanceDetailsLocal(type, mPhoneNo, mInTime, mOutTime, mTotalTime, mLongitudeIn, mLongitudeOut, mLatitudeIn, mLatitudeOut, mCheckInDate, mCheckOutDate,false, isCheckIn, isCheckOut,
-                    mCheckInCode, checkOutCode);
+                    mCheckInCode, checkOutCode,mEvrId);
             startApiHandler();
         }
     }
 
     private void saveAttendanceDetailsLocal(String type, String mPhoneNo, String mInTime, String mOutTime, String mTotalTime, String mLongitudeIn, String mLongitudeOut, String mLatitudeIn, String mLatitudeOut,
-                                            String mCheckInDate, String mCheckOutDate, boolean isSynced, boolean isCheckIn, boolean isCheckOut, String checkInCode,String checkOutCode) {
+                                            String mCheckInDate, String mCheckOutDate, boolean isSynced, boolean isCheckIn, boolean isCheckOut, String checkInCode,String checkOutCode, String evrId) {
         ModelPunchInOutLocal model = null;
         if (type.equals("check_in")) {
             model = new ModelPunchInOutLocal();
@@ -416,6 +423,7 @@ public class AttendanceFragment extends Fragment {
             model.setStatus(type);
             model.setCheckInCode(checkInCode);
             model.setCheckOutCode(checkOutCode);
+            model.setEvrId(evrId);
             if (isSynced && isCheckIn && !isCheckOut) {
                 model.setIsCheckInSynced("Y");
                 model.setIsSynced("Y");
@@ -444,6 +452,7 @@ public class AttendanceFragment extends Fragment {
                 model.setStatus(type);
                 model.setCheckInCode(checkInCode);
                 model.setCheckOutCode(checkOutCode);
+                model.setEvrId(evrId);
                 if (isSynced && isCheckIn && isCheckOut) {
                     model.setIsSynced("Y");
                 } else {
@@ -461,6 +470,7 @@ public class AttendanceFragment extends Fragment {
 
     private void callAttendanceDetailApi() {
         try {
+            CustomLog.d(TAG,"callAttendanceDetailApi called");
             String api_key = Constant.API_KEY;
             String phone_no = mSharedPreference.getUserPhoneNo();
             Api api = ApiClients.getApiClients().create(Api.class);
@@ -485,6 +495,7 @@ public class AttendanceFragment extends Fragment {
                 }
                 @Override
                 public void onFailure(Call<DriverAttendance> call, Throwable t) {
+                    t.printStackTrace();
                     CustomLog.d(TAG, "callAttendanceDetailApi onFailure called");
                     init();
                 }
@@ -523,7 +534,11 @@ public class AttendanceFragment extends Fragment {
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                            mActivity.onBackPressedCalled();
+                            if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)) {
+                                mActivity.onBackPressedCalled();
+                            } else {
+                                mFragmentManger.popBackStack();
+                            }
                         }
                         return true;
                     }

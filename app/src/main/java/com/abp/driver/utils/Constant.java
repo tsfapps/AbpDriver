@@ -23,6 +23,7 @@ public class Constant {
     public static final String USER_STATE_ID = "state_id";
     public static final String USER_DISTRICT_ID = "district_id";
     public static final String USER_LOGIN_TYPE = "login_type";
+    public static final String USER_LOGIN_EVR_ID = "evr_id";
     public static final String EMPTY = "";
     public static final String TIME_FORMAT_24HR = "h:mm a";
     public static final String DATE_FORMAT_FROM_SERVER = "dd-MMM-yyyy HH:mm";

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
@@ -25,6 +26,8 @@ import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -35,9 +38,13 @@ public class EvrDistrictListFragment extends Fragment {
 
     @BindView(R.id.rv_evr_district)
     protected RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_data)
+    protected TextView mNoDataText;
     private Context mContext;
     private FragmentManager mFragmentManager;
     private SharedPreference mSharedPreference;
+    private List<ModelDistrictList> mList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,7 +52,6 @@ public class EvrDistrictListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        apiCall();
         init();
         return view;
     }
@@ -68,13 +74,14 @@ public class EvrDistrictListFragment extends Fragment {
                         }
                         callRecyclerView();
                     } else {
-
+                        callRecyclerView();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ModelDistrict> call, Throwable t) {
-
+                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                    callRecyclerView();
                 }
             });
         } catch (Exception e) {
@@ -83,16 +90,36 @@ public class EvrDistrictListFragment extends Fragment {
     }
 
     private void callRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(layoutManager);
-        EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager);
-        mRecyclerView.setAdapter(evrDistrictAdapter);
+        mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        if (mList.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoDataText.setVisibility(View.GONE);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+            mRecyclerView.setLayoutManager(layoutManager);
+            EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager,mList);
+            mRecyclerView.setAdapter(evrDistrictAdapter);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoDataText.setVisibility(View.VISIBLE);
+        }
     }
 
     private void init() {
         DashboardActivity mActivity = (DashboardActivity) getActivity();
         if (mActivity !=null){
             mActivity.setToolbarTitle("District List");
+        }
+        mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        if (mList.size() > 0){
+            callRecyclerView();
+            apiCall();
+        } else {
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            } else {
+                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            }
+            mNoDataText.setVisibility(View.VISIBLE);
         }
     }
 

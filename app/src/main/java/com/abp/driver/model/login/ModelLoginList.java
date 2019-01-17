@@ -42,6 +42,9 @@ public class ModelLoginList extends SugarRecord {
     @SerializedName("district_id")
     @Expose
     private String districtId;
+    @SerializedName("evr_id")
+    @Expose
+    private String evrId;
 
     public String getLogintype() {
         return logintype;
@@ -137,5 +140,13 @@ public class ModelLoginList extends SugarRecord {
 
     public void setDistrictId(String districtId) {
         this.districtId = districtId;
+    }
+
+    public String getEvrId() {
+        return evrId;
+    }
+
+    public void setEvrId(String evrId) {
+        this.evrId = evrId;
     }
 }

@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
@@ -22,7 +23,10 @@ import com.abp.driver.adapter.StatusDistrictAdapter;
 import com.abp.driver.model.district.ModelDistrict;
 import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,32 +38,58 @@ public class StatusDistrictListFragment extends Fragment{
 
     @BindView(R.id.rv_status_district)
     RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_data)
+    protected TextView mNoDataText;
     private StatusDistrictAdapter districtAdapter;
 
     private SharedPreference mSharedPreference;
+    private FragmentManager mFragmentManager;
+    private Context mContext;
+    private LinearLayoutManager mLayoutManager;
+    private List<ModelDistrictList> mList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status_district, container, false);
         ButterKnife.bind(this, view);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        Context mContext = getContext();
-        FragmentManager mFragmentManager = getFragmentManager();
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        districtAdapter = new StatusDistrictAdapter(mContext, mFragmentManager);
-        mRecyclerView.setAdapter(districtAdapter);
-        callApi();
+        mContext = getContext();
+        mFragmentManager = getFragmentManager();
         init();
         return view;
     }
-private void init(){
-    DashboardActivity mActivity = (DashboardActivity)getActivity();
-    if (mActivity!=null){
-        mActivity.setToolbarTitle("District List");
+    private void init(){
+        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        if (mActivity!=null){
+            mActivity.setToolbarTitle("District List");
+        }
+        mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        if (mList.size() >0) {
+            callRecyclerView();
+            callApi();
+        } else {
+            callApi();
+            mNoDataText.setVisibility(View.VISIBLE);
+        }
+
     }
-}
-        private void callApi(){
+
+    private void callRecyclerView() {
+        mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        if (mList.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoDataText.setVisibility(View.GONE);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            districtAdapter = new StatusDistrictAdapter(mContext, mFragmentManager, mList);
+            mRecyclerView.setAdapter(districtAdapter);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoDataText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void callApi(){
         mSharedPreference = new SharedPreference(getContext());
         String strApi = Constant.API_KEY;
         String strId =  mSharedPreference.getUserStateId();
@@ -69,16 +99,22 @@ private void init(){
             @Override
             public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
                 ModelDistrict modelDistrict = response.body();
-                ModelDistrictList.deleteAll(ModelDistrictList.class);
-                for (ModelDistrictList modelDistrictList : modelDistrict.getData()){
-                    modelDistrictList.save();
+                if (modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                    ModelDistrictList.deleteAll(ModelDistrictList.class);
+                    for (ModelDistrictList modelDistrictList : modelDistrict.getData()) {
+                        modelDistrictList.save();
+                    }
+                    callRecyclerView();
+                } else {
+                    callRecyclerView();
                 }
 
             }
 
             @Override
             public void onFailure(Call<ModelDistrict> call, Throwable t) {
-//                CustomLog.d("districtList", "NotResponding");
+               CustomLog.d("districtList", "onFailure");
+               callRecyclerView();
             }
         });
     }

@@ -38,22 +38,22 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_attendance)
     public void llDmAttendanceClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
+       mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_status)
     public void llDmStatusClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusFragment()).addToBackStack(null).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_evr)
     public void llDmEvrClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, EvrPoliceListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, EvrPoliceListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_profile)
     public void llDmProfileClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
     }
     private void init() {
         mActivity = (DashboardActivity) getActivity();

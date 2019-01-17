@@ -24,11 +24,13 @@ public class SharedPreference {
         edt.remove(Constant.USER_STATE_ID);
         edt.remove(Constant.USER_DISTRICT_ID);
         edt.remove(Constant.USER_LOGIN_TYPE);
+        edt.remove(Constant.USER_LOGIN_EVR_ID);
         edt.commit();
         edt.clear();
     }
 
-    public void setUserData(String userName, String userPhone, String userPic, String stateId, String districtId, String loginType) {
+    public void setUserData(String userName, String userPhone, String userPic, String stateId, String districtId, String loginType,
+                            String evrId) {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
         edt = sp.edit();
         edt.putString(Constant.USER_NAME, userName);
@@ -37,6 +39,7 @@ public class SharedPreference {
         edt.putString(Constant.USER_STATE_ID, stateId);
         edt.putString(Constant.USER_DISTRICT_ID, districtId);
         edt.putString(Constant.USER_LOGIN_TYPE, loginType);
+        edt.putString(Constant.USER_LOGIN_EVR_ID, evrId);
         edt.commit();
     }
 
@@ -69,30 +72,9 @@ public class SharedPreference {
         return sp.getString(Constant.USER_LOGIN_TYPE, Constant.EMPTY);
     }
 
-
-
-    public void setPermissionSettingPage(boolean value) {
+    public String getUserEvrId() {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        edt = sp.edit();
-        edt.putBoolean(Constant.PREF_KEY_PERMISSION_SETTING, value);
-        edt.commit();
-    }
-
-    public boolean getPermissionSettingPage() {
-        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        return sp.getBoolean(Constant.PREF_KEY_PERMISSION_SETTING, false);
-    }
-
-    public void setCountLeftTime(long leftTime) {
-        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        edt = sp.edit();
-        edt.putLong(Constant.PREF_KEY_COUNT_TIME_LEFT, leftTime);
-        edt.commit();
-    }
-
-    public long getCountLeftTime(){
-        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        return sp.getLong(Constant.PREF_KEY_COUNT_TIME_LEFT, mTimeLeft);
+        return sp.getString(Constant.USER_LOGIN_EVR_ID, Constant.EMPTY);
     }
 
 }

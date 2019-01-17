@@ -163,7 +163,8 @@ public class LoginActivity extends AppCompatActivity{
                             modelLoginList.save();
                         }
                         mSharedPreference.setUserData(modelLogin.getData().get(0).getName(),modelLogin.getData().get(0).getPhoneno(),modelLogin.getData().get(0).getProfilePic(),
-                                modelLogin.getData().get(0).getStateId(), modelLogin.getData().get(0).getDistrictId(),modelLogin.getData().get(0).getLogintype());
+                                modelLogin.getData().get(0).getStateId(), modelLogin.getData().get(0).getDistrictId(),modelLogin.getData().get(0).getLogintype(),
+                                modelLogin.getData().get(0).getEvrId());
                         startApiHandler(mType);
                     } else {
                         Toast.makeText(LoginActivity.this,"Server Error ! Please try again",Toast.LENGTH_SHORT).show();
