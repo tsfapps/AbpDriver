@@ -20,8 +20,9 @@ import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.adapter.EvrPoliceAdapter;
-import com.abp.driver.model.police.ModelPolice;
+import com.abp.driver.adapter.EvrDateAdapter;
+import com.abp.driver.model.date.ModelDate;
+import com.abp.driver.model.date.ModelDateList;
 import com.abp.driver.model.police.ModelPoliceList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
@@ -34,37 +35,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EvrPoliceListFragment extends Fragment {
+public class EvrDateListFragment extends Fragment {
 
     private Context mContext;
     private FragmentManager mFragmentManager;
-    @BindView(R.id.rv_evr_police)
-    protected RecyclerView rv_police;
-    @BindView(R.id.tv_no_data)
-    protected TextView mTvNoData;
+    @BindView(R.id.rv_evr_date)
+    protected RecyclerView rv_date;
+    @BindView(R.id.tv_no_evr_date)
+    protected TextView mTvNoDate;
 
     private SharedPreference mSharedPreference;
-    private List<ModelPoliceList> mPoliceLists;
+    private List<ModelDateList> modelDateLists;
     private DashboardActivity mActivity;
     private String mDistrictId = null;
 
-    public static EvrPoliceListFragment newInstance(String districtId) {
-        EvrPoliceListFragment fragment = new EvrPoliceListFragment();
+    public static EvrDateListFragment newInstance(String districtId) {
+        EvrDateListFragment fragment = new EvrDateListFragment();
         fragment.mDistrictId = districtId;
         return fragment;
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_evr_police, container, false);
+        View view = inflater.inflate(R.layout.fragment_evr_date, container, false);
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
         mActivity = (DashboardActivity)getActivity();
-        mPoliceLists = ModelPoliceList.listAll(ModelPoliceList.class);
-        if (mPoliceLists.size() > 0) {
+        modelDateLists = ModelDateList.listAll(ModelDateList.class);
+        if (modelDateLists.size() > 0) {
             callRecyclerView();
             if (mActivity.isNetworkAvailable()) {
                 apiCall();
@@ -76,21 +78,23 @@ public class EvrPoliceListFragment extends Fragment {
                 Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
             }
         }
+
+//apiCall();
         init();
         return view;
     }
 
     private void callRecyclerView() {
-        List<ModelPoliceList> mList = ModelPoliceList.listAll(ModelPoliceList.class);
+        List<ModelDateList> mList = ModelDateList.listAll(ModelDateList.class);
         if (mList.size() > 0) {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-            rv_police.setLayoutManager(layoutManager);
-            EvrPoliceAdapter evrPoliceAdapter = new EvrPoliceAdapter(mContext, mFragmentManager, mList);
-            rv_police.setAdapter(evrPoliceAdapter);
-            evrPoliceAdapter.notifyDataSetChanged();
+            rv_date.setLayoutManager(layoutManager);
+            EvrDateAdapter evrDateAdapter = new EvrDateAdapter(mList, mContext, mFragmentManager);
+            rv_date.setAdapter(evrDateAdapter);
+            evrDateAdapter.notifyDataSetChanged();
         } else {
-            rv_police.setVisibility(View.GONE);
-            mTvNoData.setVisibility(View.VISIBLE);
+            rv_date.setVisibility(View.GONE);
+            mTvNoDate.setVisibility(View.VISIBLE);
         }
     }
 
@@ -101,31 +105,32 @@ public class EvrPoliceListFragment extends Fragment {
             String strStateId = mSharedPreference.getUserStateId();
             Api api = ApiClients.getApiClients().create(Api.class);
             Log.d("danny","sid:"+strStateId+" dId:"+mDistrictId);
-            Call<ModelPolice> call = api.districtDetail(strApiKey, strStateId, mDistrictId);
-            call.enqueue(new Callback<ModelPolice>() {
+            Call<ModelDate> call = api.dateList(strApiKey, strStateId, mDistrictId);
+            call.enqueue(new Callback<ModelDate>() {
                 @Override
-                public void onResponse(Call<ModelPolice> call, Response<ModelPolice> response) {
-                    ModelPolice modelPolice = response.body();
-                    if (modelPolice.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        mTvNoData.setVisibility(View.GONE);
-                        rv_police.setVisibility(View.VISIBLE);
-                        ModelPoliceList.deleteAll(ModelPoliceList.class);
-                        for (ModelPoliceList modelPoliceList : modelPolice.getData()) {
-                            modelPoliceList.save();
+                public void onResponse(Call<ModelDate> call, Response<ModelDate> response) {
+                    ModelDate modelDate = response.body();
+                    if (modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                        mTvNoDate.setVisibility(View.GONE);
+                        rv_date.setVisibility(View.VISIBLE);
+                        ModelDateList.deleteAll(ModelDateList.class);
+                        for (ModelDateList modelDateList : modelDate.getData()){
+                            modelDateList.save();
                         }
                         callRecyclerView();
-                    } else {
-                        rv_police.setVisibility(View.GONE);
-                        mTvNoData.setVisibility(View.VISIBLE);
+                    }else {
+                        mTvNoDate.setVisibility(View.VISIBLE);
+                        rv_date.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ModelPolice> call, Throwable t) {
-                    rv_police.setVisibility(View.GONE);
-                    mTvNoData.setVisibility(View.VISIBLE);
+                public void onFailure(Call<ModelDate> call, Throwable t) {
+                    mTvNoDate.setVisibility(View.VISIBLE);
+                    rv_date.setVisibility(View.GONE);
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }

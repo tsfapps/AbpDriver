@@ -44,7 +44,6 @@ public class NetworkStateChangeReceiver extends BroadcastReceiver {
             }
         }
 
-
     }
 
     private void syncDataToServer(Context context, List<ModelPunchInOutLocal> localDetails, boolean isConnected) {

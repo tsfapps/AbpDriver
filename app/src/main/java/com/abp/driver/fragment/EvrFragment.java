@@ -43,7 +43,7 @@ public class EvrFragment extends Fragment {
     protected TextView mNoDataText;
     private RecyclerView.LayoutManager mLayoutManager;
     private String mDistrictId;
-    private String mPoliceId;
+    private String dateCreated;
     private DashboardActivity mActivity;
     private SharedPreference mSharePref;
     private Context mContext;
@@ -52,10 +52,10 @@ public class EvrFragment extends Fragment {
     private FragmentManager mFragmentManager;
 
 
-    public static EvrFragment newInstance(String districtId, String policeId, String stateId) {
+    public static EvrFragment newInstance(String districtId, String dateCreated, String stateId) {
         EvrFragment fragment = new EvrFragment();
         fragment.mDistrictId = districtId;
-        fragment.mPoliceId = policeId;
+        fragment.dateCreated = dateCreated;
         fragment.mStateId = stateId;
         return fragment;
     }
@@ -76,9 +76,9 @@ public class EvrFragment extends Fragment {
         String strApiKey = Constant.API_KEY;
         String strStateId = mStateId;
         String strDistrictId = mDistrictId;
-        String strPoliceId = mPoliceId;
+        String strDateCreated = dateCreated;
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<ModelEvr> call = api.ervDetail(strApiKey, strStateId, strDistrictId, strPoliceId);
+        Call<ModelEvr> call = api.ervDetail(strApiKey, strStateId, strDistrictId, strDateCreated);
         call.enqueue(new Callback<ModelEvr>() {
             @Override
             public void onResponse(Call<ModelEvr> call, Response<ModelEvr> response) {

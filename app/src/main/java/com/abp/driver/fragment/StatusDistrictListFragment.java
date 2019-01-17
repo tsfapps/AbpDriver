@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
@@ -46,7 +47,7 @@ public class StatusDistrictListFragment extends Fragment{
     private FragmentManager mFragmentManager;
     private Context mContext;
     private LinearLayoutManager mLayoutManager;
-    private List<ModelDistrictList> mList;
+    private List<ModelDistrictList> modelDistrictLists;
 
     @Nullable
     @Override
@@ -55,6 +56,20 @@ public class StatusDistrictListFragment extends Fragment{
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
+        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
+        if (modelDistrictLists.size() > 0) {
+            callRecyclerView();
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            }
+        } else {
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            } else {
+                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            }
+        }
         init();
         return view;
     }
@@ -63,19 +78,12 @@ public class StatusDistrictListFragment extends Fragment{
         if (mActivity!=null){
             mActivity.setToolbarTitle("District List");
         }
-        mList = ModelDistrictList.listAll(ModelDistrictList.class);
-        if (mList.size() >0) {
-            callRecyclerView();
-            callApi();
-        } else {
-            callApi();
-            mNoDataText.setVisibility(View.VISIBLE);
-        }
+
 
     }
 
     private void callRecyclerView() {
-        mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        List<ModelDistrictList> mList = ModelDistrictList.listAll(ModelDistrictList.class);
         if (mList.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             mNoDataText.setVisibility(View.GONE);
@@ -89,7 +97,7 @@ public class StatusDistrictListFragment extends Fragment{
         }
     }
 
-    private void callApi(){
+    private void apiCall(){
         mSharedPreference = new SharedPreference(getContext());
         String strApi = Constant.API_KEY;
         String strId =  mSharedPreference.getUserStateId();

@@ -38,7 +38,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_attendance)
     public void llDmAttendanceClk(View view){
-       mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverFragment()).addToBackStack(null).commit();
+       mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_status)

@@ -21,6 +21,7 @@ import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.EvrDistrictAdapter;
+import com.abp.driver.model.date.ModelDateList;
 import com.abp.driver.model.district.ModelDistrict;
 import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
@@ -43,7 +44,7 @@ public class EvrDistrictListFragment extends Fragment {
     private Context mContext;
     private FragmentManager mFragmentManager;
     private SharedPreference mSharedPreference;
-    private List<ModelDistrictList> mList;
+    private List<ModelDistrictList> modelDistrictLists;
 
     @Nullable
     @Override
@@ -52,6 +53,21 @@ public class EvrDistrictListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
+        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
+
+        if (modelDistrictLists.size() > 0) {
+            callRecyclerView();
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            }
+        } else {
+            if (mActivity.isNetworkAvailable()) {
+                apiCall();
+            } else {
+                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            }
+        }
         init();
         return view;
     }
@@ -90,7 +106,7 @@ public class EvrDistrictListFragment extends Fragment {
     }
 
     private void callRecyclerView() {
-        mList = ModelDistrictList.listAll(ModelDistrictList.class);
+      List<ModelDistrictList>  mList = ModelDistrictList.listAll(ModelDistrictList.class);
         if (mList.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             mNoDataText.setVisibility(View.GONE);
@@ -108,18 +124,6 @@ public class EvrDistrictListFragment extends Fragment {
         DashboardActivity mActivity = (DashboardActivity) getActivity();
         if (mActivity !=null){
             mActivity.setToolbarTitle("District List");
-        }
-        mList = ModelDistrictList.listAll(ModelDistrictList.class);
-        if (mList.size() > 0){
-            callRecyclerView();
-            apiCall();
-        } else {
-            if (mActivity.isNetworkAvailable()) {
-                apiCall();
-            } else {
-                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
-            }
-            mNoDataText.setVisibility(View.VISIBLE);
         }
     }
 
