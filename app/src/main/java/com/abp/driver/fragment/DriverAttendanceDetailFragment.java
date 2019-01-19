@@ -59,7 +59,7 @@ public class DriverAttendanceDetailFragment extends Fragment {
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
-            mActivity.setToolbarTitle("Driver Attendance");
+            mActivity.setToolbarTitle("Attendance");
         }
         mSharePref = new SharedPreference(getContext());
         mList = DriverAttendanceList.listAll(DriverAttendanceList.class);

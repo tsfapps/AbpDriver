@@ -20,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +82,14 @@ public class DashboardActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
         ImageView iv_header_img = navigationView.getHeaderView(0).findViewById(R.id.iv_header_user_image);
+        iv_header_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
+                DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
         mSharedPreference = new SharedPreference(this);
         tv_header_name.setText(mSharedPreference.getUserName());
         Glide.with(this).load(mSharedPreference.getUserPic()).into(iv_header_img);
@@ -150,7 +159,7 @@ public class DashboardActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_attendance) {
-          getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DriverAttendanceDetailFragment()).addToBackStack(null).commit();
+          getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_profile) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_share) {

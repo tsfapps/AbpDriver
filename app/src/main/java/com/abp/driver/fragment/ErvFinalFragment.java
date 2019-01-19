@@ -78,14 +78,12 @@ public class ErvFinalFragment extends Fragment {
         final String stateId = mStateId;
         String districtId = mDistrictId;
         String dateCreated = mDate;
-//        CustomLog.d("tsfapps", dateCreated+" "+stateId+" "+districtId);
         Api api = ApiClients.getApiClients().create(Api.class);
         Call<ModelErvFinal> call = api.finalErv(apiKey, stateId, districtId, dateCreated);
         call.enqueue(new Callback<ModelErvFinal>() {
             @Override
             public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
                 ModelErvFinal modelErvFinal = response.body();
-             //   CustomLog.d("tsfapps", modelErvFinal.getSTATUS());
                 if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
                     ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                     for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
@@ -101,7 +99,6 @@ public class ErvFinalFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ModelErvFinal> call, Throwable t) {
-                    callRecyclerView();
                 Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
             }
         });

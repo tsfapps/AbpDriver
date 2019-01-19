@@ -15,106 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!--<LinearLayout-->
-                <!--android:layout_marginStart="12dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content">-->
-                <!--<TextView-->
-                    <!--android:textColor="@color/black"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:text="State :  "-->
-                    <!--style="@style/style_tv_dri_att" />-->
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_evr_state_name"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:textColor="@color/colorPrimaryDark"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:text="Jharkhand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"/>-->
-            <!--</LinearLayout>-->
-            <!--<LinearLayout-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content">-->
-                <!--<TextView-->
-                    <!--android:textColor="@color/black"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:text="District : "-->
-                    <!--style="@style/style_tv_dri_att" />-->
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_evr_district_name"-->
-                    <!--android:textColor="@color/colorPrimaryDark"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:text="Ranchi Buland"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"/>-->
-            <!--</LinearLayout>-->
-
-        </LinearLayout>
-<android.support.v7.widget.CardView
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    app:cardCornerRadius="4dp"
-    android:elevation="22dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-        <!--<LinearLayout-->
-            <!--android:paddingStart="8dp"-->
-            <!--android:background="@color/colorPrimary"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-            <!--<LinearLayout-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content">-->
-                <!--<LinearLayout-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content">-->
-
-                <!--<TextView-->
-                    <!--android:textColor="@color/white"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:text="Police Station : "-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_evr_police_station_name"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:textColor="@color/white"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:text="Maulana Azad Colony"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"/>-->
-                <!--</LinearLayout>-->
-
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
-</android.support.v7.widget.CardView>
-        <LinearLayout
             android:padding="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
-                android:gravity="start"
-                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".8">
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_weight="1"
                     android:textColor="@color/black"
                     android:textSize="12sp"
@@ -122,6 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_weight="1"
                     android:textColor="@color/black"
                     android:textSize="12sp"
@@ -129,6 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_weight="1"
                     android:textColor="@color/black"
                     android:textSize="12sp"
@@ -145,6 +59,7 @@
                 android:layout_weight="1">
 
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="12sp"
@@ -156,6 +71,7 @@
 
 
                 <TextView
+                    android:gravity="center_vertical"
                     android:id="@+id/tv_erv_second_driver"
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
@@ -166,6 +82,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:gravity="center_vertical"
                     android:id="@+id/tv_erv_third_driver"
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
@@ -181,8 +98,9 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".5">
+                android:layout_weight=".25">
 <LinearLayout
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
@@ -201,6 +119,7 @@
                 </android.support.v7.widget.CardView>
 </LinearLayout>
                 <LinearLayout
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -218,6 +137,8 @@
                 </android.support.v7.widget.CardView>
                 </LinearLayout>
                 <LinearLayout
+                    android:gravity="center_vertical"
+
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -269,15 +190,15 @@
             </LinearLayout>
             <LinearLayout
                 android:gravity="center"
-                android:layout_weight="1.2"
+                android:layout_weight="1.5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <android.support.v7.widget.CardView
                     android:id="@+id/cv_container_dri_att_det"
                     android:elevation="20dp"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    app:cardCornerRadius="45dp">
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="50dp">
                     <LinearLayout
                         android:background="@color/colorPrimary"
                         android:gravity="center"
