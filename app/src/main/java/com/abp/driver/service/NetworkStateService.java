@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.abp.driver.receiver.NetworkStateChangeReceiver;
@@ -32,7 +33,6 @@ public class NetworkStateService extends Service {
     public void onDestroy() {
         super.onDestroy();
         CustomLog.d("ABPNetworkService","onDestroy called");
-        unregisterReceiver(new NetworkStateChangeReceiver());
     }
 
     private void registerNetworkReceiver() {
