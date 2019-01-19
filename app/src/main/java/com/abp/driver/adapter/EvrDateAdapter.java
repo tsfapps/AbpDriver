@@ -2,7 +2,6 @@ package com.abp.driver.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abp.driver.R;
-import com.abp.driver.fragment.EvrFragment;
+import com.abp.driver.fragment.ErvFinalFragment;
 import com.abp.driver.model.date.ModelDateList;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class EvrDateAdapter extends RecyclerView.Adapter<EvrDateAdapter.DateView
     @Override
     public DateViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_evr_date_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_erv_date_item, viewGroup, false);
         return new DateViewHolder(view);
     }
 
@@ -46,7 +45,7 @@ public class EvrDateAdapter extends RecyclerView.Adapter<EvrDateAdapter.DateView
         dateViewHolder.linearLayoutDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, EvrFragment.newInstance(modelDateLists.get(i).getDistrictid(),modelDateLists.get(i).getCreateDate(),modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().replace(R.id.container_main, ErvFinalFragment.newInstance(modelDateLists.get(i).getDistrictid(),modelDateLists.get(i).getCreateDate(),modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
             }
         });
     }

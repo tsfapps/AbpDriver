@@ -23,7 +23,6 @@ import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.adapter.EvrDateAdapter;
 import com.abp.driver.model.date.ModelDate;
 import com.abp.driver.model.date.ModelDateList;
-import com.abp.driver.model.police.ModelPoliceList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
 
@@ -41,7 +40,7 @@ public class EvrDateListFragment extends Fragment {
     private FragmentManager mFragmentManager;
     @BindView(R.id.rv_evr_date)
     protected RecyclerView rv_date;
-    @BindView(R.id.tv_no_evr_date)
+    @BindView(R.id.tv_no_erv_date)
     protected TextView mTvNoDate;
 
     private SharedPreference mSharedPreference;
@@ -54,13 +53,10 @@ public class EvrDateListFragment extends Fragment {
         fragment.mDistrictId = districtId;
         return fragment;
     }
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_evr_date, container, false);
+        View view = inflater.inflate(R.layout.fragment_erv_date, container, false);
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
@@ -126,6 +122,7 @@ public class EvrDateListFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ModelDate> call, Throwable t) {
+                    callRecyclerView();
                     mTvNoDate.setVisibility(View.VISIBLE);
                     rv_date.setVisibility(View.GONE);
                 }
@@ -140,7 +137,7 @@ public class EvrDateListFragment extends Fragment {
     private void init() {
         DashboardActivity mActivity = (DashboardActivity)getActivity();
         if (mActivity !=null){
-            mActivity.setToolbarTitle("Police Station");
+            mActivity.setToolbarTitle("Date List");
         }
     }
 

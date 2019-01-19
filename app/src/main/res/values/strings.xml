@@ -25,6 +25,8 @@
     <string name="app_title">ABP 112 Police Service</string>
     <string name="code_disclaimer">** Please enter correct pass code to mark your attendance present !</string>
     <string name="date_created">Date Created</string>
+    <string name="no_data_available">No data available</string>
+    <string name="veh_num_dummy">JH 01 TS\n0001</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>

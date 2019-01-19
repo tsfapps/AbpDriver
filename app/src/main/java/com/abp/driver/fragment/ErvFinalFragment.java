@@ -20,10 +20,11 @@ import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.adapter.ErvAdapter;
-import com.abp.driver.model.evr.ModelEvr;
-import com.abp.driver.model.evr.ModelEvrList;
+import com.abp.driver.adapter.ErvFinalAdapter;
+import com.abp.driver.model.evr.ModelErvFinal;
+import com.abp.driver.model.evr.ModelErvFinalList;
 import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
 import java.util.List;
@@ -35,27 +36,27 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class EvrFragment extends Fragment {
+public class ErvFinalFragment extends Fragment {
 
-    @BindView(R.id.rv_evr)
+    @BindView(R.id.rv_erv_final)
     protected RecyclerView mRecyclerView;
-    @BindView(R.id.tv_no_data)
+    @BindView(R.id.tv_no_data_erv_final)
     protected TextView mNoDataText;
     private RecyclerView.LayoutManager mLayoutManager;
     private String mDistrictId;
-    private String dateCreated;
+    private String mDate;
     private DashboardActivity mActivity;
     private SharedPreference mSharePref;
     private Context mContext;
     private String mStateId;
-    private List<ModelEvrList> mList;
+    private List<ModelErvFinalList> mList;
     private FragmentManager mFragmentManager;
 
 
-    public static EvrFragment newInstance(String districtId, String dateCreated, String stateId) {
-        EvrFragment fragment = new EvrFragment();
+    public static ErvFinalFragment newInstance(String districtId, String mDate, String stateId) {
+        ErvFinalFragment fragment = new ErvFinalFragment();
         fragment.mDistrictId = districtId;
-        fragment.dateCreated = dateCreated;
+        fragment.mDate = mDate;
         fragment.mStateId = stateId;
         return fragment;
     }
@@ -63,42 +64,48 @@ public class EvrFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_erv, container, false);
+        View view = inflater.inflate(R.layout.fragment_erv_final, container, false);
 
        ButterKnife.bind(this, view);
        mContext = getContext();
        mFragmentManager = getFragmentManager();
-        init();
-        return view;
+       init();
+       return view;
     }
 
     private void callApi() {
-        String strApiKey = Constant.API_KEY;
-        String strStateId = mStateId;
-        String strDistrictId = mDistrictId;
-        String strDateCreated = dateCreated;
+        String apiKey = Constant.API_KEY;
+        final String stateId = mStateId;
+        String districtId = mDistrictId;
+        String dateCreated = mDate;
+//        CustomLog.d("tsfapps", dateCreated+" "+stateId+" "+districtId);
         Api api = ApiClients.getApiClients().create(Api.class);
-        Call<ModelEvr> call = api.ervDetail(strApiKey, strStateId, strDistrictId, strDateCreated);
-        call.enqueue(new Callback<ModelEvr>() {
+        Call<ModelErvFinal> call = api.finalErv(apiKey, stateId, districtId, dateCreated);
+        call.enqueue(new Callback<ModelErvFinal>() {
             @Override
-            public void onResponse(Call<ModelEvr> call, Response<ModelEvr> response) {
-                ModelEvr modelEvr = response.body();
-                if (modelEvr.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                    ModelEvrList.deleteAll(ModelEvrList.class);
-                    for (ModelEvrList modelEvrList : modelEvr.getData()) {
-                        modelEvrList.save();
+            public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
+                ModelErvFinal modelErvFinal = response.body();
+             //   CustomLog.d("tsfapps", modelErvFinal.getSTATUS());
+                if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                    ModelErvFinalList.deleteAll(ModelErvFinalList.class);
+                    for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
+
+                        modelErvFinalList.save();
                     }
+
                     callRecyclerView();
-                } else {
+                }else {
                     callRecyclerView();
                 }
             }
+
             @Override
-            public void onFailure(Call<ModelEvr> call, Throwable t) {
-                callRecyclerView();
+            public void onFailure(Call<ModelErvFinal> call, Throwable t) {
+                    callRecyclerView();
                 Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void init() {
@@ -107,7 +114,7 @@ public class EvrFragment extends Fragment {
             mActivity.setToolbarTitle("ERV");
         }
         mSharePref = new SharedPreference(getContext());
-        mList = ModelEvrList.listAll(ModelEvrList.class);
+        mList = ModelErvFinalList.listAll(ModelErvFinalList.class);
         if (mList.size() > 0) {
             callRecyclerView();
             callApi();
@@ -123,14 +130,14 @@ public class EvrFragment extends Fragment {
     }
 
     private void callRecyclerView(){
-        mList = ModelEvrList.listAll(ModelEvrList.class);
+        mList = ModelErvFinalList.listAll(ModelErvFinalList.class);
         if (mList.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             mNoDataText.setVisibility(View.GONE);
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
-            ErvAdapter evrAapter = new ErvAdapter(mContext, mFragmentManager, mList);
-            mRecyclerView.setAdapter(evrAapter);
+            ErvFinalAdapter ervFinalAdapter = new ErvFinalAdapter(mList);
+            mRecyclerView.setAdapter(ervFinalAdapter);
         } else {
             mRecyclerView.setVisibility(View.GONE);
             mNoDataText.setVisibility(View.VISIBLE);

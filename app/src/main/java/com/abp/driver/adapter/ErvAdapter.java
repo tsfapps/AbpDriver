@@ -17,13 +17,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EarAdapter extends RecyclerView.Adapter<EarAdapter.EvrViewHolder> {
+public class ErvAdapter extends RecyclerView.Adapter<ErvAdapter.EvrViewHolder> {
 
     private final Context mContext;
     private final FragmentManager mFragmentManger;
     private final List<ModelEvrList> mList;
 
-    public EarAdapter(Context mContext, FragmentManager mFragmentManager, List<ModelEvrList> mList) {
+    public ErvAdapter(Context mContext, FragmentManager mFragmentManager, List<ModelEvrList> mList) {
         this.mContext = mContext;
         this.mFragmentManger = mFragmentManager;
         this.mList = mList;
@@ -31,7 +31,7 @@ public class EarAdapter extends RecyclerView.Adapter<EarAdapter.EvrViewHolder> {
     @NonNull
     @Override
     public EvrViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_evr_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_erv_final_item, viewGroup, false);
 
 
 

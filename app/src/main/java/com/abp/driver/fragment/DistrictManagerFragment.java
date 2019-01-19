@@ -48,7 +48,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_evr)
     public void llDmEvrClk(View view){
-        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, EvrPoliceListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, EvrDateListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_profile)
