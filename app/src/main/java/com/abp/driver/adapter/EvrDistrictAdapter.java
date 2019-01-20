@@ -25,11 +25,13 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
 
     private Context mContext;
     private FragmentManager mFragmentManager;
+    private String mCheck;
 
-    public EvrDistrictAdapter(Context mContext, FragmentManager mFragmentManager, List<ModelDistrictList> list) {
+    public EvrDistrictAdapter(Context mContext, FragmentManager mFragmentManager, List<ModelDistrictList> list, String strCheck) {
         this.mContext = mContext;
         this.mFragmentManager = mFragmentManager;
         this.modelDistrictLists = list;
+        this.mCheck = strCheck;
     }
 
     @NonNull
@@ -49,7 +51,7 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
         evrDistrictHolder.ll_EvrDistrictList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(modelDistrictLists.get(i).getDistrictId())).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(modelDistrictLists.get(i).getDistrictId(), mCheck)).addToBackStack(null).commit();
             }
         });
 

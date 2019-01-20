@@ -26,6 +26,7 @@ public class DistrictManagerFragment extends Fragment {
     private Unbinder unbinder;
     private SharedPreference mSharePref;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,12 +44,12 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_status)
     public void llDmStatusClk(View view){
-        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(mSharePref.getUserDistrictId(), "strStatus")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_evr)
     public void llDmEvrClk(View view){
-        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(mSharePref.getUserDistrictId())).addToBackStack(null).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(mSharePref.getUserDistrictId(), "strErv")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_profile)

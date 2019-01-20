@@ -46,6 +46,16 @@ public class ErvDistrictListFragment extends Fragment {
     private SharedPreference mSharedPreference;
     private List<ModelDistrictList> modelDistrictLists;
 
+    private String strCheck;
+    private String mStateId;
+
+    public static ErvDistrictListFragment newInstance(String mStateId, String strCheck) {
+        ErvDistrictListFragment fragment = new ErvDistrictListFragment();
+        fragment.mStateId = mStateId;
+        fragment.strCheck = strCheck;
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,7 +86,7 @@ public class ErvDistrictListFragment extends Fragment {
         try {
             mSharedPreference = new SharedPreference(mContext);
             String strApiKey = Constant.API_KEY;
-            String strStateId = mSharedPreference.getUserStateId();
+            String strStateId = mStateId;
             Api api = ApiClients.getApiClients().create(Api.class);
             Call<ModelDistrict> call = api.districtList(strApiKey, strStateId);
             call.enqueue(new Callback<ModelDistrict>() {
@@ -112,7 +122,7 @@ public class ErvDistrictListFragment extends Fragment {
             mNoDataText.setVisibility(View.GONE);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
             mRecyclerView.setLayoutManager(layoutManager);
-            EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager,mList);
+            EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager,mList, strCheck);
             mRecyclerView.setAdapter(evrDistrictAdapter);
         } else {
             mRecyclerView.setVisibility(View.GONE);

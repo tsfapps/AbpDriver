@@ -25,11 +25,13 @@ public class ErvDateAdapter extends RecyclerView.Adapter<ErvDateAdapter.DateView
    private List<ModelDateList> modelDateLists;
    private Context mContext;
    private FragmentManager mFragmentManager;
+   private String mCheckType;
 
-    public ErvDateAdapter(List<ModelDateList> modelDateLists, Context mContext, FragmentManager mFragmentManager) {
+    public ErvDateAdapter(List<ModelDateList> modelDateLists, Context mContext, FragmentManager mFragmentManager, String mCheckType) {
         this.modelDateLists = modelDateLists;
         this.mContext = mContext;
         this.mFragmentManager = mFragmentManager;
+        this.mCheckType = mCheckType;
     }
 
     @NonNull
@@ -45,7 +47,12 @@ public class ErvDateAdapter extends RecyclerView.Adapter<ErvDateAdapter.DateView
         dateViewHolder.linearLayoutDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, StatusFinalFragment.newInstance(modelDateLists.get(i).getDistrictid(),modelDateLists.get(i).getCreateDate(),modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
+                if (mCheckType.equals("strStatus")) {
+                    mFragmentManager.beginTransaction().replace(R.id.container_main, StatusFinalFragment.newInstance(modelDateLists.get(i).getDistrictid(), modelDateLists.get(i).getCreateDate(), modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
+                }else if (mCheckType.equals("strErv")){
+                    mFragmentManager.beginTransaction().replace(R.id.container_main, ErvFinalFragment.newInstance(modelDateLists.get(i).getDistrictid(), modelDateLists.get(i).getCreateDate(), modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
+
+                }
             }
         });
     }

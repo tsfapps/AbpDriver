@@ -45,10 +45,12 @@ public class ErvDateListFragment extends Fragment {
 
     private List<ModelDateList> modelDateLists;
     private String mDistrictId = null;
+    private String mCheck;
 
-    public static ErvDateListFragment newInstance(String districtId) {
+    public static ErvDateListFragment newInstance(String districtId, String mCheck) {
         ErvDateListFragment fragment = new ErvDateListFragment();
         fragment.mDistrictId = districtId;
+        fragment.mCheck = mCheck;
         return fragment;
     }
     @Nullable
@@ -85,7 +87,7 @@ public class ErvDateListFragment extends Fragment {
             mTvNoDate.setVisibility(View.GONE);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
             rv_date.setLayoutManager(layoutManager);
-            ErvDateAdapter ervDateAdapter = new ErvDateAdapter(mList, mContext, mFragmentManager);
+            ErvDateAdapter ervDateAdapter = new ErvDateAdapter(mList, mContext, mFragmentManager, mCheck);
             rv_date.setAdapter(ervDateAdapter);
             ervDateAdapter.notifyDataSetChanged();
         } else {

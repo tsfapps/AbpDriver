@@ -41,6 +41,7 @@ public class StateManagerFragment extends Fragment {
         if (mActivity != null) {
             mActivity.setToolbarTitle("State Manager");
         }
+        mSharePref = new SharedPreference(getContext());
         mFragmentManager = mActivity.getSupportFragmentManager();
     }
     @OnClick(R.id.ll_sm_attendance)
@@ -50,12 +51,12 @@ public class StateManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_sm_status)
     public void llSmStatusClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ErvDistrictListFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDistrictListFragment.newInstance(mSharePref.getUserStateId(), "strStatus")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_evr)
     public void llSmEvrClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ErvDistrictListFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDistrictListFragment.newInstance(mSharePref.getUserStateId(), "strErv")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_profile)
