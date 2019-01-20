@@ -20,9 +20,9 @@ import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.adapter.EvrPoliceAdapter;
-import com.abp.driver.model.police.ModelPolice;
-import com.abp.driver.model.police.ModelPoliceList;
+import com.abp.driver.adapter.EvrDistrictAdapter;
+import com.abp.driver.model.district.ModelDistrict;
+import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
 
@@ -34,37 +34,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EvrPoliceListFragment extends Fragment {
+public class DistrictListFragment extends Fragment {
 
+    @BindView(R.id.rv_evr_district)
+    protected RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_data)
+    protected TextView mNoDataText;
     private Context mContext;
     private FragmentManager mFragmentManager;
-    @BindView(R.id.rv_evr_police)
-    protected RecyclerView rv_police;
-    @BindView(R.id.tv_no_data)
-    protected TextView mTvNoData;
-
     private SharedPreference mSharedPreference;
-    private List<ModelPoliceList> mPoliceLists;
-    private DashboardActivity mActivity;
-    private String mDistrictId = null;
+    private List<ModelDistrictList> modelDistrictLists;
 
-    public static EvrPoliceListFragment newInstance(String districtId) {
-        EvrPoliceListFragment fragment = new EvrPoliceListFragment();
-        fragment.mDistrictId = districtId;
+    private String strCheck;
+    private String mStateId;
+
+    public static DistrictListFragment newInstance(String mStateId, String strCheck) {
+        DistrictListFragment fragment = new DistrictListFragment();
+        fragment.mStateId = mStateId;
+        fragment.strCheck = strCheck;
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_evr_police, container, false);
+        View view = inflater.inflate(R.layout.fragment_district_list, container, false);
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        mActivity = (DashboardActivity)getActivity();
-        mPoliceLists = ModelPoliceList.listAll(ModelPoliceList.class);
-        if (mPoliceLists.size() > 0) {
+        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
+
+        if (modelDistrictLists.size() > 0) {
             callRecyclerView();
             if (mActivity.isNetworkAvailable()) {
                 apiCall();
@@ -80,62 +81,61 @@ public class EvrPoliceListFragment extends Fragment {
         return view;
     }
 
-    private void callRecyclerView() {
-        List<ModelPoliceList> mList = ModelPoliceList.listAll(ModelPoliceList.class);
-        if (mList.size() > 0) {
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-            rv_police.setLayoutManager(layoutManager);
-            EvrPoliceAdapter evrPoliceAdapter = new EvrPoliceAdapter(mContext, mFragmentManager, mList);
-            rv_police.setAdapter(evrPoliceAdapter);
-            evrPoliceAdapter.notifyDataSetChanged();
-        } else {
-            rv_police.setVisibility(View.GONE);
-            mTvNoData.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void apiCall() {
         try {
             mSharedPreference = new SharedPreference(mContext);
             String strApiKey = Constant.API_KEY;
-            String strStateId = mSharedPreference.getUserStateId();
+            String strStateId = mStateId;
             Api api = ApiClients.getApiClients().create(Api.class);
-            Log.d("danny","sid:"+strStateId+" dId:"+mDistrictId);
-            Call<ModelPolice> call = api.districtDetail(strApiKey, strStateId, mDistrictId);
-            call.enqueue(new Callback<ModelPolice>() {
+            Call<ModelDistrict> call = api.districtList(strApiKey, strStateId);
+            call.enqueue(new Callback<ModelDistrict>() {
                 @Override
-                public void onResponse(Call<ModelPolice> call, Response<ModelPolice> response) {
-                    ModelPolice modelPolice = response.body();
-                    if (modelPolice.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        mTvNoData.setVisibility(View.GONE);
-                        rv_police.setVisibility(View.VISIBLE);
-                        ModelPoliceList.deleteAll(ModelPoliceList.class);
-                        for (ModelPoliceList modelPoliceList : modelPolice.getData()) {
-                            modelPoliceList.save();
+                public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
+                    ModelDistrict modelDistrict = response.body();
+                    if (modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mNoDataText.setVisibility(View.VISIBLE);
+                        ModelDistrictList.deleteAll(ModelDistrictList.class);
+                        for (ModelDistrictList modelDistrictList : modelDistrict.getData()) {
+                            modelDistrictList.save();
                         }
                         callRecyclerView();
                     } else {
-                        rv_police.setVisibility(View.GONE);
-                        mTvNoData.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
+                        mNoDataText.setVisibility(View.VISIBLE);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ModelPolice> call, Throwable t) {
-                    rv_police.setVisibility(View.GONE);
-                    mTvNoData.setVisibility(View.VISIBLE);
+                public void onFailure(Call<ModelDistrict> call, Throwable t) {
+                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                    callRecyclerView();
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void callRecyclerView() {
+      List<ModelDistrictList>  mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        if (mList.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoDataText.setVisibility(View.GONE);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+            mRecyclerView.setLayoutManager(layoutManager);
+            EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager,mList, strCheck);
+            mRecyclerView.setAdapter(evrDistrictAdapter);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoDataText.setVisibility(View.VISIBLE);
+        }
     }
 
     private void init() {
-        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        DashboardActivity mActivity = (DashboardActivity) getActivity();
         if (mActivity !=null){
-            mActivity.setToolbarTitle("Police Station");
+            mActivity.setToolbarTitle("District List");
         }
     }
 

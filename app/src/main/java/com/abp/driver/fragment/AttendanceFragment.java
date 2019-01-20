@@ -38,7 +38,6 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.DateUtil;
 import com.abp.driver.utils.SharedPreference;
-import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Random;
@@ -106,7 +105,7 @@ public class AttendanceFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         CustomLog.d(TAG,"onCreateView called");
-        View view = inflater.inflate(R.layout.fragment_driver,container,false);
+        View view = inflater.inflate(R.layout.fragment_attendance,container,false);
         ButterKnife.bind(this, view);
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().startService(intent);

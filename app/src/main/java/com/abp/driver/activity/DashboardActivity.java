@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
-import com.abp.driver.fragment.DriverAttendanceDetailFragment;
 import com.abp.driver.fragment.AttendanceFragment;
 
 import com.abp.driver.fragment.ProfileFragment;

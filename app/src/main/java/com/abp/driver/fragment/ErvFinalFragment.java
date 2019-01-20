@@ -85,6 +85,8 @@ public class ErvFinalFragment extends Fragment {
             public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
                 ModelErvFinal modelErvFinal = response.body();
                 if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mNoDataText.setVisibility(View.GONE);
                     ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                     for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
                         modelErvFinalList.save();
@@ -92,14 +94,16 @@ public class ErvFinalFragment extends Fragment {
 
                     callRecyclerView();
                 }else {
-                    callRecyclerView();
+                    mRecyclerView.setVisibility(View.GONE);
+                    mNoDataText.setVisibility(View.VISIBLE);
+                   // callRecyclerView();
                 }
             }
 
             @Override
             public void onFailure(Call<ModelErvFinal> call, Throwable t) {
                 Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
-                callRecyclerView();
+               // callRecyclerView();
             }
         });
 
@@ -113,13 +117,14 @@ public class ErvFinalFragment extends Fragment {
         mSharePref = new SharedPreference(getContext());
         mList = ModelErvFinalList.listAll(ModelErvFinalList.class);
         if (mList.size() > 0) {
-            callRecyclerView();
-            callApi();
-        } else {
-            mNoDataText.setVisibility(View.VISIBLE);
+
             if (mActivity.isNetworkAvailable()) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mNoDataText.setVisibility(View.GONE);
                 callApi();
             } else {
+                mRecyclerView.setVisibility(View.GONE);
+                mNoDataText.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(),"No internet available",Toast.LENGTH_SHORT).show();
             }
         }

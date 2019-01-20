@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abp.driver.R;
-import com.abp.driver.fragment.ErvDateListFragment;
+import com.abp.driver.fragment.DateListFragment;
 import com.abp.driver.model.district.ModelDistrictList;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
     @Override
     public EvrDistrictHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_evr_district_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_district_list_item, viewGroup, false);
 
         return new EvrDistrictHolder(view);
     }
@@ -51,7 +51,7 @@ public class EvrDistrictAdapter extends RecyclerView.Adapter<EvrDistrictAdapter.
         evrDistrictHolder.ll_EvrDistrictList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, ErvDateListFragment.newInstance(modelDistrictLists.get(i).getDistrictId(), mCheck)).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().replace(R.id.container_main, DateListFragment.newInstance(modelDistrictLists.get(i).getDistrictId(), mCheck)).addToBackStack(null).commit();
             }
         });
 

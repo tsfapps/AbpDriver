@@ -30,7 +30,7 @@ public class StateManagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_state, container, false);
+        View view = inflater.inflate(R.layout.fragment_state_manager, container, false);
         unbinder = ButterKnife.bind(this, view);
         init();
         return view;
@@ -51,12 +51,12 @@ public class StateManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_sm_status)
     public void llSmStatusClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDistrictListFragment.newInstance(mSharePref.getUserStateId(), "strStatus")).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DistrictListFragment.newInstance(mSharePref.getUserStateId(), "strStatus")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_evr)
     public void llSmEvrClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, ErvDistrictListFragment.newInstance(mSharePref.getUserStateId(), "strErv")).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DistrictListFragment.newInstance(mSharePref.getUserStateId(), "strErv")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_profile)

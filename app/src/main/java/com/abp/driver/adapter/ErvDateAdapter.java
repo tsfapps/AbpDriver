@@ -37,7 +37,7 @@ public class ErvDateAdapter extends RecyclerView.Adapter<ErvDateAdapter.DateView
     @NonNull
     @Override
     public DateViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_erv_date_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_date_item, viewGroup, false);
         return new DateViewHolder(view);
     }
 

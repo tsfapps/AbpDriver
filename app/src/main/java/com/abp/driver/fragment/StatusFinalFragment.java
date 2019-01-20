@@ -57,10 +57,10 @@ public class StatusFinalFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_status_final, container, false);
         ButterKnife.bind(this, view);
         DashboardActivity mActivity = (DashboardActivity)getActivity();
-        callRecyclerView();
+        //callRecyclerView();
         mList =  ModelStatusList.listAll(ModelStatusList.class);
         if (mList.size() > 0) {
-            callRecyclerView();
+           // callRecyclerView();
             if (mActivity.isNetworkAvailable()) {
                 callApi();
             }
