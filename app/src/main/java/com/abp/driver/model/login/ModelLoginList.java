@@ -45,6 +45,9 @@ public class ModelLoginList extends SugarRecord {
     @SerializedName("evr_id")
     @Expose
     private String evrId;
+    @SerializedName("driver_shift")
+    @Expose
+    private String driverShift;
 
     public String getLogintype() {
         return logintype;
@@ -148,5 +151,13 @@ public class ModelLoginList extends SugarRecord {
 
     public void setEvrId(String evrId) {
         this.evrId = evrId;
+    }
+
+    public String getDriverShift() {
+        return driverShift;
+    }
+
+    public void setDriverShift(String driverShift) {
+        this.driverShift = driverShift;
     }
 }

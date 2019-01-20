@@ -99,6 +99,7 @@ public class ErvFinalFragment extends Fragment {
             @Override
             public void onFailure(Call<ModelErvFinal> call, Throwable t) {
                 Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                callRecyclerView();
             }
         });
 

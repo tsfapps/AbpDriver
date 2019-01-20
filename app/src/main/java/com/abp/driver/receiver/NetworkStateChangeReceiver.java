@@ -26,7 +26,7 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class NetworkStateChangeReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "danny";
+    public static final String TAG = "NetworkStateReceiver";
     private boolean isReceived = false;
 
     @Override

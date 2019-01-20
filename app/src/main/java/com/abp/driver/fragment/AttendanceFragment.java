@@ -2,6 +2,8 @@ package com.abp.driver.fragment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +70,10 @@ public class AttendanceFragment extends Fragment {
     protected TextView mCheckInDesc;
     @BindView(R.id.tv_pass_code)
     protected TextView mTvPassCode;
+    @BindView(R.id.iv_copy)
+    protected ImageView mIvCopy;
+    @BindView(R.id.tv_shiftTime)
+    protected TextView mTvShiftTime;
     private int REQUEST_LOCATION = 1;
     private double mLatitude;
     private double mLongitude;
@@ -86,6 +93,8 @@ public class AttendanceFragment extends Fragment {
     private String mCheckInCode = null;
     private String mCheckOutCode = null;
     private Dialog mPassCodeDialog = null;
+    private final String WORK_IN_PROGRESS = "In progress";
+    private final String WORK_COMPLETED = "Completed";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,6 +115,23 @@ public class AttendanceFragment extends Fragment {
         mActivity.setToolbarTitle("Attendance");
         mFragmentManger = mActivity.getSupportFragmentManager();
         mSharedPreference = new SharedPreference(getContext());
+        List<ModelLoginList> loginList = ModelLoginList.listAll(ModelLoginList.class);
+        if (loginList.size() > 0) {
+            String mShift = loginList.get(0).getDriverShift();
+            if (mShift != null && !mShift.equals("")) {
+                if (mShift.equals("morning")) {
+                    mTvShiftTime.setText("06:00 Am से 02:00 Pm");
+                } else if (mShift.equals("afternoon")) {
+                    mTvShiftTime.setText("02:00 Pm से 10:00 Pm");
+                } else if (mShift.equals("evening")) {
+                    mTvShiftTime.setText("10:00 Pm से 06:00 Am");
+                }
+            } else {
+                mTvShiftTime.setText("असाइन नहीं किया गया");
+            }
+        } else {
+            mTvShiftTime.setText("असाइन नहीं किया गया");
+        }
         getDataFromServer();
         return view;
     }
@@ -123,6 +149,11 @@ public class AttendanceFragment extends Fragment {
             }
         } else {
             init();
+        }
+
+        if (!mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)){
+            mTvPassCode.setVisibility(View.GONE);
+            mIvCopy.setVisibility(View.GONE);
         }
     }
 
@@ -156,19 +187,29 @@ public class AttendanceFragment extends Fragment {
             setValueOfViewFromLocal();
             if (mActivity.isNetworkAvailable() && attendanceServerData.size() > 0) {
                 mTvPassCode.setText("Your Pass code : " +attendanceServerData.get(attendanceServerData.size() -1).getCheckOutCode());
+                showCopyIcon();
             } else {
                 if (punchInOutLocalDetails.size() > 0) {
                     mTvPassCode.setText("Your Pass code : " + punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1).getCheckOutCode());
+                    showCopyIcon();
                 }
             }
         }
 
-        if (punchType.equals("check_out")) {
+       /* if (punchType.equals("check_out")) {
             startTimer();
         } else {
             stopTimerTask();
-        }
+        }*/
 
+    }
+
+    private void showCopyIcon(){
+        if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)) {
+            mIvCopy.setVisibility(View.VISIBLE);
+        } else {
+            mIvCopy.setVisibility(View.GONE);
+        }
     }
 
     private void setValueOfViewFromLocal() {
@@ -178,20 +219,23 @@ public class AttendanceFragment extends Fragment {
             ModelPunchInOutLocal mLastData = punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1);
             if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mTimeIn = mLastData.getCheckInDate();
-                mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
+                //mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
+                mTotalHours.setText(WORK_IN_PROGRESS);
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(mLastData.getTimeIn());
                 mCheckInCode = mLastData.getCheckInCode();
                 mTvPassCode.setText("Pass code not generated yet !");
+                mIvCopy.setVisibility(View.GONE);
             } else {
-                mTotalHours.setText("00:00:00");
+                mTotalHours.setText(WORK_COMPLETED);
                 mCheckInDesc.setText("You not yet clocked ");
                 mCheckInTime.setVisibility(View.GONE);
                 mTvPassCode.setText("Your Pass code : "+mLastData.getCheckOutCode());
+                showCopyIcon();
             }
         } else {
-            mTotalHours.setText("00:00:00");
+            mTotalHours.setText(WORK_COMPLETED);
             mCheckInDesc.setText("You not yet clocked ");
             mCheckInTime.setVisibility(View.GONE);
         }
@@ -203,20 +247,23 @@ public class AttendanceFragment extends Fragment {
             DriverAttendanceList mLastData = attendanceServerData.get(attendanceServerData.size() - 1);
             if (!mLastData.getTimeIn().equals("") && mLastData.getTimeOut().equals("")) {
                 mTimeIn = mLastData.getCheckInDate();
-                mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
+                //mTotalHours.setText(DateUtil.timeDiff(mLastData.getCheckInDate(), DateUtil.getCurrentDateTime(), Constant.HOUR_SUFFIX, true));
+                mTotalHours.setText(WORK_IN_PROGRESS);
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(mLastData.getTimeIn());
                 mCheckInCode = mLastData.getCheckInCode();
                 mTvPassCode.setText("Pass code not generated yet !");
+                mIvCopy.setVisibility(View.GONE);
             } else {
-                mTotalHours.setText("00:00:00");
+                mTotalHours.setText(WORK_COMPLETED);
                 mCheckInDesc.setText("You not yet clocked ");
                 mCheckInTime.setVisibility(View.GONE);
                 mTvPassCode.setText("Your Pass code : "+mLastData.getCheckOutCode());
+                showCopyIcon();
             }
         } else {
-            mTotalHours.setText("00:00:00");
+            mTotalHours.setText(WORK_COMPLETED);
             mCheckInDesc.setText("You not yet clocked ");
             mCheckInTime.setVisibility(View.GONE);
         }
@@ -555,7 +602,7 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.btn_check_in_out)
+    @OnClick({R.id.btn_check_in_out,R.id.iv_copy})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.btn_check_in_out:
@@ -565,6 +612,17 @@ public class AttendanceFragment extends Fragment {
                     mActivity.showDialogueGps(false);
                 }
                 break;
+            case R.id.iv_copy:
+                copyPassCode();
+                break;
+        }
+    }
+
+    private void copyPassCode() {
+        if (mCheckOutCode != null) {
+            ClipboardManager cm = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            cm.setText(mCheckOutCode);
+            Toast.makeText(getContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -572,7 +630,7 @@ public class AttendanceFragment extends Fragment {
     public void onResume() {
         super.onResume();
         CustomLog.d(TAG,"onResume called");
-        startTimer();
+        //startTimer();
         if (!mActivity.isGpsEnable()) {
             mActivity.showDialogueGps(false);
         }
@@ -602,13 +660,13 @@ public class AttendanceFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        stopTimerTask();
+        //stopTimerTask();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopTimerTask();
+        //stopTimerTask();
         Intent intent=new Intent(getContext(), LocationService.class);
         getActivity().stopService(intent);
     }
@@ -625,16 +683,17 @@ public class AttendanceFragment extends Fragment {
                     mBtnPunchInOut.setText("Punch Out");
                 } else {
                     mBtnPunchInOut.setText("Punch In");
-                    stopTimerTask();
+                    //stopTimerTask();
                 }
-                mTotalHours.setText("00:00:00");
+                mTotalHours.setText(WORK_COMPLETED);
                 mCheckInDesc.setText("You clocked in at ");
                 mCheckInTime.setVisibility(View.VISIBLE);
                 mCheckInTime.setText(DateUtil.getCurrentTime());
-                startTimer();
+                //startTimer();
                 getDataFromServer();
                 if (mCheckOutCode != null) {
                     mTvPassCode.setText("Your Pass code : " + mCheckOutCode);
+                    showCopyIcon();
                 }
             }
         }, 500);
@@ -644,7 +703,7 @@ public class AttendanceFragment extends Fragment {
         CustomLog.d(TAG,"startTimer called..");
         if (mBtnPunchInOut.getText().toString().equals("Punch In")) {
             CustomLog.d(TAG,"startTimer : punchType == Punch In ... return");
-            stopTimerTask();
+            //stopTimerTask();
             return;
         }
 

@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pass Code"
+            android:text="पास कोड"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -30,7 +30,7 @@
             android:id="@+id/et_pass_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter 6 digit code."
+            android:hint="6 अंक कोड दर्ज करें।"
             android:maxLength="6"
             android:textStyle="bold"/>
     </android.support.design.widget.TextInputLayout>
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="0.5"
-            android:text="Submit"
+            android:text="जमा करें"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
             android:textColor="@color/white"
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="0.5"
-            android:text="Cancel"
+            android:text="रद्द करना"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
             android:textColor="@color/white"
