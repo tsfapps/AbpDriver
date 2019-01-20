@@ -33,7 +33,6 @@ import retrofit2.Response;
 
 public class StatusFragment extends Fragment {
 
-    private Unbinder unbinder;
     @BindView(R.id.rv_status)
     RecyclerView mRecyclerView;
     private SharedPreference mSharedPreference;
@@ -41,14 +40,12 @@ public class StatusFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_status, container, false);
-
-        unbinder = ButterKnife.bind(this, view);
+        View view = inflater.inflate(R.layout.fragment_status_final, container, false);
+        ButterKnife.bind(this, view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         StatusAdapter statusAdapter = new StatusAdapter();
         mRecyclerView.setAdapter(statusAdapter);
-
         callApi();
         init();
         return view;

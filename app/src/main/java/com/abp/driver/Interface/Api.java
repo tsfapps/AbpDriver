@@ -8,6 +8,7 @@ import com.abp.driver.model.evr.ModelEvr;
 import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.police.ModelPolice;
 import com.abp.driver.model.district.ModelDistrict;
+import com.abp.driver.model.status.ModelStatus;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -53,9 +54,16 @@ public interface Api {
             @Field("districtid") String districtid
     );
     @FormUrlEncoded
-
     @POST("api/view-state-district-policestaionwise-ervapi1.php")
     Call<ModelErvFinal> finalErv(
+            @Field("API_KEY") String API_KEY,
+            @Field("stateid") String stateid,
+            @Field("districtid") String districtid,
+            @Field("date") String date
+    );
+    @FormUrlEncoded
+    @POST("api/viewstatedisctrictwisestatus.php")
+    Call<ModelStatus> finalStatus(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
             @Field("districtid") String districtid,

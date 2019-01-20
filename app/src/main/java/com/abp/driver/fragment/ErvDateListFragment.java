@@ -20,10 +20,9 @@ import com.abp.driver.ApiClient.ApiClients;
 import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
-import com.abp.driver.adapter.EvrDistrictAdapter;
+import com.abp.driver.adapter.ErvDateAdapter;
+import com.abp.driver.model.date.ModelDate;
 import com.abp.driver.model.date.ModelDateList;
-import com.abp.driver.model.district.ModelDistrict;
-import com.abp.driver.model.district.ModelDistrictList;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.SharedPreference;
 
@@ -35,28 +34,33 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EvrDistrictListFragment extends Fragment {
+public class ErvDateListFragment extends Fragment {
 
-    @BindView(R.id.rv_evr_district)
-    protected RecyclerView mRecyclerView;
-    @BindView(R.id.tv_no_data)
-    protected TextView mNoDataText;
     private Context mContext;
     private FragmentManager mFragmentManager;
-    private SharedPreference mSharedPreference;
-    private List<ModelDistrictList> modelDistrictLists;
+    @BindView(R.id.rv_evr_date)
+    protected RecyclerView rv_date;
+    @BindView(R.id.tv_no_erv_date)
+    protected TextView mTvNoDate;
 
+    private List<ModelDateList> modelDateLists;
+    private String mDistrictId = null;
+
+    public static ErvDateListFragment newInstance(String districtId) {
+        ErvDateListFragment fragment = new ErvDateListFragment();
+        fragment.mDistrictId = districtId;
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_evr_district, container, false);
+        View view = inflater.inflate(R.layout.fragment_erv_date, container, false);
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        DashboardActivity mActivity = (DashboardActivity)getActivity();
-        modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
-
-        if (modelDistrictLists.size() > 0) {
+        DashboardActivity mActivity = (DashboardActivity) getActivity();
+        modelDateLists = ModelDateList.listAll(ModelDateList.class);
+        if (modelDateLists.size() > 0) {
             callRecyclerView();
             if (mActivity.isNetworkAvailable()) {
                 apiCall();
@@ -68,62 +72,72 @@ public class EvrDistrictListFragment extends Fragment {
                 Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
             }
         }
+
+//apiCall();
         init();
         return view;
     }
 
+    private void callRecyclerView() {
+        List<ModelDateList> mList = ModelDateList.listAll(ModelDateList.class);
+        if (mList.size() > 0) {
+            rv_date.setVisibility(View.VISIBLE);
+            mTvNoDate.setVisibility(View.GONE);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+            rv_date.setLayoutManager(layoutManager);
+            ErvDateAdapter ervDateAdapter = new ErvDateAdapter(mList, mContext, mFragmentManager);
+            rv_date.setAdapter(ervDateAdapter);
+            ervDateAdapter.notifyDataSetChanged();
+        } else {
+            rv_date.setVisibility(View.GONE);
+            mTvNoDate.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void apiCall() {
         try {
-            mSharedPreference = new SharedPreference(mContext);
+            SharedPreference mSharedPreference = new SharedPreference(mContext);
             String strApiKey = Constant.API_KEY;
             String strStateId = mSharedPreference.getUserStateId();
             Api api = ApiClients.getApiClients().create(Api.class);
-            Call<ModelDistrict> call = api.districtList(strApiKey, strStateId);
-            call.enqueue(new Callback<ModelDistrict>() {
+            Log.d("danny","sid:"+strStateId+" dId:"+mDistrictId);
+            Call<ModelDate> call = api.dateList(strApiKey, strStateId, mDistrictId);
+            call.enqueue(new Callback<ModelDate>() {
                 @Override
-                public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
-                    ModelDistrict modelDistrict = response.body();
-                    if (modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        ModelDistrictList.deleteAll(ModelDistrictList.class);
-                        for (ModelDistrictList modelDistrictList : modelDistrict.getData()) {
-                            modelDistrictList.save();
+                public void onResponse(Call<ModelDate> call, Response<ModelDate> response) {
+                    ModelDate modelDate = response.body();
+                    if (modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                        mTvNoDate.setVisibility(View.GONE);
+                        rv_date.setVisibility(View.VISIBLE);
+                        ModelDateList.deleteAll(ModelDateList.class);
+                        for (ModelDateList modelDateList : modelDate.getData()){
+                            modelDateList.save();
                         }
                         callRecyclerView();
-                    } else {
-                        callRecyclerView();
+                    }else {
+                        mTvNoDate.setVisibility(View.VISIBLE);
+                        rv_date.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ModelDistrict> call, Throwable t) {
-                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                public void onFailure(Call<ModelDate> call, Throwable t) {
                     callRecyclerView();
+                    mTvNoDate.setVisibility(View.VISIBLE);
+                    rv_date.setVisibility(View.GONE);
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    private void callRecyclerView() {
-      List<ModelDistrictList>  mList = ModelDistrictList.listAll(ModelDistrictList.class);
-        if (mList.size() > 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mNoDataText.setVisibility(View.GONE);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-            mRecyclerView.setLayoutManager(layoutManager);
-            EvrDistrictAdapter evrDistrictAdapter = new EvrDistrictAdapter(mContext, mFragmentManager,mList);
-            mRecyclerView.setAdapter(evrDistrictAdapter);
-        } else {
-            mRecyclerView.setVisibility(View.GONE);
-            mNoDataText.setVisibility(View.VISIBLE);
-        }
     }
 
     private void init() {
-        DashboardActivity mActivity = (DashboardActivity) getActivity();
+        DashboardActivity mActivity = (DashboardActivity)getActivity();
         if (mActivity !=null){
-            mActivity.setToolbarTitle("District List");
+            mActivity.setToolbarTitle("Date List");
         }
     }
 

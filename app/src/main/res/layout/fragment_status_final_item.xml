@@ -16,57 +16,66 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
             <LinearLayout
-                android:layout_marginStart="12dp"
+                android:orientation="horizontal"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
                 <TextView
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:text="State :  "
-                    style="@style/style_tv_dri_att" />
+                    android:text="Shifting Time :  "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/tv_evr_state_name"
+                    android:id="@+id/tv_status_shifting"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="12sp"
-                    android:text="Jharkhand"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:text="Morning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_weight=".5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
                 <TextView
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:text="District : "
-                    style="@style/style_tv_dri_att" />
+                    android:text="Status : "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/tv_evr_district_name"
+                    android:id="@+id/tv_status_status"
                     android:textColor="@color/colorPrimaryDark"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
-                    android:text="Ranchi Buland"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:textStyle="bold"
+                    android:text="signon"
+                    android:textAllCaps="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
         </LinearLayout>
 <android.support.v7.widget.CardView
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
+    android:layout_margin="8dp"
     app:cardCornerRadius="4dp"
     android:elevation="22dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
         <LinearLayout
+
             android:paddingStart="8dp"
             android:background="@color/colorPrimary"
             android:orientation="horizontal"
@@ -85,16 +94,16 @@
 
                 <TextView
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:text="Police Station : "
+                    android:textSize="18sp"
+                    android:text="Driver Name : "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/tv_evr_police_station_name"
+                    android:id="@+id/tv_status_driver_name"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:text="Maulana Azad Colony"
+                    android:textSize="22sp"
+                    android:text="Pappu Pandey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -108,82 +117,71 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
-
-                android:gravity="start"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".8">
-                <TextView
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:text="1st Driver :"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:text="2nd Driver :"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:text="3rd Driver :"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+                android:layout_weight="1.5"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
             <LinearLayout
-                android:gravity="start"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1.5">
-
                 <TextView
-                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:text="Police Station :"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_marginStart="8dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="14sp"
-                    android:id="@+id/tv_evr_first_driver"
-                    android:text="First Driver"
+                    android:id="@+id/tv_status_police_station_name"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:text="Pune police station"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-
-                <TextView
-                    android:id="@+id/tv_evr_second_driver"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:text="Second Driver"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/tv_evr_third_driver"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp"
-                    android:text="Third Driver"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
-                android:gravity="center"
-                android:layout_weight="1.2"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5">
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:text="Working hours :"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14sp"
+                    android:id="@+id/tv_status_work_hr"
+                    android:textStyle="bold"
+                    android:text="12 hr : 00 min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center_horizontal"
+                android:layout_weight=".8"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <android.support.v7.widget.CardView
                     android:id="@+id/cv_container_dri_att_det"
                     android:elevation="20dp"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    app:cardCornerRadius="45dp">
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="50dp">
                     <LinearLayout
                         android:background="@color/colorPrimary"
                         android:gravity="center"
@@ -194,19 +192,20 @@
                             android:gravity="center"
                             android:layout_marginTop="8dp"
                             android:textColor="@color/white"
-                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:textSize="12sp"
                             android:id="@+id/tv_workHrs_lbl"
-                            android:text="@string/vehicle_number"
+                            android:text="ERV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:ignore="SmallSp" />
                         <TextView
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"
                             android:gravity="center_horizontal"
-                            android:id="@+id/tv_evr_vehicle_number"
+                            android:id="@+id/tv_status_erv_number"
                             android:text="JH 01 TS 0001"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>

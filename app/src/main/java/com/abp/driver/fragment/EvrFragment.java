@@ -37,105 +37,105 @@ import retrofit2.Response;
 
 public class EvrFragment extends Fragment {
 
-    @BindView(R.id.rv_evr)
-    protected RecyclerView mRecyclerView;
-    @BindView(R.id.tv_no_data)
-    protected TextView mNoDataText;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private String mDistrictId;
-    private String dateCreated;
-    private DashboardActivity mActivity;
-    private SharedPreference mSharePref;
-    private Context mContext;
-    private String mStateId;
-    private List<ModelEvrList> mList;
-    private FragmentManager mFragmentManager;
+//    @BindView(R.id.rv_evr)
+//    protected RecyclerView mRecyclerView;
+//    @BindView(R.id.tv_no_data)
+//    protected TextView mNoDataText;
+//    private RecyclerView.LayoutManager mLayoutManager;
+//    private String mDistrictId;
+//    private String dateCreated;
+//    private DashboardActivity mActivity;
+//    private SharedPreference mSharePref;
+//    private Context mContext;
+//    private String mStateId;
+//    private List<ModelEvrList> mList;
+//    private FragmentManager mFragmentManager;
 
 
-    public static EvrFragment newInstance(String districtId, String dateCreated, String stateId) {
-        EvrFragment fragment = new EvrFragment();
-        fragment.mDistrictId = districtId;
-        fragment.dateCreated = dateCreated;
-        fragment.mStateId = stateId;
-        return fragment;
-    }
+//    public static EvrFragment newInstance(String districtId, String dateCreated, String stateId) {
+//        EvrFragment fragment = new EvrFragment();
+//        fragment.mDistrictId = districtId;
+//        fragment.dateCreated = dateCreated;
+//        fragment.mStateId = stateId;
+//        return fragment;
+//    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_erv, container, false);
+        View view = inflater.inflate(R.layout.fragment_status_final, container, false);
 
-       ButterKnife.bind(this, view);
-       mContext = getContext();
-       mFragmentManager = getFragmentManager();
-        init();
+//       ButterKnife.bind(this, view);
+//       mContext = getContext();
+//       mFragmentManager = getFragmentManager();
+//        init();
         return view;
     }
 
-    private void callApi() {
-        String strApiKey = Constant.API_KEY;
-        String strStateId = mStateId;
-        String strDistrictId = mDistrictId;
-        String strDateCreated = dateCreated;
-        Api api = ApiClients.getApiClients().create(Api.class);
-        Call<ModelEvr> call = api.ervDetail(strApiKey, strStateId, strDistrictId, strDateCreated);
-        call.enqueue(new Callback<ModelEvr>() {
-            @Override
-            public void onResponse(Call<ModelEvr> call, Response<ModelEvr> response) {
-                ModelEvr modelEvr = response.body();
-                if (modelEvr.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                    ModelEvrList.deleteAll(ModelEvrList.class);
-                    for (ModelEvrList modelEvrList : modelEvr.getData()) {
-                        modelEvrList.save();
-                    }
-                    callRecyclerView();
-                } else {
-                    callRecyclerView();
-                }
-            }
-            @Override
-            public void onFailure(Call<ModelEvr> call, Throwable t) {
-                callRecyclerView();
-                Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void callApi() {
+//        String strApiKey = Constant.API_KEY;
+//        String strStateId = mStateId;
+//        String strDistrictId = mDistrictId;
+//        String strDateCreated = dateCreated;
+//        Api api = ApiClients.getApiClients().create(Api.class);
+//        Call<ModelEvr> call = api.ervDetail(strApiKey, strStateId, strDistrictId, strDateCreated);
+//        call.enqueue(new Callback<ModelEvr>() {
+//            @Override
+//            public void onResponse(Call<ModelEvr> call, Response<ModelEvr> response) {
+//                ModelEvr modelEvr = response.body();
+//                if (modelEvr.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+//                    ModelEvrList.deleteAll(ModelEvrList.class);
+//                    for (ModelEvrList modelEvrList : modelEvr.getData()) {
+//                        modelEvrList.save();
+//                    }
+//                    callRecyclerView();
+//                } else {
+//                    callRecyclerView();
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<ModelEvr> call, Throwable t) {
+//                callRecyclerView();
+//                Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
-    private void init() {
-        mActivity = (DashboardActivity) getActivity();
-        if (mActivity != null) {
-            mActivity.setToolbarTitle("ERV");
-        }
-        mSharePref = new SharedPreference(getContext());
-        mList = ModelEvrList.listAll(ModelEvrList.class);
-        if (mList.size() > 0) {
-            callRecyclerView();
-            callApi();
-        } else {
-            mNoDataText.setVisibility(View.VISIBLE);
-            if (mActivity.isNetworkAvailable()) {
-                callApi();
-            } else {
-                Toast.makeText(getContext(),"No internet available",Toast.LENGTH_SHORT).show();
-            }
-        }
+//    private void init() {
+//        mActivity = (DashboardActivity) getActivity();
+//        if (mActivity != null) {
+//            mActivity.setToolbarTitle("ERV");
+//        }
+//        mSharePref = new SharedPreference(getContext());
+//        mList = ModelEvrList.listAll(ModelEvrList.class);
+//        if (mList.size() > 0) {
+//            callRecyclerView();
+//            callApi();
+//        } else {
+//            mNoDataText.setVisibility(View.VISIBLE);
+//            if (mActivity.isNetworkAvailable()) {
+//                callApi();
+//            } else {
+//                Toast.makeText(getContext(),"No internet available",Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//    }
 
-    }
-
-    private void callRecyclerView(){
-        mList = ModelEvrList.listAll(ModelEvrList.class);
-        if (mList.size() > 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mNoDataText.setVisibility(View.GONE);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            ErvAdapter evrAapter = new ErvAdapter(mContext, mFragmentManager, mList);
-            mRecyclerView.setAdapter(evrAapter);
-        } else {
-            mRecyclerView.setVisibility(View.GONE);
-            mNoDataText.setVisibility(View.VISIBLE);
-        }
-    }
+//    private void callRecyclerView(){
+//        mList = ModelEvrList.listAll(ModelEvrList.class);
+//        if (mList.size() > 0) {
+//            mRecyclerView.setVisibility(View.VISIBLE);
+//            mNoDataText.setVisibility(View.GONE);
+//            mLayoutManager = new LinearLayoutManager(getActivity());
+//            mRecyclerView.setLayoutManager(mLayoutManager);
+//            ErvAdapter evrAapter = new ErvAdapter(mContext, mFragmentManager, mList);
+//            mRecyclerView.setAdapter(evrAapter);
+//        } else {
+//            mRecyclerView.setVisibility(View.GONE);
+//            mNoDataText.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     @Override
     public void onResume() {

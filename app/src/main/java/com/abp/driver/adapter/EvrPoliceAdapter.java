@@ -43,16 +43,16 @@ public class EvrPoliceAdapter extends RecyclerView.Adapter<EvrPoliceAdapter.EvrP
     @Override
     public void onBindViewHolder(@NonNull final EvrPoliceHolder evrPoliceHolder, final int i) {
 
-        String policeStationName = modelPoliceLists.get(i).getPolicestationname();
-        evrPoliceHolder.tv_policeList.setText(policeStationName);
-
-        CustomLog.d("PoliceList", policeStationName);
-        evrPoliceHolder.ll_policeList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, EvrFragment.newInstance(modelPoliceLists.get(i).getDistrictId(),modelPoliceLists.get(i).getPoliceId(),modelPoliceLists.get(i).getStateId())).addToBackStack(null).commit();
-            }
-        });
+//        String policeStationName = modelPoliceLists.get(i).getPolicestationname();
+//        evrPoliceHolder.tv_policeList.setText(policeStationName);
+//
+//        CustomLog.d("PoliceList", policeStationName);
+//        evrPoliceHolder.ll_policeList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mFragmentManager.beginTransaction().replace(R.id.container_main, EvrFragment.newInstance(modelPoliceLists.get(i).getDistrictId(),modelPoliceLists.get(i).getPoliceId(),modelPoliceLists.get(i).getStateId())).addToBackStack(null).commit();
+//            }
+//        });
     }
 
     @Override

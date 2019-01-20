@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.abp.driver.R;
 import com.abp.driver.fragment.ErvFinalFragment;
+import com.abp.driver.fragment.StatusFinalFragment;
 import com.abp.driver.model.date.ModelDateList;
 
 import java.util.List;
@@ -19,13 +20,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EvrDateAdapter extends RecyclerView.Adapter<EvrDateAdapter.DateViewHolder>  {
+public class ErvDateAdapter extends RecyclerView.Adapter<ErvDateAdapter.DateViewHolder>  {
 
    private List<ModelDateList> modelDateLists;
    private Context mContext;
    private FragmentManager mFragmentManager;
 
-    public EvrDateAdapter(List<ModelDateList> modelDateLists, Context mContext, FragmentManager mFragmentManager) {
+    public ErvDateAdapter(List<ModelDateList> modelDateLists, Context mContext, FragmentManager mFragmentManager) {
         this.modelDateLists = modelDateLists;
         this.mContext = mContext;
         this.mFragmentManager = mFragmentManager;
@@ -34,7 +35,6 @@ public class EvrDateAdapter extends RecyclerView.Adapter<EvrDateAdapter.DateView
     @NonNull
     @Override
     public DateViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_erv_date_item, viewGroup, false);
         return new DateViewHolder(view);
     }
@@ -45,7 +45,7 @@ public class EvrDateAdapter extends RecyclerView.Adapter<EvrDateAdapter.DateView
         dateViewHolder.linearLayoutDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.container_main, ErvFinalFragment.newInstance(modelDateLists.get(i).getDistrictid(),modelDateLists.get(i).getCreateDate(),modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
+                mFragmentManager.beginTransaction().replace(R.id.container_main, StatusFinalFragment.newInstance(modelDateLists.get(i).getDistrictid(),modelDateLists.get(i).getCreateDate(),modelDateLists.get(i).getStateid())).addToBackStack(null).commit();
             }
         });
     }

@@ -87,7 +87,6 @@ public class ErvFinalFragment extends Fragment {
                 if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
                     ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                     for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
-
                         modelErvFinalList.save();
                     }
 

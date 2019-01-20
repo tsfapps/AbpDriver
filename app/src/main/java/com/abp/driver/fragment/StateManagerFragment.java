@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.utils.SharedPreference;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +24,8 @@ public class StateManagerFragment extends Fragment {
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
     private Unbinder unbinder;
+    private SharedPreference mSharePref;
+
 
     @Nullable
     @Override
@@ -47,12 +50,12 @@ public class StateManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_sm_status)
     public void llSmStatusClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StatusDistrictListFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ErvDistrictListFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_evr)
     public void llSmEvrClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new EvrDistrictListFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ErvDistrictListFragment()).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_profile)

@@ -40,20 +40,20 @@ public class ErvAdapter extends RecyclerView.Adapter<ErvAdapter.EvrViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull EvrViewHolder evrViewHolder, int i) {
-        String strStateName = mList.get(i).getStateName();
-        String strDistrictName = mList.get(i).getDistrictName();
-        String strPoliceStationName = mList.get(i).getPolicestationname();
-        String strVehicleNumber = mList.get(i).getVehicleNumber();
-        String driverOne = mList.get(i).getDriver1Name();
-        String driverTwo = mList.get(i).getDriver2Name();
-        String druverThree = (String) mList.get(i).getDriver3Name();
-        evrViewHolder.evrStateName.setText(strStateName);
-        evrViewHolder.evrDistrictName.setText(strDistrictName);
-        evrViewHolder.evrPoliceStationName.setText(strPoliceStationName);
-        evrViewHolder.evrVehicleNumber.setText(strVehicleNumber);
-        evrViewHolder.firstDriver.setText(driverOne);
-        evrViewHolder.secondDriver.setText(driverTwo);
-        evrViewHolder.thirdDriver.setText(druverThree);
+//        String strStateName = mList.get(i).getStateName();
+//        String strDistrictName = mList.get(i).getDistrictName();
+//        String strPoliceStationName = mList.get(i).getPolicestationname();
+//        String strVehicleNumber = mList.get(i).getVehicleNumber();
+//        String driverOne = mList.get(i).getDriver1Name();
+//        String driverTwo = mList.get(i).getDriver2Name();
+//        String druverThree = (String) mList.get(i).getDriver3Name();
+//        evrViewHolder.evrStateName.setText(strStateName);
+//        evrViewHolder.evrDistrictName.setText(strDistrictName);
+//        evrViewHolder.evrPoliceStationName.setText(strPoliceStationName);
+//        evrViewHolder.evrVehicleNumber.setText(strVehicleNumber);
+//        evrViewHolder.firstDriver.setText(driverOne);
+//        evrViewHolder.secondDriver.setText(driverTwo);
+//        evrViewHolder.thirdDriver.setText(druverThree);
 
     }
 
@@ -64,20 +64,20 @@ public class ErvAdapter extends RecyclerView.Adapter<ErvAdapter.EvrViewHolder> {
 
     public class EvrViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.tv_evr_state_name)
-        TextView evrStateName;
-        @BindView(R.id.tv_evr_district_name)
-        TextView evrDistrictName;
-        @BindView(R.id.tv_evr_police_station_name)
-        TextView evrPoliceStationName;
-        @BindView(R.id.tv_evr_vehicle_number)
-        TextView evrVehicleNumber;
-        @BindView(R.id.tv_evr_first_driver)
-        TextView firstDriver;
-        @BindView(R.id.tv_evr_second_driver)
-        TextView secondDriver;
-        @BindView(R.id.tv_evr_third_driver)
-        TextView thirdDriver;
+//        @BindView(R.id.tv_evr_state_name)
+//        TextView evrStateName;
+//        @BindView(R.id.tv_evr_district_name)
+//        TextView evrDistrictName;
+//        @BindView(R.id.tv_evr_police_station_name)
+//        TextView evrPoliceStationName;
+//        @BindView(R.id.tv_evr_vehicle_number)
+//        TextView evrVehicleNumber;
+//        @BindView(R.id.tv_evr_first_driver)
+//        TextView firstDriver;
+//        @BindView(R.id.tv_evr_second_driver)
+//        TextView secondDriver;
+//        @BindView(R.id.tv_evr_third_driver)
+//        TextView thirdDriver;
         public EvrViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
