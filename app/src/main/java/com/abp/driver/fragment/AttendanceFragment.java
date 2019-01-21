@@ -1,5 +1,6 @@
 package com.abp.driver.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
@@ -150,12 +151,13 @@ public class AttendanceFragment extends Fragment {
             init();
         }
 
-        if (!mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)){
-            mTvPassCode.setVisibility(View.GONE);
-            mIvCopy.setVisibility(View.GONE);
+        if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)){
+            mTvPassCode.setVisibility(View.VISIBLE);
+            mIvCopy.setVisibility(View.VISIBLE);
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         CustomLog.d(TAG,"init called");
         attendanceServerData = DriverAttendanceList.listAll(DriverAttendanceList.class);
