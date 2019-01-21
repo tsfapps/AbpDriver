@@ -108,10 +108,9 @@ public class DateListFragment extends Fragment {
             call.enqueue(new Callback<ModelDate>() {
                 @Override
                 public void onResponse(Call<ModelDate> call, Response<ModelDate> response) {
-                  //  startHandler();
                     ModelDate modelDate = response.body();
                     assert modelDate != null;
-                    if (modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                    if (modelDate.getSTATUS() != null && modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
                         ModelDateList.deleteAll(ModelDateList.class);
                         for (ModelDateList modelDateList : modelDate.getData()){
                             modelDateList.save();

@@ -100,8 +100,10 @@ public class DashboardActivity extends AppCompatActivity
         if (mLoginList.size() > 0) {
             startDashboardFragment(mLoginList.get(0).getLogintype());
         } else {
-            String userType = getIntent().getExtras().getString("login_type");
-            startDashboardFragment(userType);
+            if (getIntent().getExtras() != null) {
+                String userType = getIntent().getExtras().getString("login_type");
+                startDashboardFragment(userType);
+            }
         }
     }
 

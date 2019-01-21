@@ -110,7 +110,7 @@ public class DistrictListFragment extends Fragment {
                 public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
                     ModelDistrict modelDistrict = response.body();
                     assert modelDistrict != null;
-                    if (modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
+                    if (modelDistrict.getSTATUS() != null && modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mNoDataText.setVisibility(View.VISIBLE);
                         ModelDistrictList.deleteAll(ModelDistrictList.class);

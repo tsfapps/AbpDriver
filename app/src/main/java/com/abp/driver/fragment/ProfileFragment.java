@@ -30,7 +30,7 @@ public class ProfileFragment extends Fragment {
 
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
-    private List<ModelLoginList> loginLists = ModelLoginList.listAll(ModelLoginList.class);
+    private List<ModelLoginList> loginLists = null;
     @BindView(R.id.tv_driver_ervNumber)
     protected TextView tv_ervNumber;
     @BindView(R.id.tv_profile_name)
@@ -54,7 +54,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
-        profileInfo();
         init();
         return view;
     }
@@ -73,7 +72,12 @@ public class ProfileFragment extends Fragment {
         } else if (userType.equals(Constant.LOGIN_TYPE_DISTRICT_MANAGER)) {
             userType = Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER;
         }
-        tv_ervNumber.setText(ervNumber);
+        if (userType.equals(Constant.LOGIN_SPINNER_TYPE_STATE_MANAGER) || userType.equals(Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER)){
+            tv_ervNumber.setVisibility(View.GONE);
+        } else {
+            tv_ervNumber.setVisibility(View.VISIBLE);
+            tv_ervNumber.setText("ERV Number : "+ervNumber);
+        }
         tv_name.setText(name);
         tv_email.setText(email);
         tv_phone.setText(phone);
@@ -88,6 +92,10 @@ public class ProfileFragment extends Fragment {
         if (mActivity != null) {
             mActivity.setToolbarTitle("Profile");
             mFragmentManager = mActivity.getSupportFragmentManager();
+        }
+        loginLists = ModelLoginList.listAll(ModelLoginList.class);
+        if (loginLists.size() > 0) {
+            profileInfo();
         }
     }
     @Override

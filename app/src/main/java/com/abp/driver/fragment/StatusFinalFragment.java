@@ -120,7 +120,7 @@ public class StatusFinalFragment extends Fragment {
                     ModelStatus modelStatus = response.body();
                     CustomLog.d("tsfapps", "Responding");
                     assert modelStatus != null;
-                    if (modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                    if (modelStatus.getSTATUS() != null &&  modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
                         ModelStatusList.deleteAll(ModelStatusList.class);
                         for (ModelStatusList modelStatusList : modelStatus.getData()){
                             modelStatusList.save();

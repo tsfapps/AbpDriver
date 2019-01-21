@@ -91,7 +91,7 @@ public class ErvFinalFragment extends Fragment {
                 public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
                     ModelErvFinal modelErvFinal = response.body();
                     assert modelErvFinal != null;
-                    if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                    if (modelErvFinal.getSTATUS() != null && modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
                         CustomLog.d("danny","evr onResponse called.. status 200");
                         ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                         for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){

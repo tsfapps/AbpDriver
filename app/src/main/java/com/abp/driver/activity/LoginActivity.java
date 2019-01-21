@@ -23,6 +23,7 @@ import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -71,16 +72,10 @@ public class LoginActivity extends AppCompatActivity{
         String password = pass;
         String mType = null;
         if (type.equals(Constant.LOGIN_TYPE_DRIVER)) {
-            //username = "1234567890";
-            //password = "test@123";
             mType = Constant.LOGIN_TYPE_DRIVER;
         } else if (type.equals(Constant.LOGIN_SPINNER_TYPE_STATE_MANAGER)) {
-            //username = "9005103632";
-            //password = "MKS12322";
             mType = "statemanager";
         } else if (type.equals(Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER)) {
-           // username = "9005103645";
-            //password = "MKS123";
             mType = "districtmanager";
         }
 
@@ -88,11 +83,18 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void startDashboardAcivity(String type) {
-        Intent intent =  new Intent(this,DashboardActivity.class);
-        intent.putExtra("login_type",type);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        List<ModelLoginList> mList = ModelLoginList.listAll(ModelLoginList.class);
+        if (mList.size() > 0) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.putExtra("login_type", type);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        } else {
+            ModelLoginList.deleteAll(ModelLoginList.class);
+            mSharedPreference.clearAllData();
+            Toast.makeText(getApplicationContext(),"Error occur please retry !",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startApiHandler(final String type) {
