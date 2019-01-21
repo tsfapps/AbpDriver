@@ -52,6 +52,7 @@ public class DateListFragment extends Fragment {
     private List<ModelDateList> modelDateLists;
     private String mDistrictId = null;
     private String mCheck;
+    private DashboardActivity mActivity;
 
     public static DateListFragment newInstance(String districtId, String mCheck) {
         DateListFragment fragment = new DateListFragment();
@@ -97,6 +98,7 @@ public class DateListFragment extends Fragment {
 
     private void apiCall() {
         try {
+            mActivity.uiThreadHandler.sendEmptyMessage(Constant.SHOW_PROGRESS_DIALOG);
             SharedPreference mSharedPreference = new SharedPreference(mContext);
             String strApiKey = Constant.API_KEY;
             String strStateId = mSharedPreference.getUserStateId();
@@ -119,10 +121,12 @@ public class DateListFragment extends Fragment {
                         mTvNoDate.setVisibility(View.VISIBLE);
                         rv_date.setVisibility(View.GONE);
                     }
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
                 @Override
                 public void onFailure(Call<ModelDate> call, Throwable t) {
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     mTvNoDate.setVisibility(View.VISIBLE);
                     rv_date.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"server error occur !",Toast.LENGTH_SHORT).show();
@@ -136,8 +140,8 @@ public class DateListFragment extends Fragment {
     }
 
     private void init() {
-        startHandler();
-        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        //startHandler();
+        mActivity = (DashboardActivity)getActivity();
         if (mActivity !=null){
             mActivity.setToolbarTitle("Date List");
         }

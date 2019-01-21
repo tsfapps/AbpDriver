@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -57,6 +58,7 @@ public class DashboardActivity extends AppCompatActivity
     private SharedPreference mSharedPreference;
     private ProgressDialog mDialog;
     private boolean isDataSyncStarted = false;
+    public UIThreadHandler uiThreadHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     private void init() {
+        uiThreadHandler = new UIThreadHandler();
         mLoginList = ModelLoginList.listAll(ModelLoginList.class);
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView tv_header_name = navigationView.getHeaderView(0).findViewById(R.id.tv_header_user_name);
@@ -126,7 +129,7 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-       onBackPressedCalled();
+        onBackPressedCalled();
 
     }
 
@@ -145,7 +148,7 @@ public class DashboardActivity extends AppCompatActivity
             fm.popBackStack();
         }
         else {
-           finish();
+            finish();
         }
     }
 
@@ -158,7 +161,7 @@ public class DashboardActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_attendance) {
-          getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_profile) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ProfileFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_share) {
@@ -221,7 +224,7 @@ public class DashboardActivity extends AppCompatActivity
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               userLogoutCall();
+                userLogoutCall();
             }
         }, 3000);
     }
@@ -282,4 +285,34 @@ public class DashboardActivity extends AppCompatActivity
         }
         return condition;
     }
+
+    public class UIThreadHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Constant.SHOW_PROGRESS_DIALOG:
+                    CustomLog.d("danny","SHOW_PROGRESS_DIALOG");
+                    showProgressDailog();
+                    break;
+                case Constant.HIDE_PROGRESS_DIALOG:
+                    CustomLog.d("danny","HIDE_PROGRESS_DIALOG");
+                    hideProgressDailog();
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
+    private void hideProgressDailog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    private void showProgressDailog() {
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage("Fetching data from server....");
+        mDialog.show();
+    }
+
 }

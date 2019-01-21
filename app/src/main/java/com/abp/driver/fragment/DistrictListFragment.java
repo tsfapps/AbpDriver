@@ -51,6 +51,7 @@ public class DistrictListFragment extends Fragment {
 
     private String strCheck;
     private String mStateId;
+    private DashboardActivity mActivity;
 
     public static DistrictListFragment newInstance(String mStateId, String strCheck) {
         DistrictListFragment fragment = new DistrictListFragment();
@@ -66,18 +67,18 @@ public class DistrictListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        DashboardActivity mActivity = (DashboardActivity)getActivity();
+        mActivity = (DashboardActivity)getActivity();
         modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
 
-        startHandler();
+        //startHandler();
         if (modelDistrictLists.size() > 0) {
             callRecyclerView();
             if (mActivity.isNetworkAvailable()) {
-                apiCall();
+                apiCall(false);
             }
         } else {
             if (mActivity.isNetworkAvailable()) {
-                apiCall();
+                apiCall(true);
             } else {
                 Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
             }
@@ -95,8 +96,10 @@ public class DistrictListFragment extends Fragment {
         }, 1000);
     }
 
-    private void apiCall() {
+    private void apiCall(boolean show) {
         try {
+            if (show)
+            mActivity.uiThreadHandler.sendEmptyMessage(Constant.SHOW_PROGRESS_DIALOG);
             mSharedPreference = new SharedPreference(mContext);
             String strApiKey = Constant.API_KEY;
             String strStateId = mStateId;
@@ -119,10 +122,12 @@ public class DistrictListFragment extends Fragment {
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataText.setVisibility(View.VISIBLE);
                     }
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
                 @Override
                 public void onFailure(Call<ModelDistrict> call, Throwable t) {
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
                     callRecyclerView();
                 }

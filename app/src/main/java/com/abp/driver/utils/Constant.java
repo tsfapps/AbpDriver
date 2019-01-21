@@ -36,4 +36,7 @@ public class Constant {
     public static final String HOUR_SUFFIX = " hr ";
     public static final String MINUTE_SUFFIX = " min ";
     public static final String SECOND_SUFFIX = " sec ";
+    public static final int SHOW_PROGRESS_DIALOG = 1001;
+    public static final int HIDE_PROGRESS_DIALOG = 1002;
+    public static final long HIDE_PROGRESS_DIALOG_DELAY = 500;
 }
