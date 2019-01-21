@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
     private void profileInfo(){
-        String ervNumber = loginLists.get(0).getUserName();
+        String ervNumber = loginLists.get(0).getErvNo();
         String name = loginLists.get(0).getName();
         String email = loginLists.get(0).getEmail();
         String phone = loginLists.get(0).getPhoneno();
