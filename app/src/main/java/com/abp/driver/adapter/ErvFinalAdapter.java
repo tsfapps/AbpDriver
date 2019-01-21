@@ -39,20 +39,20 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
 
     @Override
     public void onBindViewHolder(@NonNull ErvFinalHolder ervFinalHolder, int i) {
-        String firstDriver = modelErvFinalLists.get(i).getDriver1();
+//        String firstDriver = modelErvFinalLists.get(i).getDriver1();
         String firstDriverStatus = modelErvFinalLists.get(i).getDriverstatus1();
-        String secDriver = modelErvFinalLists.get(i).getDriver2();
+//        String secDriver = modelErvFinalLists.get(i).getDriver2();
         String secDriverStatus = modelErvFinalLists.get(i).getDriverstatus2();
-        String thirdDriver = modelErvFinalLists.get(i).getDriver3();
+//        String thirdDriver = modelErvFinalLists.get(i).getDriver3();
         String thirdDriverStatus = modelErvFinalLists.get(i).getDriverstatus3();
         String vehicleNumber = modelErvFinalLists.get(i).getRegistrationNo();
 
-        ervFinalHolder.tvFirstDriver.setText(firstDriver);
-        ervFinalHolder.tvFirstDriverStatus.setText(firstDriverStatus);
-        ervFinalHolder.tvSecDriver.setText(secDriver);
-        ervFinalHolder.tvSecDriverStatus.setText(secDriverStatus);
-        ervFinalHolder.tvThirdDriver.setText(thirdDriver);
-        ervFinalHolder.tvThirdDriverStatus.setText(thirdDriverStatus);
+//        ervFinalHolder.tvFirstDriver.setText(firstDriver);
+//        ervFinalHolder.tvFirstDriverStatus.setText(firstDriverStatus);
+//        ervFinalHolder.tvSecDriver.setText(secDriver);
+//        ervFinalHolder.tvSecDriverStatus.setText(secDriverStatus);
+//        ervFinalHolder.tvThirdDriver.setText(thirdDriver);
+//        ervFinalHolder.tvThirdDriverStatus.setText(thirdDriverStatus);
         ervFinalHolder.tvVehicleNumber.setText(vehicleNumber);
 
         if (firstDriverStatus.equals("delay")){

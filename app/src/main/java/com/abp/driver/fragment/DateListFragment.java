@@ -74,7 +74,7 @@ public class DateListFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                pbDate.setVisibility(View.VISIBLE);
+                pbDate.setVisibility(View.GONE);
             }
         }, 1000);
     }
@@ -136,6 +136,7 @@ public class DateListFragment extends Fragment {
     }
 
     private void init() {
+        startHandler();
         DashboardActivity mActivity = (DashboardActivity)getActivity();
         if (mActivity !=null){
             mActivity.setToolbarTitle("Date List");

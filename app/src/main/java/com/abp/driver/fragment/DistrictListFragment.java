@@ -2,6 +2,7 @@ package com.abp.driver.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,8 @@ public class DistrictListFragment extends Fragment {
     protected RecyclerView mRecyclerView;
     @BindView(R.id.tv_no_data)
     protected TextView mNoDataText;
+    @BindView(R.id.pbDistrict)
+    protected ProgressBar pbDistrict;
     private Context mContext;
     private FragmentManager mFragmentManager;
     private SharedPreference mSharedPreference;
@@ -65,6 +69,7 @@ public class DistrictListFragment extends Fragment {
         DashboardActivity mActivity = (DashboardActivity)getActivity();
         modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
 
+        startHandler();
         if (modelDistrictLists.size() > 0) {
             callRecyclerView();
             if (mActivity.isNetworkAvailable()) {
@@ -79,6 +84,15 @@ public class DistrictListFragment extends Fragment {
         }
         init();
         return view;
+    }
+    private void startHandler() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pbDistrict.setVisibility(View.GONE);
+            }
+        }, 1000);
     }
 
     private void apiCall() {

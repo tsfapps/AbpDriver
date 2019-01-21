@@ -2,6 +2,7 @@ package com.abp.driver.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,8 @@ public class ErvFinalFragment extends Fragment {
     protected RecyclerView mRecyclerView;
     @BindView(R.id.tv_no_data_erv_final)
     protected TextView mNoDataText;
+    @BindView(R.id.pbErv)
+    protected ProgressBar pbErv;
     private RecyclerView.LayoutManager mLayoutManager;
     private String mDistrictId;
     private String mDate;
@@ -110,8 +114,18 @@ public class ErvFinalFragment extends Fragment {
         });
 
     }
+    private void startHandler() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pbErv.setVisibility(View.GONE);
+            }
+        }, 1000);
+    }
 
     private void init() {
+        startHandler();
         CustomLog.d("danny","evr init called..");
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {

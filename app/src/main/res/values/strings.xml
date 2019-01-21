@@ -27,6 +27,7 @@
     <string name="date_created">Date Created</string>
     <string name="no_data_available">No data available</string>
     <string name="veh_num_dummy">JH 01 TS\n0001</string>
+    <string name="pass_code_not_gen">Pass code not generated yet !</string>
     <string-array name="spinner_login">
         <item>Select Type</item>
         <item>Driver</item>

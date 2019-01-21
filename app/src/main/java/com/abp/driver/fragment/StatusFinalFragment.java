@@ -1,6 +1,7 @@
 package com.abp.driver.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class StatusFinalFragment extends Fragment {
     RecyclerView mRecyclerView;
     @BindView(R.id.tv_no_data_status)
     protected TextView mNoDataStatus;
+    @BindView(R.id.pbStatus)
+    protected ProgressBar pbStatus;
     private String mStateId;
     private String mDistrictId;
     private String mDate;
@@ -60,6 +64,15 @@ public class StatusFinalFragment extends Fragment {
         init();
         return view;
     }
+    private void startHandler() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pbStatus.setVisibility(View.GONE);
+            }
+        }, 1000);
+    }
 
    public void callRecyclerView(){
         mList = ModelStatusList.listAll(ModelStatusList.class);
@@ -77,6 +90,7 @@ public class StatusFinalFragment extends Fragment {
     }
 
     private void init() {
+        startHandler();
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("Status");
