@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity{
                 public void onResponse(Call<ModelLogin> call, Response<ModelLogin> response) {
                     ModelLogin modelLogin = response.body();
                     CustomLog.d("danny","LoginActivity onResponse..."+ modelLogin.getData());
-                    if (modelLogin.getStatus().equals(Constant.SUCCESS_CODE)){
+                    if (modelLogin.getSTATUS().equals(Constant.SUCCESS_CODE)){
                         ModelLoginList.deleteAll(ModelLoginList.class);
                         for (ModelLoginList modelLoginList : modelLogin.getData()){
                             modelLoginList.save();

@@ -9,6 +9,18 @@ public class ModelLoginList extends SugarRecord {
     @SerializedName("logintype")
     @Expose
     private String logintype;
+    @SerializedName("evr_id")
+    @Expose
+    private String evrId;
+    @SerializedName("erv_no")
+    @Expose
+    private String ervNo;
+    @SerializedName("state_id")
+    @Expose
+    private String stateId;
+    @SerializedName("district_id")
+    @Expose
+    private String districtId;
     @SerializedName("name")
     @Expose
     private String name;
@@ -33,21 +45,12 @@ public class ModelLoginList extends SugarRecord {
     @SerializedName("create_date")
     @Expose
     private String createDate;
-    @SerializedName("profile_pic")
-    @Expose
-    private String profilePic;
-    @SerializedName("state_id")
-    @Expose
-    private String stateId;
-    @SerializedName("district_id")
-    @Expose
-    private String districtId;
-    @SerializedName("evr_id")
-    @Expose
-    private String evrId;
     @SerializedName("driver_shift")
     @Expose
     private String driverShift;
+    @SerializedName("profile_pic")
+    @Expose
+    private String profilePic;
 
     public String getLogintype() {
         return logintype;
@@ -55,6 +58,38 @@ public class ModelLoginList extends SugarRecord {
 
     public void setLogintype(String logintype) {
         this.logintype = logintype;
+    }
+
+    public String getEvrId() {
+        return evrId;
+    }
+
+    public void setEvrId(String evrId) {
+        this.evrId = evrId;
+    }
+
+    public String getErvNo() {
+        return ervNo;
+    }
+
+    public void setErvNo(String ervNo) {
+        this.ervNo = ervNo;
+    }
+
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
 
     public String getName() {
@@ -121,43 +156,19 @@ public class ModelLoginList extends SugarRecord {
         this.createDate = createDate;
     }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
-
-    public String getStateId() {
-        return stateId;
-    }
-
-    public void setStateId(String stateId) {
-        this.stateId = stateId;
-    }
-
-    public String getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId;
-    }
-
-    public String getEvrId() {
-        return evrId;
-    }
-
-    public void setEvrId(String evrId) {
-        this.evrId = evrId;
-    }
-
     public String getDriverShift() {
         return driverShift;
     }
 
     public void setDriverShift(String driverShift) {
         this.driverShift = driverShift;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 }

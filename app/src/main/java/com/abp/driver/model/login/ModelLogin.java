@@ -11,7 +11,7 @@ public class ModelLogin {
     private List<ModelLoginList> data = null;
     @SerializedName("STATUS")
     @Expose
-    private String status;
+    private String sTATUS;
 
     public List<ModelLoginList> getData() {
         return data;
@@ -21,11 +21,11 @@ public class ModelLogin {
         this.data = data;
     }
 
-    public String getStatus() {
-        return status;
+    public String getSTATUS() {
+        return sTATUS;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSTATUS(String sTATUS) {
+        this.sTATUS = sTATUS;
     }
 }

@@ -47,6 +47,12 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:textStyle="bold"
+            android:text="Erv Number"
+            android:id="@+id/tv_driver_ervNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     <android.support.v7.widget.CardView
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"

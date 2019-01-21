@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -29,7 +31,8 @@ public class ProfileFragment extends Fragment {
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
     private List<ModelLoginList> loginLists = ModelLoginList.listAll(ModelLoginList.class);
-
+    @BindView(R.id.tv_driver_ervNumber)
+    protected TextView tv_ervNumber;
     @BindView(R.id.tv_profile_name)
    protected TextView tv_name;
     @BindView(R.id.tv_profile_phone)
@@ -50,17 +53,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         ButterKnife.bind(this, view);
-
-
         profileInfo();
-
         init();
         return view;
     }
-
     private void profileInfo(){
+        String ervNumber = loginLists.get(0).getErvNo();
         String name = loginLists.get(0).getName();
         String email = loginLists.get(0).getEmail();
         String phone = loginLists.get(0).getPhoneno();
@@ -74,7 +73,8 @@ public class ProfileFragment extends Fragment {
         } else if (userType.equals(Constant.LOGIN_TYPE_DISTRICT_MANAGER)) {
             userType = Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER;
         }
-
+        Toast.makeText(getContext(), ervNumber, Toast.LENGTH_LONG).show();
+        tv_ervNumber.setText(ervNumber);
         tv_name.setText(name);
         tv_email.setText(email);
         tv_phone.setText(phone);
@@ -83,17 +83,13 @@ public class ProfileFragment extends Fragment {
         tv_username.setText(userName);
         tv_user_type.setText(userType);
         Glide.with(this).load(image).into(iv_image);
-
-
     }
-
     private void init() {
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("Profile");
             mFragmentManager = mActivity.getSupportFragmentManager();
         }
-
     }
     @Override
     public void onResume() {
