@@ -443,6 +443,7 @@ public class AttendanceFragment extends Fragment {
                 public void onResponse(Call<ModelPunchInOut> call, Response<ModelPunchInOut> response) {
                     ModelPunchInOut modelPunchInOut = response.body();
                     try {
+                        assert modelPunchInOut != null;
                         if (modelPunchInOut.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                             CustomLog.d(TAG, "callPunchInOutApi response success.");
                             mTimeIn = finalMCheckInDate;
