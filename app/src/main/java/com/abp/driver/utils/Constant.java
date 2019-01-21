@@ -18,6 +18,7 @@ public class Constant {
     public static final String LOGIN_TYPE_STATE_MANAGER = "statemanager";
     public static final String LOGIN_TYPE_DISTRICT_MANAGER = "districtmanager";
     public static final String USER_NAME = "user_name";
+    public static final String USER_ERV_NO = "erv_number";
     public static final String USER_PHONE = "user_phone";
     public static final String USER_PIC = "user_pic";
     public static final String USER_STATE_ID = "state_id";

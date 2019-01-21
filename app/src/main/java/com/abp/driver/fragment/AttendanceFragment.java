@@ -366,7 +366,7 @@ public class AttendanceFragment extends Fragment {
         final String mPhoneNo = mSharedPreference.getUserPhoneNo();
         final String mEvrId;
         if (mSharedPreference.getUserLoginType().equals(Constant.LOGIN_TYPE_DRIVER)) {
-            mEvrId = mSharedPreference.getUserEvrId();
+            mEvrId = mSharedPreference.getUserErvId();
         } else {
             mEvrId = "";
         }

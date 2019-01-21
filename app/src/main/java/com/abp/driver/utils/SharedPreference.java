@@ -25,12 +25,13 @@ public class SharedPreference {
         edt.remove(Constant.USER_DISTRICT_ID);
         edt.remove(Constant.USER_LOGIN_TYPE);
         edt.remove(Constant.USER_LOGIN_EVR_ID);
+        edt.remove(Constant.USER_ERV_NO);
         edt.commit();
         edt.clear();
     }
 
     public void setUserData(String userName, String userPhone, String userPic, String stateId, String districtId, String loginType,
-                            String evrId) {
+                            String evrId, String ervNo) {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
         edt = sp.edit();
         edt.putString(Constant.USER_NAME, userName);
@@ -40,6 +41,7 @@ public class SharedPreference {
         edt.putString(Constant.USER_DISTRICT_ID, districtId);
         edt.putString(Constant.USER_LOGIN_TYPE, loginType);
         edt.putString(Constant.USER_LOGIN_EVR_ID, evrId);
+        edt.putString(Constant.USER_ERV_NO, ervNo);
         edt.commit();
     }
 
@@ -72,9 +74,13 @@ public class SharedPreference {
         return sp.getString(Constant.USER_LOGIN_TYPE, Constant.EMPTY);
     }
 
-    public String getUserEvrId() {
+    public String getUserErvId() {
         android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
         return sp.getString(Constant.USER_LOGIN_EVR_ID, Constant.EMPTY);
+    }
+    public String getUserEvrNo() {
+        android.content.SharedPreferences sp = mContext.getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return sp.getString(Constant.USER_ERV_NO, Constant.EMPTY);
     }
 
 }

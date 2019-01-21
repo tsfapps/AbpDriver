@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
     private void profileInfo(){
-        String ervNumber = loginLists.get(0).getErvNo();
+        String ervNumber = loginLists.get(0).getUserName();
         String name = loginLists.get(0).getName();
         String email = loginLists.get(0).getEmail();
         String phone = loginLists.get(0).getPhoneno();
@@ -73,7 +73,6 @@ public class ProfileFragment extends Fragment {
         } else if (userType.equals(Constant.LOGIN_TYPE_DISTRICT_MANAGER)) {
             userType = Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER;
         }
-        Toast.makeText(getContext(), ervNumber, Toast.LENGTH_LONG).show();
         tv_ervNumber.setText(ervNumber);
         tv_name.setText(name);
         tv_email.setText(email);
