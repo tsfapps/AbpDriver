@@ -42,6 +42,7 @@ public class StatusFinalFragment extends Fragment {
     private String mDistrictId;
     private String mDate;
     List<ModelStatusList> mList;
+    private DashboardActivity mActivity;
 
     public static StatusFinalFragment newInstance( String mDistrictId, String mDate, String mStateId) {
         StatusFinalFragment fragment = new StatusFinalFragment();
@@ -56,27 +57,12 @@ public class StatusFinalFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status_final, container, false);
         ButterKnife.bind(this, view);
-        DashboardActivity mActivity = (DashboardActivity)getActivity();
-        //callRecyclerView();
-        mList =  ModelStatusList.listAll(ModelStatusList.class);
-        if (mList.size() > 0) {
-           // callRecyclerView();
-            if (mActivity.isNetworkAvailable()) {
-                callApi();
-            }
-        } else {
-            if (mActivity.isNetworkAvailable()) {
-                callApi();
-            } else {
-                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
-            }
-        }
         init();
         return view;
     }
+
    public void callRecyclerView(){
         mList = ModelStatusList.listAll(ModelStatusList.class);
-        CustomLog.d("tsfapps", String.valueOf(mList.size()));
        if (mList.size()>0) {
            mRecyclerView.setVisibility(View.VISIBLE);
            mNoDataStatus.setVisibility(View.GONE);
@@ -84,16 +70,23 @@ public class StatusFinalFragment extends Fragment {
            mRecyclerView.setLayoutManager(mLayoutManager);
            StatusFinalAdapter statusFinalAdapter = new StatusFinalAdapter(mList);
            mRecyclerView.setAdapter(statusFinalAdapter);
-       }
-       else {
+       } else {
            mRecyclerView.setVisibility(View.GONE);
            mNoDataStatus.setVisibility(View.VISIBLE);
        }
     }
+
     private void init() {
-        DashboardActivity mActivity = (DashboardActivity) getActivity();
+        mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("Status");
+        }
+        if (mActivity.isNetworkAvailable()) {
+            callApi();
+        } else {
+            mNoDataStatus.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -110,9 +103,8 @@ public class StatusFinalFragment extends Fragment {
             public void onResponse(Call<ModelStatus> call, Response<ModelStatus> response) {
                 ModelStatus modelStatus = response.body();
                 CustomLog.d("tsfapps", "Responding");
+                assert modelStatus != null;
                 if (modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mNoDataStatus.setVisibility(View.GONE);
                     ModelStatusList.deleteAll(ModelStatusList.class);
                     for (ModelStatusList modelStatusList : modelStatus.getData()){
                         modelStatusList.save();
@@ -127,8 +119,11 @@ public class StatusFinalFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ModelStatus> call, Throwable t) {
+                CustomLog.d("tsfapps", "onFailure called.");
+                mNoDataStatus.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
+                Toast.makeText(getContext(),"Server error occured !",Toast.LENGTH_SHORT).show();
 
-                CustomLog.d("tsfapps", "Not Responding");
             }
         });
     }

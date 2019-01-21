@@ -66,22 +66,6 @@ public class DateListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mContext = getContext();
         mFragmentManager = getFragmentManager();
-        DashboardActivity mActivity = (DashboardActivity) getActivity();
-        modelDateLists = ModelDateList.listAll(ModelDateList.class);
-        if (modelDateLists.size() > 0) {
-          //  callRecyclerView();
-            if (mActivity.isNetworkAvailable()) {
-                apiCall();
-            }
-        } else {
-            if (mActivity.isNetworkAvailable()) {
-                apiCall();
-            } else {
-                Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
-            }
-        }
-
-//apiCall();
         init();
         return view;
     }
@@ -124,9 +108,8 @@ public class DateListFragment extends Fragment {
                 public void onResponse(Call<ModelDate> call, Response<ModelDate> response) {
                   //  startHandler();
                     ModelDate modelDate = response.body();
+                    assert modelDate != null;
                     if (modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                        mTvNoDate.setVisibility(View.GONE);
-                        rv_date.setVisibility(View.VISIBLE);
                         ModelDateList.deleteAll(ModelDateList.class);
                         for (ModelDateList modelDateList : modelDate.getData()){
                             modelDateList.save();
@@ -140,9 +123,9 @@ public class DateListFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ModelDate> call, Throwable t) {
-                   // callRecyclerView();
                     mTvNoDate.setVisibility(View.VISIBLE);
                     rv_date.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),"server error occur !",Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -156,6 +139,13 @@ public class DateListFragment extends Fragment {
         DashboardActivity mActivity = (DashboardActivity)getActivity();
         if (mActivity !=null){
             mActivity.setToolbarTitle("Date List");
+        }
+        if (mActivity.isNetworkAvailable()) {
+            apiCall();
+        } else {
+            Toast.makeText(getContext(),"No Internet available",Toast.LENGTH_SHORT).show();
+            mTvNoDate.setVisibility(View.VISIBLE);
+            rv_date.setVisibility(View.GONE);
         }
     }
 

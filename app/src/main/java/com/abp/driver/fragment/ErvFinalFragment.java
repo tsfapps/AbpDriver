@@ -84,16 +84,16 @@ public class ErvFinalFragment extends Fragment {
             @Override
             public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
                 ModelErvFinal modelErvFinal = response.body();
+                assert modelErvFinal != null;
                 if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mNoDataText.setVisibility(View.GONE);
+                    CustomLog.d("danny","evr onResponse called.. status 200");
                     ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                     for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
                         modelErvFinalList.save();
                     }
-
                     callRecyclerView();
                 }else {
+                    CustomLog.d("danny","evr onResponse called.. status 404");
                     mRecyclerView.setVisibility(View.GONE);
                     mNoDataText.setVisibility(View.VISIBLE);
                    // callRecyclerView();
@@ -104,29 +104,26 @@ public class ErvFinalFragment extends Fragment {
             public void onFailure(Call<ModelErvFinal> call, Throwable t) {
                 Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
                // callRecyclerView();
+                mRecyclerView.setVisibility(View.GONE);
+                mNoDataText.setVisibility(View.VISIBLE);
             }
         });
 
     }
 
     private void init() {
+        CustomLog.d("danny","evr init called..");
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("ERV");
         }
         mSharePref = new SharedPreference(getContext());
-        mList = ModelErvFinalList.listAll(ModelErvFinalList.class);
-        if (mList.size() > 0) {
-
-            if (mActivity.isNetworkAvailable()) {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mNoDataText.setVisibility(View.GONE);
-                callApi();
-            } else {
-                mRecyclerView.setVisibility(View.GONE);
-                mNoDataText.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(),"No internet available",Toast.LENGTH_SHORT).show();
-            }
+        if (mActivity.isNetworkAvailable()) {
+            callApi();
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoDataText.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(),"No internet available",Toast.LENGTH_SHORT).show();
         }
 
     }
