@@ -17,7 +17,7 @@
         android:outlineSpotShadowColor="@color/white"
         android:progressDrawable="@drawable/circular_progress_bar"
         android:layout_centerInParent="true"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 
     <TextView

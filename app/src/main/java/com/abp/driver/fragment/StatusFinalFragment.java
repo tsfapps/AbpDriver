@@ -90,7 +90,7 @@ public class StatusFinalFragment extends Fragment {
     }
 
     private void init() {
-        startHandler();
+        //startHandler();
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
             mActivity.setToolbarTitle("Status");
@@ -105,41 +105,48 @@ public class StatusFinalFragment extends Fragment {
     }
 
     private void callApi(){
-        String strApi = Constant.API_KEY;
-        String stateId = mStateId;
-        String districtId = mDistrictId;
-        String strDate = mDate;
-        Api api = ApiClients.getApiClients().create(Api.class);
-        CustomLog.d("tsfapps", "stId : "+mStateId+" disId : "+mDistrictId+" date : "+mDate);
-        Call<ModelStatus> call = api.finalStatus(strApi, stateId, districtId, strDate);
-        call.enqueue(new Callback<ModelStatus>() {
-            @Override
-            public void onResponse(Call<ModelStatus> call, Response<ModelStatus> response) {
-                ModelStatus modelStatus = response.body();
-                CustomLog.d("tsfapps", "Responding");
-                assert modelStatus != null;
-                if (modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                    ModelStatusList.deleteAll(ModelStatusList.class);
-                    for (ModelStatusList modelStatusList : modelStatus.getData()){
-                        modelStatusList.save();
+        try {
+            mActivity.uiThreadHandler.sendEmptyMessage(Constant.SHOW_PROGRESS_DIALOG);
+            String strApi = Constant.API_KEY;
+            String stateId = mStateId;
+            String districtId = mDistrictId;
+            String strDate = mDate;
+            Api api = ApiClients.getApiClients().create(Api.class);
+            CustomLog.d("tsfapps", "stId : "+mStateId+" disId : "+mDistrictId+" date : "+mDate);
+            Call<ModelStatus> call = api.finalStatus(strApi, stateId, districtId, strDate);
+            call.enqueue(new Callback<ModelStatus>() {
+                @Override
+                public void onResponse(Call<ModelStatus> call, Response<ModelStatus> response) {
+                    ModelStatus modelStatus = response.body();
+                    CustomLog.d("tsfapps", "Responding");
+                    assert modelStatus != null;
+                    if (modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                        ModelStatusList.deleteAll(ModelStatusList.class);
+                        for (ModelStatusList modelStatusList : modelStatus.getData()){
+                            modelStatusList.save();
+                        }
+                        callRecyclerView();
                     }
-                    callRecyclerView();
+                   else {
+                        mRecyclerView.setVisibility(View.GONE);
+                        mNoDataStatus.setVisibility(View.VISIBLE);
+                    }
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
-               else {
-                    mRecyclerView.setVisibility(View.GONE);
+
+                @Override
+                public void onFailure(Call<ModelStatus> call, Throwable t) {
+                    CustomLog.d("tsfapps", "onFailure called.");
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     mNoDataStatus.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),"Server error occured !",Toast.LENGTH_SHORT).show();
+
                 }
-            }
-
-            @Override
-            public void onFailure(Call<ModelStatus> call, Throwable t) {
-                CustomLog.d("tsfapps", "onFailure called.");
-                mNoDataStatus.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
-                Toast.makeText(getContext(),"Server error occured !",Toast.LENGTH_SHORT).show();
-
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

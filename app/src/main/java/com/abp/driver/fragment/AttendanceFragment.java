@@ -187,11 +187,13 @@ public class AttendanceFragment extends Fragment {
             }
             setValueOfViewFromLocal();
             if (mActivity.isNetworkAvailable() && attendanceServerData.size() > 0) {
-                mTvPassCode.setText("Your Pass code : " +attendanceServerData.get(attendanceServerData.size() -1).getCheckOutCode());
+                mCheckOutCode = attendanceServerData.get(attendanceServerData.size() -1).getCheckOutCode();
+                mTvPassCode.setText("Your Pass code : " +mCheckOutCode);
                 showCopyIcon();
             } else {
                 if (punchInOutLocalDetails.size() > 0) {
-                    mTvPassCode.setText("Your Pass code : " + punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1).getCheckOutCode());
+                    mCheckOutCode = punchInOutLocalDetails.get(punchInOutLocalDetails.size() - 1).getCheckOutCode();
+                    mTvPassCode.setText("Your Pass code : " + mCheckOutCode);
                     showCopyIcon();
                 }
             }
@@ -232,7 +234,8 @@ public class AttendanceFragment extends Fragment {
                 mTotalHours.setText(WORK_COMPLETED);
                 mCheckInDesc.setText("You not yet clocked ");
                 mCheckInTime.setVisibility(View.GONE);
-                mTvPassCode.setText("Your Pass code : "+mLastData.getCheckOutCode());
+                mCheckOutCode = mLastData.getCheckOutCode();
+                mTvPassCode.setText("Your Pass code : "+mCheckOutCode);
                 showCopyIcon();
             }
         } else {
@@ -260,7 +263,8 @@ public class AttendanceFragment extends Fragment {
                 mTotalHours.setText(WORK_COMPLETED);
                 mCheckInDesc.setText("You not yet clocked ");
                 mCheckInTime.setVisibility(View.GONE);
-                mTvPassCode.setText("Your Pass code : "+mLastData.getCheckOutCode());
+                mCheckOutCode = mLastData.getCheckOutCode();
+                mTvPassCode.setText("Your Pass code : "+mCheckOutCode);
                 showCopyIcon();
             }
         } else {
@@ -621,6 +625,7 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void copyPassCode() {
+        CustomLog.d("danny","copyPassCode called");
         if (mCheckOutCode != null) {
             ClipboardManager cm = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             cm.setText(mCheckOutCode);

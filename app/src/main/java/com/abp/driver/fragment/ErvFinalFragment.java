@@ -78,40 +78,46 @@ public class ErvFinalFragment extends Fragment {
     }
 
     private void callApi() {
-        String apiKey = Constant.API_KEY;
-        final String stateId = mStateId;
-        String districtId = mDistrictId;
-        String dateCreated = mDate;
-        Api api = ApiClients.getApiClients().create(Api.class);
-        Call<ModelErvFinal> call = api.finalErv(apiKey, stateId, districtId, dateCreated);
-        call.enqueue(new Callback<ModelErvFinal>() {
-            @Override
-            public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
-                ModelErvFinal modelErvFinal = response.body();
-                assert modelErvFinal != null;
-                if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                    CustomLog.d("danny","evr onResponse called.. status 200");
-                    ModelErvFinalList.deleteAll(ModelErvFinalList.class);
-                    for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
-                        modelErvFinalList.save();
+        try {
+            mActivity.uiThreadHandler.sendEmptyMessage(Constant.SHOW_PROGRESS_DIALOG);
+            String apiKey = Constant.API_KEY;
+            final String stateId = mStateId;
+            String districtId = mDistrictId;
+            String dateCreated = mDate;
+            Api api = ApiClients.getApiClients().create(Api.class);
+            Call<ModelErvFinal> call = api.finalErv(apiKey, stateId, districtId, dateCreated);
+            call.enqueue(new Callback<ModelErvFinal>() {
+                @Override
+                public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
+                    ModelErvFinal modelErvFinal = response.body();
+                    assert modelErvFinal != null;
+                    if (modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                        CustomLog.d("danny","evr onResponse called.. status 200");
+                        ModelErvFinalList.deleteAll(ModelErvFinalList.class);
+                        for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
+                            modelErvFinalList.save();
+                        }
+                        callRecyclerView();
+                    }else {
+                        CustomLog.d("danny","evr onResponse called.. status 404");
+                        mRecyclerView.setVisibility(View.GONE);
+                        mNoDataText.setVisibility(View.VISIBLE);
+                       // callRecyclerView();
                     }
-                    callRecyclerView();
-                }else {
-                    CustomLog.d("danny","evr onResponse called.. status 404");
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
+                }
+
+                @Override
+                public void onFailure(Call<ModelErvFinal> call, Throwable t) {
+                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                    mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     mRecyclerView.setVisibility(View.GONE);
                     mNoDataText.setVisibility(View.VISIBLE);
-                   // callRecyclerView();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<ModelErvFinal> call, Throwable t) {
-                Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
-               // callRecyclerView();
-                mRecyclerView.setVisibility(View.GONE);
-                mNoDataText.setVisibility(View.VISIBLE);
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
     private void startHandler() {
@@ -125,7 +131,7 @@ public class ErvFinalFragment extends Fragment {
     }
 
     private void init() {
-        startHandler();
+       // startHandler();
         CustomLog.d("danny","evr init called..");
         mActivity = (DashboardActivity) getActivity();
         if (mActivity != null) {
