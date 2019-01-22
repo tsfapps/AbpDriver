@@ -72,7 +72,7 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
         }else if (thirdDriverStatus.equals("overtime")) {
             ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fca103"));
         } else {
-            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#03c2df"));
+            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#000000"));
         }
 
     }
