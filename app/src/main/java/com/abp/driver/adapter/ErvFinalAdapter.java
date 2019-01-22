@@ -53,7 +53,7 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
         } else if (firstDriverStatus.equals("overtime")) {
             ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#fc5203"));
         } else {
-            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#0216c6"));
+            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#031ae4"));
         }
         if (secDriverStatus.equals("delay")){
             ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fa0202"));
@@ -62,7 +62,7 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
         }else if (secDriverStatus.equals("overtime")) {
             ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fc5203"));
         } else {
-            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#0216c6"));
+            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#031ae4"));
         }
 
         if (thirdDriverStatus.equals("delay")){
@@ -72,7 +72,7 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
         }else if (thirdDriverStatus.equals("overtime")) {
             ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fc5203"));
         } else {
-            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#0216c6"));
+            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#031ae4"));
         }
 
     }

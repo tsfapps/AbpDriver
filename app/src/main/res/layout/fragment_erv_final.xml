@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
+            android:layout_weight=".52"
             android:text="S.no"
             android:gravity="center"
             android:textColor="@color/white"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".4"
+            android:layout_weight=".35"
             android:text="ERV No"
             android:gravity="center"
             android:textColor="@color/white"
