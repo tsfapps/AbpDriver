@@ -209,6 +209,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <View
+                android:id="@+id/line_erv_num"
                 android:layout_weight=".01"
                 android:layout_marginTop="3dp"
                 android:background="@color/colorPrimaryDark"
@@ -224,6 +225,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/erv_num_label"
                     android:textSize="12sp"
                     android:hint="Erv Number"
                     android:layout_width="wrap_content"

@@ -51,18 +51,18 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
         }else if (firstDriverStatus.equals("normal")){
             ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#059603"));
         } else if (firstDriverStatus.equals("overtime")) {
-            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#fca103"));
+            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#fc5203"));
         } else {
-            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#03c2df"));
+            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#0216c6"));
         }
         if (secDriverStatus.equals("delay")){
             ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fa0202"));
         }else if (secDriverStatus.equals("normal")){
             ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#059603"));
         }else if (secDriverStatus.equals("overtime")) {
-            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fca103"));
+            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fc5203"));
         } else {
-            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#03c2df"));
+            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#0216c6"));
         }
 
         if (thirdDriverStatus.equals("delay")){
@@ -70,9 +70,9 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
         }else if (thirdDriverStatus.equals("normal")){
             ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#059603"));
         }else if (thirdDriverStatus.equals("overtime")) {
-            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fca103"));
+            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fc5203"));
         } else {
-            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#000000"));
+            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#0216c6"));
         }
 
     }

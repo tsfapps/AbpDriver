@@ -12,13 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
 import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.utils.Constant;
-import com.abp.driver.utils.CustomLog;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -31,6 +29,10 @@ public class ProfileFragment extends Fragment {
     private DashboardActivity mActivity;
     private FragmentManager mFragmentManager;
     private List<ModelLoginList> loginLists = null;
+    @BindView(R.id.line_erv_num)
+    protected View viewLineErv;
+    @BindView(R.id.erv_num_label)
+    protected TextView tv_ervLabel;
     @BindView(R.id.tv_driver_ervNumber)
     protected TextView tv_ervNumber;
     @BindView(R.id.tv_profile_name)
@@ -74,7 +76,11 @@ public class ProfileFragment extends Fragment {
         }
         if (userType.equals(Constant.LOGIN_SPINNER_TYPE_STATE_MANAGER) || userType.equals(Constant.LOGIN_SPINNER_TYPE_DISTRICT_MANAGER)){
             tv_ervNumber.setVisibility(View.GONE);
+            tv_ervLabel.setVisibility(View.GONE);
+            viewLineErv.setVisibility(View.GONE);
         } else {
+            viewLineErv.setVisibility(View.VISIBLE);
+            tv_ervLabel.setVisibility(View.VISIBLE);
             tv_ervNumber.setVisibility(View.VISIBLE);
             tv_ervNumber.setText(ervNumber);
         }
