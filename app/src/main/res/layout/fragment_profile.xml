@@ -47,12 +47,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:textStyle="bold"
-            android:text="Erv Number"
-            android:id="@+id/tv_driver_ervNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
     <android.support.v7.widget.CardView
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
@@ -166,9 +161,8 @@
             android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_marginTop="20dp"
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -187,6 +181,63 @@
                 android:text="0987654321"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+        </LinearLayout>-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="12sp"
+                    android:layout_marginLeft="25dp"
+                    android:hint="Phone Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+                <TextView
+                    android:id="@+id/tv_profile_phone"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    android:drawableStart="@drawable/ic_pro_phone"
+                    android:layout_gravity="center_vertical"
+                    android:text="0987654321"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:layout_weight=".01"
+                android:layout_marginTop="3dp"
+                android:background="@color/colorPrimaryDark"
+                android:layout_width="0dp"
+                android:layout_margin="10dp"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="12sp"
+                    android:hint="Erv Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+                <TextView
+                    android:id="@+id/tv_driver_ervNumber"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:text="JH 03 7954"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </LinearLayout>
         <View
             android:layout_marginTop="3dp"

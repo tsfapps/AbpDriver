@@ -1,5 +1,6 @@
 package com.abp.driver.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -47,6 +48,7 @@ public class StatusFinalFragment extends Fragment {
     private String mDate;
     List<ModelStatusList> mList;
     private DashboardActivity mActivity;
+    private Context mContext;
 
     public static StatusFinalFragment newInstance( String mDistrictId, String mDate, String mStateId) {
         StatusFinalFragment fragment = new StatusFinalFragment();
@@ -54,6 +56,12 @@ public class StatusFinalFragment extends Fragment {
         fragment.mDistrictId = mDistrictId;
         fragment.mDate = mDate;
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 
     @Nullable
@@ -120,17 +128,16 @@ public class StatusFinalFragment extends Fragment {
                     ModelStatus modelStatus = response.body();
                     CustomLog.d("tsfapps", "Responding");
                     assert modelStatus != null;
-                    if (modelStatus.getSTATUS() != null &&  modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                   // if (modelStatus.getSTATUS() != null &&  modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
                         ModelStatusList.deleteAll(ModelStatusList.class);
                         for (ModelStatusList modelStatusList : modelStatus.getData()){
                             modelStatusList.save();
                         }
                         callRecyclerView();
-                    }
-                   else {
+                    /*} else {
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataStatus.setVisibility(View.VISIBLE);
-                    }
+                    }*/
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
@@ -140,8 +147,8 @@ public class StatusFinalFragment extends Fragment {
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     mNoDataStatus.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"Server error occured !",Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(mContext,"Server error occured !",Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
                 }
             });
         } catch (Exception e) {

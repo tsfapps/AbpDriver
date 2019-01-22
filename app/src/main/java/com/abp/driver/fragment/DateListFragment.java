@@ -60,12 +60,18 @@ public class DateListFragment extends Fragment {
         fragment.mCheck = mCheck;
         return fragment;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_date, container, false);
         ButterKnife.bind(this, view);
-        mContext = getContext();
         mFragmentManager = getFragmentManager();
         init();
         return view;
@@ -110,16 +116,16 @@ public class DateListFragment extends Fragment {
                 public void onResponse(Call<ModelDate> call, Response<ModelDate> response) {
                     ModelDate modelDate = response.body();
                     assert modelDate != null;
-                    if (modelDate.getSTATUS() != null && modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                   // if (modelDate.getSTATUS() != null && modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
                         ModelDateList.deleteAll(ModelDateList.class);
                         for (ModelDateList modelDateList : modelDate.getData()){
                             modelDateList.save();
                         }
                         callRecyclerView();
-                    }else {
+                   /* }else {
                         mTvNoDate.setVisibility(View.VISIBLE);
                         rv_date.setVisibility(View.GONE);
-                    }
+                    }*/
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
@@ -128,7 +134,8 @@ public class DateListFragment extends Fragment {
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     mTvNoDate.setVisibility(View.VISIBLE);
                     rv_date.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"server error occur !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"server error occur !",Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
                 }
             });
 

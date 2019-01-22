@@ -65,13 +65,18 @@ public class ErvFinalFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_erv_final, container, false);
 
        ButterKnife.bind(this, view);
-       mContext = getContext();
        mFragmentManager = getFragmentManager();
        init();
        return view;
@@ -89,30 +94,32 @@ public class ErvFinalFragment extends Fragment {
             call.enqueue(new Callback<ModelErvFinal>() {
                 @Override
                 public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
+                    CustomLog.d("danny","evr onResponse called..");
                     ModelErvFinal modelErvFinal = response.body();
                     assert modelErvFinal != null;
-                    if (modelErvFinal.getSTATUS() != null && modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                        CustomLog.d("danny","evr onResponse called.. status 200");
+                   // if (modelErvFinal.getSTATUS() != null && modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
+
                         ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                         for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
                             modelErvFinalList.save();
                         }
                         callRecyclerView();
-                    }else {
+                   /* }else {
                         CustomLog.d("danny","evr onResponse called.. status 404");
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataText.setVisibility(View.VISIBLE);
                        // callRecyclerView();
-                    }
+                    }*/
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
                 @Override
                 public void onFailure(Call<ModelErvFinal> call, Throwable t) {
-                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"Server error coming !",Toast.LENGTH_SHORT).show();
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                     mRecyclerView.setVisibility(View.GONE);
                     mNoDataText.setVisibility(View.VISIBLE);
+                    t.printStackTrace();
                 }
             });
         } catch (Exception e) {

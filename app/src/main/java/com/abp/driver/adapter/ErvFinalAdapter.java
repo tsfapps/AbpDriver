@@ -39,38 +39,41 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
 
     @Override
     public void onBindViewHolder(@NonNull ErvFinalHolder ervFinalHolder, int i) {
-//        String firstDriver = modelErvFinalLists.get(i).getDriver1();
         String firstDriverStatus = modelErvFinalLists.get(i).getDriverstatus1();
-//        String secDriver = modelErvFinalLists.get(i).getDriver2();
         String secDriverStatus = modelErvFinalLists.get(i).getDriverstatus2();
-//        String thirdDriver = modelErvFinalLists.get(i).getDriver3();
         String thirdDriverStatus = modelErvFinalLists.get(i).getDriverstatus3();
         String vehicleNumber = modelErvFinalLists.get(i).getRegistrationNo();
-
-//        ervFinalHolder.tvFirstDriver.setText(firstDriver);
-//        ervFinalHolder.tvFirstDriverStatus.setText(firstDriverStatus);
-//        ervFinalHolder.tvSecDriver.setText(secDriver);
-//        ervFinalHolder.tvSecDriverStatus.setText(secDriverStatus);
-//        ervFinalHolder.tvThirdDriver.setText(thirdDriver);
-//        ervFinalHolder.tvThirdDriverStatus.setText(thirdDriverStatus);
         ervFinalHolder.tvVehicleNumber.setText(vehicleNumber);
-
+        int no = i+1;
+        ervFinalHolder.mTvSno.setText(""+no);
         if (firstDriverStatus.equals("delay")){
             ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#fa0202"));
         }else if (firstDriverStatus.equals("normal")){
             ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#059603"));
-        }else ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#fca103"));
- if (secDriverStatus.equals("delay")){
+        } else if (firstDriverStatus.equals("overtime")) {
+            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#fca103"));
+        } else {
+            ervFinalHolder.llFirstDriver.setBackgroundColor(Color.parseColor("#03c2df"));
+        }
+        if (secDriverStatus.equals("delay")){
             ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fa0202"));
         }else if (secDriverStatus.equals("normal")){
             ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#059603"));
-        }else ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fca103"));
- if (thirdDriverStatus.equals("delay")){
+        }else if (secDriverStatus.equals("overtime")) {
+            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#fca103"));
+        } else {
+            ervFinalHolder.llSecDriver.setBackgroundColor(Color.parseColor("#03c2df"));
+        }
+
+        if (thirdDriverStatus.equals("delay")){
             ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fa0202"));
         }else if (thirdDriverStatus.equals("normal")){
             ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#059603"));
-        }else ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fca103"));
-
+        }else if (thirdDriverStatus.equals("overtime")) {
+            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#fca103"));
+        } else {
+            ervFinalHolder.llThirdDriver.setBackgroundColor(Color.parseColor("#03c2df"));
+        }
 
     }
 
@@ -81,33 +84,17 @@ public class ErvFinalAdapter extends RecyclerView.Adapter<ErvFinalAdapter.ErvFin
 
     public class ErvFinalHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.tv_erv_first_driver)
-        protected TextView tvFirstDriver;
-
-        @BindView(R.id.tv_erv_first_driver_status)
-        protected TextView tvFirstDriverStatus;
-
-        @BindView(R.id.tv_erv_second_driver)
-        protected TextView tvSecDriver;
-
-        @BindView(R.id.tv_erv_second_driver_status)
-        protected TextView tvSecDriverStatus;
-
-        @BindView(R.id.tv_erv_third_driver)
-        protected TextView tvThirdDriver;
-
-        @BindView(R.id.tv_erv_third_driver_status)
-        protected TextView tvThirdDriverStatus;
-
         @BindView(R.id.tv_erv_vehicle_number)
         protected TextView tvVehicleNumber;
 
-        @BindView(R.id.ll_erv_first_driver_status)
-        protected LinearLayout llFirstDriver;
-        @BindView(R.id.ll_erv_second_driver_status)
-        protected LinearLayout llSecDriver;
-        @BindView(R.id.ll_erv_third_driver_status)
-        protected LinearLayout llThirdDriver;
+        @BindView(R.id.tv_erv_M_driver_status)
+        protected TextView llFirstDriver;
+        @BindView(R.id.tv_erv_D_driver_status)
+        protected TextView llSecDriver;
+        @BindView(R.id.tv_erv_N_driver_status)
+        protected TextView llThirdDriver;
+        @BindView(R.id.tv_srl_no_evr)
+        public TextView mTvSno;
 
         public ErvFinalHolder(@NonNull View itemView) {
             super(itemView);

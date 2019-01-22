@@ -60,12 +60,17 @@ public class DistrictListFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_district_list, container, false);
         ButterKnife.bind(this, view);
-        mContext = getContext();
         mFragmentManager = getFragmentManager();
         mActivity = (DashboardActivity)getActivity();
         modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
@@ -110,26 +115,25 @@ public class DistrictListFragment extends Fragment {
                 public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
                     ModelDistrict modelDistrict = response.body();
                     assert modelDistrict != null;
-                    if (modelDistrict.getSTATUS() != null && modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mNoDataText.setVisibility(View.VISIBLE);
+                   // if (modelDistrict.getSTATUS() != null && modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
                         ModelDistrictList.deleteAll(ModelDistrictList.class);
                         for (ModelDistrictList modelDistrictList : modelDistrict.getData()) {
                             modelDistrictList.save();
                         }
                         callRecyclerView();
-                    } else {
+                   /* } else {
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataText.setVisibility(View.VISIBLE);
-                    }
+                    }*/
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
                 @Override
                 public void onFailure(Call<ModelDistrict> call, Throwable t) {
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
-                    Toast.makeText(getContext(),"Server error coming !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"Server error coming !",Toast.LENGTH_SHORT).show();
                     callRecyclerView();
+                    t.printStackTrace();
                 }
             });
         } catch (Exception e) {

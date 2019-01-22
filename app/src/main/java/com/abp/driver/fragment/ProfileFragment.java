@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
             tv_ervNumber.setVisibility(View.GONE);
         } else {
             tv_ervNumber.setVisibility(View.VISIBLE);
-            tv_ervNumber.setText("ERV Number : "+ervNumber);
+            tv_ervNumber.setText(ervNumber);
         }
         tv_name.setText(name);
         tv_email.setText(email);
