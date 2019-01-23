@@ -96,20 +96,17 @@ public class ErvFinalFragment extends Fragment {
                 public void onResponse(Call<ModelErvFinal> call, Response<ModelErvFinal> response) {
                     CustomLog.d("danny","evr onResponse called..");
                     ModelErvFinal modelErvFinal = response.body();
-                    assert modelErvFinal != null;
-                   // if (modelErvFinal.getSTATUS() != null && modelErvFinal.getSTATUS().equals(Constant.SUCCESS_CODE)){
-
+                    if (modelErvFinal != null && modelErvFinal.getData() != null) {
                         ModelErvFinalList.deleteAll(ModelErvFinalList.class);
                         for (ModelErvFinalList modelErvFinalList : modelErvFinal.getData()){
                             modelErvFinalList.save();
                         }
                         callRecyclerView();
-                   /* }else {
+                    }else {
                         CustomLog.d("danny","evr onResponse called.. status 404");
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataText.setVisibility(View.VISIBLE);
-                       // callRecyclerView();
-                    }*/
+                    }
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 

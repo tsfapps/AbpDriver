@@ -100,10 +100,9 @@ public class DashboardActivity extends AppCompatActivity
         if (mLoginList.size() > 0) {
             startDashboardFragment(mLoginList.get(0).getLogintype());
         } else {
-            if (getIntent().getExtras() != null) {
-                String userType = getIntent().getExtras().getString("login_type");
-                startDashboardFragment(userType);
-            }
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -119,7 +118,11 @@ public class DashboardActivity extends AppCompatActivity
             case Constant.LOGIN_TYPE_STATE_MANAGER:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StateManagerFragment()).addToBackStack(null).commit();
                 break;
-
+            default:
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
 
     }

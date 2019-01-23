@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
@@ -112,7 +113,7 @@ public class LoginActivity extends AppCompatActivity{
 
     @OnClick(R.id.btn_login)
     public void onButtonClick(View view) {
-                submitBtn();
+        submitBtn();
     }
     private void submitBtn(){
         int type = mSpinner.getSelectedItemPosition();
@@ -151,35 +152,45 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         protected Void doInBackground(Void... args) {
-            // do background work here
             Api api = ApiClients.getApiClients().create(Api.class);
             Call<ModelLogin> call = api.loginUser(mApiKey, mType, mUserName, mPassword);
             call.enqueue(new Callback<ModelLogin>() {
                 @Override
-                public void onResponse(Call<ModelLogin> call, Response<ModelLogin> response) {
+                public void onResponse(@NonNull Call<ModelLogin> call, @NonNull Response<ModelLogin> response) {
                     ModelLogin modelLogin = response.body();
-                    CustomLog.d("danny","LoginActivity onResponse..."+ modelLogin.getData());
-                    if (modelLogin.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                        ModelLoginList.deleteAll(ModelLoginList.class);
-                        for (ModelLoginList modelLoginList : modelLogin.getData()){
-                            modelLoginList.save();
-                        }
-                        mSharedPreference.setUserData(modelLogin.getData().get(0).getName(),modelLogin.getData().get(0).getPhoneno(),modelLogin.getData().get(0).getProfilePic(),
-                                modelLogin.getData().get(0).getStateId(), modelLogin.getData().get(0).getDistrictId(),modelLogin.getData().get(0).getLogintype(),
-                                modelLogin.getData().get(0).getEvrId(), modelLogin.getData().get(0).getErvNo());
-                        startApiHandler(mType);
-                    } else {
-                        Toast.makeText(LoginActivity.this,"Server Error ! Please try again",Toast.LENGTH_SHORT).show();
-                        if (mDialog.isShowing()) {
-                            mDialog.dismiss();
-                        }
-                    }
+                    CustomLog.d("danny","LoginActivity onResponse...");
+                    ModelLoginList.deleteAll(ModelLoginList.class);
+                   if (modelLogin != null && modelLogin.getData() != null) {
+                       for (ModelLoginList modelLoginList : modelLogin.getData()) {
+                           modelLoginList.save();
+                       }
+                       List<ModelLoginList> mList = ModelLoginList.listAll(ModelLoginList.class);
+                       if (mList.size() > 0) {
+                           CustomLog.d("danny", "LoginActivity onResponse...data added success.. list size :" + mList.size());
+                           mSharedPreference.setUserData(mList.get(0).getName(), mList.get(0).getPhoneno(), mList.get(0).getProfilePic(),
+                                   mList.get(0).getStateId(), mList.get(0).getDistrictId(), mList.get(0).getLogintype(),
+                                   mList.get(0).getEvrId(), mList.get(0).getErvNo());
+                           startApiHandler(mType);
+                       } else {
+                           Toast.makeText(LoginActivity.this, "Please enter correct credentials !", Toast.LENGTH_SHORT).show();
+                           if (mDialog.isShowing()) {
+                               mDialog.dismiss();
+                           }
+
+                       }
+                   } else {
+                       Toast.makeText(LoginActivity.this, "No data found in server !", Toast.LENGTH_SHORT).show();
+                       if (mDialog.isShowing()) {
+                           mDialog.dismiss();
+                       }
+                   }
+
                 }
 
                 @Override
                 public void onFailure(Call<ModelLogin> call, Throwable t) {
                     CustomLog.d("danny","onFailure..."+ call.toString());
-                    Toast.makeText(LoginActivity.this,"Server Error ! Please try again",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"Server Error ! Please check internet connection",Toast.LENGTH_SHORT).show();
                     if (mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
