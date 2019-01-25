@@ -127,17 +127,16 @@ public class StatusFinalFragment extends Fragment {
                 public void onResponse(Call<ModelStatus> call, Response<ModelStatus> response) {
                     ModelStatus modelStatus = response.body();
                     CustomLog.d("tsfapps", "Responding");
-                    assert modelStatus != null;
-                   // if (modelStatus.getSTATUS() != null &&  modelStatus.getSTATUS().equals(Constant.SUCCESS_CODE)){
+                    if (modelStatus != null && modelStatus.getData() != null) {
                         ModelStatusList.deleteAll(ModelStatusList.class);
                         for (ModelStatusList modelStatusList : modelStatus.getData()){
                             modelStatusList.save();
                         }
                         callRecyclerView();
-                    /*} else {
+                    } else {
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataStatus.setVisibility(View.VISIBLE);
-                    }*/
+                    }
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 

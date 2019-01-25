@@ -104,7 +104,7 @@ public class DistrictListFragment extends Fragment {
     private void apiCall(boolean show) {
         try {
             if (show)
-            mActivity.uiThreadHandler.sendEmptyMessage(Constant.SHOW_PROGRESS_DIALOG);
+                mActivity.uiThreadHandler.sendEmptyMessage(Constant.SHOW_PROGRESS_DIALOG);
             mSharedPreference = new SharedPreference(mContext);
             String strApiKey = Constant.API_KEY;
             String strStateId = mStateId;
@@ -114,17 +114,16 @@ public class DistrictListFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ModelDistrict> call, Response<ModelDistrict> response) {
                     ModelDistrict modelDistrict = response.body();
-                    assert modelDistrict != null;
-                   // if (modelDistrict.getSTATUS() != null && modelDistrict.getSTATUS().equals(Constant.SUCCESS_CODE)) {
-                        ModelDistrictList.deleteAll(ModelDistrictList.class);
+                    ModelDistrictList.deleteAll(ModelDistrictList.class);
+                    if (modelDistrict != null && modelDistrict.getData() != null) {
                         for (ModelDistrictList modelDistrictList : modelDistrict.getData()) {
                             modelDistrictList.save();
                         }
                         callRecyclerView();
-                   /* } else {
+                    } else {
                         mRecyclerView.setVisibility(View.GONE);
                         mNoDataText.setVisibility(View.VISIBLE);
-                    }*/
+                    }
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
@@ -142,7 +141,7 @@ public class DistrictListFragment extends Fragment {
     }
 
     private void callRecyclerView() {
-      List<ModelDistrictList>  mList = ModelDistrictList.listAll(ModelDistrictList.class);
+        List<ModelDistrictList>  mList = ModelDistrictList.listAll(ModelDistrictList.class);
         if (mList.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             mNoDataText.setVisibility(View.GONE);

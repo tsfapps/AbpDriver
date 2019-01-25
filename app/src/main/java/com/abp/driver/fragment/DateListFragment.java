@@ -115,17 +115,16 @@ public class DateListFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ModelDate> call, Response<ModelDate> response) {
                     ModelDate modelDate = response.body();
-                    assert modelDate != null;
-                   // if (modelDate.getSTATUS() != null && modelDate.getSTATUS().equals(Constant.SUCCESS_CODE)){
-                        ModelDateList.deleteAll(ModelDateList.class);
-                        for (ModelDateList modelDateList : modelDate.getData()){
+                    ModelDateList.deleteAll(ModelDateList.class);
+                    if (modelDate != null && modelDate.getData() != null) {
+                        for (ModelDateList modelDateList : modelDate.getData()) {
                             modelDateList.save();
                         }
                         callRecyclerView();
-                   /* }else {
+                    } else {
                         mTvNoDate.setVisibility(View.VISIBLE);
                         rv_date.setVisibility(View.GONE);
-                    }*/
+                    }
                     mActivity.uiThreadHandler.sendMessageDelayed(mActivity.uiThreadHandler.obtainMessage(Constant.HIDE_PROGRESS_DIALOG),Constant.HIDE_PROGRESS_DIALOG_DELAY);
                 }
 
