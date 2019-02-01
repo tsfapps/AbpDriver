@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity{
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Log In");
-        collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
+        collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         mSharedPreference = new SharedPreference(this);
     }
