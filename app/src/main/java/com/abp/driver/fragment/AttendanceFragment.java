@@ -615,7 +615,7 @@ public class AttendanceFragment extends Fragment {
                 if (mActivity.isGpsEnable()) {
                     getLocation();
                 } else {
-                    mActivity.showDialogueGps(false);
+                    mActivity.showDialogueGps(true);
                 }
                 break;
             case R.id.iv_copy:
@@ -639,7 +639,7 @@ public class AttendanceFragment extends Fragment {
         CustomLog.d(TAG,"onResume called");
         //startTimer();
         if (!mActivity.isGpsEnable()) {
-            mActivity.showDialogueGps(false);
+            mActivity.showDialogueGps(true);
         }
         try {
             if (getView() != null) {
