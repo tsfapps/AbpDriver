@@ -11,9 +11,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo_launcher"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon"
@@ -43,7 +43,7 @@
         </activity>
         <activity android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"
-            android:exported="true"
+            android:exported="false"
             />
         <service android:name=".service.LocationService"/>
         <service android:name=".service.NetworkStateService"/>
@@ -51,7 +51,8 @@
             android:name=".receiver.NetworkStateChangeReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
     </application>

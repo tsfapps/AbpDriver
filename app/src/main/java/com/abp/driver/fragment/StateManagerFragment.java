@@ -51,7 +51,7 @@ public class StateManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_sm_status)
     public void llSmStatusClk(View view){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DistrictListFragment.newInstance(mSharePref.getUserStateId(), "strStatus")).addToBackStack(null).commit();
+       // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DistrictListFragment.newInstance(mSharePref.getUserStateId(), "strStatus")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_sm_evr)

@@ -44,7 +44,7 @@ public class DistrictManagerFragment extends Fragment {
 
     @OnClick(R.id.ll_dm_status)
     public void llDmStatusClk(View view){
-        mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DateListFragment.newInstance(mSharePref.getUserDistrictId(), "strStatus")).addToBackStack(null).commit();
+      //  mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, DateListFragment.newInstance(mSharePref.getUserDistrictId(), "strStatus")).addToBackStack(null).commit();
     }
 
     @OnClick(R.id.ll_dm_evr)

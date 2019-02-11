@@ -461,7 +461,6 @@ public class AttendanceFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<ModelPunchInOut> call, Throwable t) {
                     CustomLog.d(TAG, "callPunchInOutApi onFailure called..." + call.toString());

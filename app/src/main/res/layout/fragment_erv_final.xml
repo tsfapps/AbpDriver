@@ -182,7 +182,7 @@
                 android:paddingStart="8dp"
                 android:textSize="10sp"
                 android:textColor="@color/white"
-                android:text="Driver is doing over time."
+                android:text="Driver i s doing over time."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:ignore="SmallSp" />

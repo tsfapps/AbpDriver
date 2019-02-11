@@ -56,10 +56,9 @@ public class LoginActivity extends AppCompatActivity{
         ButterKnife.bind(this);//butter knife binding
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Log In");
-        collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
+//        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
+//        collapsingToolbar.setTitle("Log In");
+//        collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         mSharedPreference = new SharedPreference(this);
     }

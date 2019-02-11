@@ -74,10 +74,7 @@ public class DashboardActivity extends AppCompatActivity
         toggle.syncState();
         profileImage();
         init();
-
-
     }
-
     private void init() {
         uiThreadHandler = new UIThreadHandler();
         mLoginList = ModelLoginList.listAll(ModelLoginList.class);
@@ -106,17 +103,16 @@ public class DashboardActivity extends AppCompatActivity
         }
     }
 
-
     private void startDashboardFragment(String userType) {
         switch (userType){
             case Constant.LOGIN_TYPE_DRIVER:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new AttendanceFragment()).commit();
                 break;
             case Constant.LOGIN_TYPE_DISTRICT_MANAGER:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new DistrictManagerFragment()).commit();
                 break;
             case Constant.LOGIN_TYPE_STATE_MANAGER:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StateManagerFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new StateManagerFragment()).commit();
                 break;
             default:
                 Intent intent = new Intent(this, LoginActivity.class);

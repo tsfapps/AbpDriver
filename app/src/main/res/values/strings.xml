@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ABP Police Service</string>
+    <string name="app_name">ABP Solutions</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -22,7 +22,7 @@
     <string name="police_list">Police List</string>
     <string name="police_station_name">Police Station Name</string>
     <string name="vehicle_number">Vehicle Number</string>
-    <string name="app_title">ABP 112 Police Service</string>
+    <string name="app_title">ABP Service</string>
     <string name="code_disclaimer">** कृपया अपनी उपस्थिति दर्ज करने के लिए सही पास कोड दर्ज करें !</string>
     <string name="date_created">Date Created</string>
     <string name="no_data_available">No data available</string>
