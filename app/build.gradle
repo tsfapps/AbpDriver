@@ -16,7 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
+}      /* keystore password for all :  danishali*/
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

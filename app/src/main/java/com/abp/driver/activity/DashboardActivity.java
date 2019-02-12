@@ -20,12 +20,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abp.driver.ApiClient.ApiClients;
+import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.fragment.DistrictManagerFragment;
 import com.abp.driver.fragment.AttendanceFragment;
@@ -33,8 +36,11 @@ import com.abp.driver.fragment.AttendanceFragment;
 import com.abp.driver.fragment.ProfileFragment;
 import com.abp.driver.fragment.StateManagerFragment;
 import com.abp.driver.model.PunchInOut.ModelPunchInOutLocal;
+import com.abp.driver.model.date.ModelDate;
+import com.abp.driver.model.date.ModelDateList;
 import com.abp.driver.model.driver.DriverAttendanceList;
 import com.abp.driver.model.login.ModelLoginList;
+import com.abp.driver.model.logout.ModelLogout;
 import com.abp.driver.receiver.NetworkStateChangeReceiver;
 import com.abp.driver.utils.Constant;
 import com.abp.driver.utils.CustomLog;
@@ -45,6 +51,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -205,19 +214,67 @@ public class DashboardActivity extends AppCompatActivity
                 Toast.makeText(this,"Please connect internet to Sync attendance data",Toast.LENGTH_SHORT).show();
             }
         } else {
-            isDataSyncStarted = false;
-            mSharedPreference.clearAllData();
-            ModelLoginList.deleteAll(ModelLoginList.class);
-            ModelPunchInOutLocal.deleteAll(ModelPunchInOutLocal.class);
-            DriverAttendanceList.deleteAll(DriverAttendanceList.class);
-
-            if (mDialog != null && mDialog.isShowing()){
-                mDialog.dismiss();
+            if (isNetworkAvailable()) {
+                callLogoutApi();
+            } else {
+                Toast.makeText(this,"Please connect internet to Logout",Toast.LENGTH_SHORT).show();
             }
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
         }
+    }
+
+    private void callLogoutApi() {
+        try {
+            String strApiKey = Constant.API_KEY;
+            String loginType = null,username = null,password = null;
+            if (mLoginList.size() > 0) {
+                loginType = mLoginList.get(0).getLogintype();
+                username = mLoginList.get(0).getPhoneno();
+                password = mLoginList.get(0).getPassword();
+            }
+            Api api = ApiClients.getApiClients().create(Api.class);
+            Call<ModelLogout> call = api.logoutUser(strApiKey, loginType, username,password,"1");
+            call.enqueue(new Callback<ModelLogout>() {
+                @Override
+                public void onResponse(Call<ModelLogout> call, Response<ModelLogout> response) {
+                    Log.d("danny","onResponse called.. ");
+                    ModelLogout modelDate = response.body();
+                    if (modelDate != null) {
+                        if (modelDate.getsTATUS().equals("200")){
+                            Toast.makeText(DashboardActivity.this,"Successfully logout !",Toast.LENGTH_SHORT).show();
+                            isDataSyncStarted = false;
+                            mSharedPreference.clearAllData();
+                            ModelLoginList.deleteAll(ModelLoginList.class);
+                            ModelPunchInOutLocal.deleteAll(ModelPunchInOutLocal.class);
+                            DriverAttendanceList.deleteAll(DriverAttendanceList.class);
+                            if (mDialog != null && mDialog.isShowing()){
+                                mDialog.dismiss();
+                            }
+                            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            if (mDialog != null && mDialog.isShowing()){
+                                mDialog.dismiss();
+                            }
+                            Toast.makeText(DashboardActivity.this,"Error in logout !",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                   }
+
+                @Override
+                public void onFailure(Call<ModelLogout> call, Throwable t) {
+                    if (mDialog != null && mDialog.isShowing()){
+                        mDialog.dismiss();
+                    }
+                    Toast.makeText(DashboardActivity.this,"server error occur !",Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void startDataSyncHandler() {

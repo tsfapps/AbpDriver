@@ -1,14 +1,9 @@
-package com.abp.driver.model.login;
+package com.abp.driver.model.logout;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ModelLogin {
-
-    @SerializedName("data")
-    @Expose
-    private List<ModelLoginList> data = null;
+public class ModelLogout {
     @SerializedName("STATUS")
     @Expose
     private String sTATUS;
@@ -16,19 +11,11 @@ public class ModelLogin {
     @Expose
     private String message;
 
-    public List<ModelLoginList> getData() {
-        return data;
-    }
-
-    public void setData(List<ModelLoginList> data) {
-        this.data = data;
-    }
-
-    public String getSTATUS() {
+    public String getsTATUS() {
         return sTATUS;
     }
 
-    public void setSTATUS(String sTATUS) {
+    public void setsTATUS(String sTATUS) {
         this.sTATUS = sTATUS;
     }
 

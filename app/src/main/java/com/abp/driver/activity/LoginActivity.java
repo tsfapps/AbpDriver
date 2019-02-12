@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity{
                 @Override
                 public void onResponse(@NonNull Call<ModelLogin> call, @NonNull Response<ModelLogin> response) {
                     ModelLogin modelLogin = response.body();
-                    CustomLog.d("danny","LoginActivity onResponse...");
+                    CustomLog.d("danny","LoginActivity onResponse...message :"+modelLogin.getMessage());
                     ModelLoginList.deleteAll(ModelLoginList.class);
                    if (modelLogin != null && modelLogin.getData() != null) {
                        for (ModelLoginList modelLoginList : modelLogin.getData()) {
@@ -171,14 +171,14 @@ public class LoginActivity extends AppCompatActivity{
                                    mList.get(0).getEvrId(), mList.get(0).getErvNo());
                            startApiHandler(mType);
                        } else {
-                           Toast.makeText(LoginActivity.this, "Please enter correct credentials !", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(LoginActivity.this, ""+modelLogin.getMessage(), Toast.LENGTH_SHORT).show();
                            if (mDialog.isShowing()) {
                                mDialog.dismiss();
                            }
 
                        }
                    } else {
-                       Toast.makeText(LoginActivity.this, "No data found in server !", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(LoginActivity.this, ""+modelLogin.getMessage(), Toast.LENGTH_SHORT).show();
                        if (mDialog.isShowing()) {
                            mDialog.dismiss();
                        }

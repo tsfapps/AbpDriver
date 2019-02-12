@@ -6,6 +6,7 @@ import com.abp.driver.model.driver.DriverAttendance;
 import com.abp.driver.model.evr.ModelErvFinal;
 import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.district.ModelDistrict;
+import com.abp.driver.model.logout.ModelLogout;
 import com.abp.driver.model.status.ModelStatus;
 
 import retrofit2.Call;
@@ -22,6 +23,16 @@ public interface Api {
             @Field("type") String type,
             @Field("username") String username,
             @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("api/logout.php")
+    Call<ModelLogout> logoutUser(
+            @Field("API_KEY") String API_KEY,
+            @Field("type") String type,
+            @Field("username") String username,
+            @Field("password") String password,
+            @Field("logout") String value
     );
 
     @FormUrlEncoded
