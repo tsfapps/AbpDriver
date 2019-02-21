@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity{
                 @Override
                 public void onResponse(@NonNull Call<ModelLogin> call, @NonNull Response<ModelLogin> response) {
                     ModelLogin modelLogin = response.body();
-                    CustomLog.d("danny","LoginActivity onResponse...message :"+modelLogin.getMessage());
+                    CustomLog.d("danny","LoginActivity onResponse");
                     ModelLoginList.deleteAll(ModelLoginList.class);
                    if (modelLogin != null && modelLogin.getData() != null) {
                        for (ModelLoginList modelLoginList : modelLogin.getData()) {
@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity{
 
                        }
                    } else {
-                       Toast.makeText(LoginActivity.this, ""+modelLogin.getMessage(), Toast.LENGTH_SHORT).show();
+                       Toast.makeText(LoginActivity.this, "No data found please retry !", Toast.LENGTH_SHORT).show();
                        if (mDialog.isShowing()) {
                            mDialog.dismiss();
                        }
