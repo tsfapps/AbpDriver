@@ -17,7 +17,7 @@ import retrofit2.http.POST;
 public interface Api {
 
     @FormUrlEncoded
-    @POST("api/logindetails.php")
+    @POST("apps/logindetails.php")
     Call<ModelLogin> loginUser(
             @Field("API_KEY") String API_KEY,
             @Field("type") String type,
@@ -26,7 +26,7 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST("api/logout.php")
+    @POST("apps/logout.php")
     Call<ModelLogout> logoutUser(
             @Field("API_KEY") String API_KEY,
             @Field("type") String type,
@@ -36,28 +36,28 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST("api/get-attendance.php")
+    @POST("apps/get-attendance.php")
     Call<DriverAttendance> driverAttendance(
             @Field("API_KEY") String API_KEY,
             @Field("phone_no") String phone_no
 
     );
     @FormUrlEncoded
-    @POST("api/view-statewise-districtapi.php")
+    @POST("apps/view-statewise-districtapi.php")
     Call<ModelDistrict> districtList(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid
     );
 
     @FormUrlEncoded
-    @POST("api/district-datewiseapi.php")
+    @POST("apps/district-datewiseapi.php")
     Call<ModelDate> dateList(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
             @Field("districtid") String districtid
     );
     @FormUrlEncoded
-    @POST("api/view-state-district-policestaionwise-ervapi1.php")
+    @POST("apps/view-state-district-policestaionwise-ervapi1.php")
     Call<ModelErvFinal> finalErv(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
@@ -65,7 +65,7 @@ public interface Api {
             @Field("date") String date
     );
     @FormUrlEncoded
-    @POST("api/viewstatedisctrictwisestatus.php")
+    @POST("apps/viewstatedisctrictwisestatus.php")
     Call<ModelStatus> finalStatus(
             @Field("API_KEY") String API_KEY,
             @Field("stateid") String stateid,
@@ -74,7 +74,7 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST("api/attendanceapi.php")
+    @POST("apps/attendanceapi.php")
     Call<ModelPunchInOut> driverPunchInOut(
             @Field("API_KEY") String API_KEY,
             @Field("type_io") String type_io,
