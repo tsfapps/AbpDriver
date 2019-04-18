@@ -1,5 +1,6 @@
 package com.abp.driver.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,17 +13,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.abp.driver.ApiClient.ApiClients;
+import com.abp.driver.Interface.Api;
 import com.abp.driver.R;
 import com.abp.driver.activity.DashboardActivity;
+import com.abp.driver.model.login.ModelLogin;
 import com.abp.driver.model.login.ModelLoginList;
 import com.abp.driver.utils.Constant;
+import com.abp.driver.utils.CustomLog;
+import com.abp.driver.utils.SharedPreference;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
@@ -99,6 +109,12 @@ public class ProfileFragment extends Fragment {
             mActivity.setToolbarTitle("Profile");
             mFragmentManager = mActivity.getSupportFragmentManager();
         }
+        updateProfile();
+        SharedPreference sp = new SharedPreference(getContext());
+        new CallUpdateProfileApiAsyncTask(Constant.API_KEY,sp.getUserLoginType(),sp.getUserPhoneNo()).execute();
+    }
+
+    private void updateProfile(){
         loginLists = ModelLoginList.listAll(ModelLoginList.class);
         if (loginLists.size() > 0) {
             profileInfo();
@@ -123,6 +139,66 @@ public class ProfileFragment extends Fragment {
             }
         } catch (Exception e) {
             Log.e("error",""+e);
+        }
+    }
+
+    private class CallUpdateProfileApiAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final String mApiKey;
+        private final String mType;
+        private final String mUserName;
+
+        public CallUpdateProfileApiAsyncTask(String api_key, String type, String username) {
+            this.mApiKey = api_key;
+            this.mType = type;
+            this.mUserName = username;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        protected Void doInBackground(Void... args) {
+            Api api = ApiClients.getApiClients().create(Api.class);
+            Call<ModelLogin> call = api.updateProfile(mApiKey, mType, mUserName);
+            call.enqueue(new Callback<ModelLogin>() {
+                @Override
+                public void onResponse(@NonNull Call<ModelLogin> call, @NonNull Response<ModelLogin> response) {
+                    ModelLogin modelLogin = response.body();
+                    CustomLog.d("danny","profileUpdate onResponse ");
+                    if (modelLogin != null && modelLogin.getData() != null) {
+                        if (loginLists.get(0).getPassword().equals(modelLogin.getData().get(0).getPassword())) {
+                            CustomLog.d("danny","profileUpdate password is same as previous");
+                            ModelLoginList.deleteAll(ModelLoginList.class);
+                            for (ModelLoginList modelLoginList : modelLogin.getData()) {
+                                modelLoginList.save();
+                            }
+                            updateProfile();
+                        } else {
+                            CustomLog.d("danny","profileUpdate password has been changed");
+                            Toast.makeText(getContext(), "Password has been changed.Please login again", Toast.LENGTH_SHORT).show();
+                            mActivity.userLogoutCall();
+                        }
+
+                    } else {
+                        Toast.makeText(getContext(), "Profile update failed.", Toast.LENGTH_SHORT).show();
+                        updateProfile();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ModelLogin> call, Throwable t) {
+                    CustomLog.d("danny","profileUpdate onFailure..."+ call.toString());
+                    Toast.makeText(getContext(),"Server Error ! Please check internet connection",Toast.LENGTH_SHORT).show();
+                    updateProfile();
+
+                }
+            });
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            // do UI work here
         }
     }
 }

@@ -192,7 +192,7 @@ public class DashboardActivity extends AppCompatActivity
         return true;
     }
 
-    private void userLogoutCall() {
+    public void userLogoutCall() {
         List<ModelPunchInOutLocal> mList = ModelPunchInOutLocal.findWithQuery(ModelPunchInOutLocal.class,
                 "SELECT * FROM MODEL_PUNCH_IN_OUT_LOCAL where phone_no = '" + mSharedPreference.getUserPhoneNo() + "' AND time_in != '"+Constant.EMPTY+"' AND time_out = '"+Constant.EMPTY+"' ORDER BY id ASC");
         if (mList.size() > 0) {

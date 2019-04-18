@@ -2,12 +2,10 @@ package com.abp.driver.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +23,6 @@ import com.abp.driver.utils.CustomLog;
 import com.abp.driver.utils.SharedPreference;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -178,7 +175,12 @@ public class LoginActivity extends AppCompatActivity{
 
                        }
                    } else {
-                       Toast.makeText(LoginActivity.this, "No data found please retry !", Toast.LENGTH_SHORT).show();
+                       assert response.body() != null;
+                       if (response.body().getMessage() != null) {
+                           Toast.makeText(LoginActivity.this,""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                       } else {
+                           Toast.makeText(LoginActivity.this, "No data found please retry !", Toast.LENGTH_SHORT).show();
+                       }
                        if (mDialog.isShowing()) {
                            mDialog.dismiss();
                        }

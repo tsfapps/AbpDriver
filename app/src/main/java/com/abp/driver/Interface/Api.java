@@ -94,6 +94,14 @@ public interface Api {
 
     );
 
+    @FormUrlEncoded
+    @POST("apps/autorefreshlogin.php")
+    Call<ModelLogin> updateProfile(
+            @Field("API_KEY") String API_KEY,
+            @Field("type") String type,
+            @Field("username") String username
+    );
+
 //    @POST("api/logindetails.php")
 //    Call<ModelLoginList> loginUser(@Body ModelLoginList modelDriver);
 
