@@ -101,7 +101,6 @@ public class AttendanceFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

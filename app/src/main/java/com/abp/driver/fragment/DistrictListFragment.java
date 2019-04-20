@@ -47,7 +47,6 @@ public class DistrictListFragment extends Fragment {
     private Context mContext;
     private FragmentManager mFragmentManager;
     private SharedPreference mSharedPreference;
-    private List<ModelDistrictList> modelDistrictLists;
 
     private String strCheck;
     private String mStateId;
@@ -73,7 +72,7 @@ public class DistrictListFragment extends Fragment {
         ButterKnife.bind(this, view);
         mFragmentManager = getFragmentManager();
         mActivity = (DashboardActivity)getActivity();
-        modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
+        List<ModelDistrictList> modelDistrictLists = ModelDistrictList.listAll(ModelDistrictList.class);
 
         //startHandler();
         if (modelDistrictLists.size() > 0) {

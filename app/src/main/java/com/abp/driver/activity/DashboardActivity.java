@@ -58,6 +58,7 @@ import retrofit2.Response;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
     private final String TAG = "DashboardActivity";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -111,7 +112,6 @@ public class DashboardActivity extends AppCompatActivity
             finish();
         }
     }
-
     private void startDashboardFragment(String userType) {
         switch (userType){
             case Constant.LOGIN_TYPE_DRIVER:
@@ -129,9 +129,7 @@ public class DashboardActivity extends AppCompatActivity
                 finish();
                 break;
         }
-
     }
-
     public void setToolbarTitle(String title){
         mToolbarTitle.setText(title);
     }
