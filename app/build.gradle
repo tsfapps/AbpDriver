@@ -6,8 +6,8 @@ android {
         applicationId "com.abp.driver"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.7"
+        versionCode 5
+        versionName "1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         useLibrary 'org.apache.http.legacy'
     }
